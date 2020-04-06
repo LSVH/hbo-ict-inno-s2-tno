@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 namespace TNO\EssifLab\Application\Controllers;
 
 defined('ABSPATH') or die();
@@ -20,4 +21,14 @@ class Activate extends SimpleController {
 	private function getComponentWhatRegistersPostTypes(): RegistersPostTypes {
 		return new Admin($this->getPluginData());
 	}
+=======
+namespace TNO\Essiflab\Application\Controllers;
+
+defined('ABSPATH') or die();
+
+use TNO\EssifLab\Application\Workflows\Constructors\CoreAbstract;
+
+class Activate extends CoreAbstract
+{
+>>>>>>> 32b6324... refactored plugin to conform to package diagram
 }

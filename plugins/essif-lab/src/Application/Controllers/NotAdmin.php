@@ -1,17 +1,15 @@
 <?php
 
-namespace TNO\EssifLab\Application\Controllers;
+namespace TNO\Essiflab\Application\Controllers;
 
 defined('ABSPATH') or die();
 
-use TNO\EssifLab\Contracts\Abstracts\Controller;
+use TNO\EssifLab\Application\Workflows\Constructors\CoreAbstract;
 
-class NotAdmin extends Controller {
-	public function getActions(): array {
-		return $this->actions;
-	}
-
-	public function getFilters(): array {
-		return $this->filters;
-	}
+class NotAdmin extends CoreAbstract
+{
+    public function insert_message($content)
+    {
+        return $content .= '<p>'.esc_attr($this->get_option(self::FIELD_MESSAGE)).'</p>';
+    }
 }
