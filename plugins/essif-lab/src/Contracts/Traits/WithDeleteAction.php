@@ -7,15 +7,13 @@ use TNO\EssifLab\Presentation\Components\Fieldset;
 trait WithDeleteAction {
 	public function getDeleteAction(): callable  {
 		return function ($item) {
-            var_dump("item", $item);
-            die();
 			return $this->getDeleteFieldset($item)->render();
 		};
 	}
 
 	private function getDeleteFieldset($item): Fieldset {
 		$key = 'ID';
-		$value = array_key_exists($key, $item) ? $item[$key] : '';
+		$value = array_key_exists($key, $item) ? strval($item[$key]) : '';
 		return new Fieldset($this, [
 			'baseName' => $this->baseName,
 			'formControls' => [
