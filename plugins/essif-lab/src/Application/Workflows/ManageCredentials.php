@@ -33,7 +33,7 @@ class ManageCredentials extends Workflow {
 	}
 
 	public function edit($request) {
-		// TODO: edit a hook of a validation policy
+		// TODO: edit a credential of a validation policy
 	}
 
 	public function delete($request) {
