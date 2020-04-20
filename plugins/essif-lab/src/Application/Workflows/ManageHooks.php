@@ -2,15 +2,40 @@
 
 namespace TNO\EssifLab\Application\Workflows;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 use Exception;
 use TNO\EssifLab\Contracts\Abstracts\Workflow;
 use TNO\EssifLab\Services\PostUtil;
+=======
+use mysql_xdevapi\Exception;
+use TNO\EssifLab\CF7\Controllers\Forms;
+use TNO\EssifLab\Contracts\Abstracts\Workflow;
+use TNO\EssifLab\Application\Workflows;
+
+>>>>>>> ab86073... Works w/o class definitions
+=======
+use TNO\EssifLab\Contracts\Abstracts\Workflow;
+>>>>>>> d1fa221... 3 Working fields
 
 class ManageHooks extends Workflow {
-
 	public static function options(): array {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 		// TODO: load all selectable options to be displayed in the select lists.
 		return [self::CONTEXT => ['hello' => 'hello', 'world' => 'world'], self::TARGET => ['foo' => 'foo', 'bar' => 'bar']];
+=======
+        $res = apply_filters('jacks_boast', '');
+		return $res;
+>>>>>>> ab86073... Works w/o class definitions
+=======
+=======
+        apply_filters('essif_options_hooks_total', []);
+>>>>>>> 37ba8b8... Working GUI
+        return apply_filters('essif_options_hooks', []);
+		//return ['context' => $context, 'target' => $target];
+>>>>>>> d1fa221... 3 Working fields
 	}
 
 	public function add($request) {
