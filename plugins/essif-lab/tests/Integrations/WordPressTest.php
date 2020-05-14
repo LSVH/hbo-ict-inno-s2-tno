@@ -2,7 +2,6 @@
 
 namespace TNO\EssifLab\Tests\Integrations;
 
-use Closure;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\WordPress;
 use TNO\EssifLab\Tests\Stubs\ModelRenderer;
@@ -19,71 +18,54 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
-	function registers_model_type_as_custom_post_type() {
-		$this->subject->registerModelType($this->model);
+	function installs_the_admin_menu_item() {
+		$this->subject->install();
 
-		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
+		$title = $this->application->getName();
+		$capability = Constants::ADMIN_MENU_CAPABILITY;
+		$menu_slug = $this->application->getNamespace();
+		$icon_url = Constants::ADMIN_MENU_ICON_URL;
+
+		$history = $this->utility->getHistoryByFuncName(WP::ADD_NAV_ITEM);
 		$this->assertNotEmpty($history);
 		$this->assertCount(1, $history);
-		
-		$entry = current($history);
-		$this->assertEquals([
-			$this->model->getTypeName(),
-			array_merge(WordPress::DEFAULT_TYPE_ARGS, [
-				'show_in_menu' => $this->application->getNamespace(),
-				'supports' => $this->model->getFields(),
-				'labels' => WordPress::generateLabels($this->model),
-			]),
-		], $entry->getParams());
-	}
 
-	/** @test */
-	function register_model_relations_as_meta_boxes() {
-		$this->subject->registerModelRelations($this->model);
-
-		$id = 'model_model';
-		$title = 'Models';
-		$post_type = 'model';
-		$is_closure = function ($x): bool {
-			return $x instanceof Closure;
-		};
-
-		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);
-		$this->assertCount(1, $history);
-		
 		$entry = current($history);
 		$params = $entry->getParams();
-		// $id parameter is equal to:
-		$this->assertEquals($id, $params[0]);
-		// $title parameter is equal to:
-		$this->assertEquals($title, $params[1]);
-		// $callback is a closure:
-		$this->assertTrue($is_closure($params[2]));
-		// $screen parameter is equal to:
-		$this->assertEquals($post_type, $params[3]);
+
+		$this->assertEquals($title, $params[0]);
+		$this->assertEquals($capability, $params[1]);
+		$this->assertEquals($menu_slug, $params[2]);
+		$this->assertEquals($icon_url, $params[3]);
 	}
 
 	/** @test */
-	function registers_models_when_running_install() {
+	function installs_all_model_types() {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
 		$this->assertNotEmpty($history);
-		/**
-		 * Types
-		 * 1. Credential
-		 * 2. Hook
-		 * 3. Input
-		 * 4. Issuer
-		 * 5. Schema
-		 * 6. Target
-		 * 7. ValidationPolicy
-		 */
 		$this->assertCount(7, $history);
 	}
 
 	/** @test */
+	function installs_all_model_types_their_save_handlers() {
+		$this->subject->install();
+
+		$history = $this->utility->getHistoryByFuncName(WP::ADD_ACTION);
+		$this->assertNotEmpty($history);
+
+		$fields = array_filter($history, function ($entry) {
+			$hookName = $entry->getParams()[0];
+
+			return strpos($hookName, 'save_post') !== false;
+		});
+		$this->assertCount(7, $fields);
+	}
+
+	/** @test */
+<<<<<<< HEAD
+<<<<<<< HEAD
 	function registers_to_hide_nav_for_certain_models() {
 		$this->subject->install();
 
@@ -99,100 +81,90 @@ class WordPressTest extends TestCase {
 
 	/** @test */
 	function registers_model_relations_when_running_install() {
+=======
+=======
+	function installs_all_model_types_their_save_handlers_and_removes_all_actions_before_updating() {
+		$_POST['namespace'][Constants::FIELD_TYPE_SIGNATURE] = 'hello';
+		$this->subject->install();
+
+		$history = $this->utility->getHistoryByFuncName(WP::REMOVE_ALL_ACTIONS_AND_EXEC);
+		$this->assertNotEmpty($history);
+	}
+
+	/** @test */
+>>>>>>> 7e2d6c5... Refactored save handler and added test
+	function installs_the_relation_components_for_the_model_currently_being_viewed() {
+>>>>>>> 999f393... Added save post handler for signature
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);
+		$this->assertNotEmpty($history);;
 
-		/**
-		 * Relations
-		 * - Credential:
-		 *   1. Input
-		 *   2. Issuer
-		 *   3. Schema
-		 * - Hook:
-		 *   4. Target
-		 * - ValidationPolicy:
-		 *   5. Hook
-		 *   6. Credential
-		 */
 		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
+
 			return strpos($id, '_relation_') !== false;
 		});
-		$this->assertCount(6, $relations);
+		$this->assertCount(1, $relations);
+
+		$entry = current($relations);
+		$title = $entry->getParams()[1];
+		$this->assertEquals('Models', $title);
 	}
 
 	/** @test */
-	function registers_menu_item_when_installing() {
+	function installs_the_relation_components_with_relation_specific_form_items() {
 		$this->subject->install();
 
-		$title = $this->application->getName();
-		$capability = Constants::ADMIN_MENU_CAPABILITY;
-		$menu_slug = $this->application->getNamespace();
-		$icon_url = Constants::ADMIN_MENU_ICON_URL;
-		
-		$history = $this->utility->getHistoryByFuncName(WP::ADD_NAV_ITEM);
-		$this->assertNotEmpty($history);
-		$this->assertCount(1, $history);
-		
-		$entry = current($history);
-		$params = $entry->getParams();
-		
-		$this->assertEquals($title, $params[0]);
-		$this->assertEquals($capability, $params[1]);
-		$this->assertEquals($menu_slug, $params[2]);
-		$this->assertEquals($icon_url, $params[3]);
+		$renderWasCalled = $this->renderer->isCalled(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
+		$this->assertTrue($renderWasCalled);
+
+		$attrs = $this->renderer->getAttrsItsCalledWith(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
+		$this->assertNotEmpty($attrs);
+		$this->assertNotEmpty($attrs[0]->getValue());
+
+		// ID of the model
+		$this->assertEquals(1, $attrs[0]->getValue()[0]->getValue());
+		// Title of the model
+		$this->assertEquals('hello', $attrs[0]->getValue()[0]->getLabel());
 	}
 
 	/** @test */
-    function can_get_form_items_from_each_model_relation() {
-        $this->subject->install();
+	function installs_the_relation_components_with_relation_specific_list_items() {
+		$this->subject->install();
 
 		$renderWasCalled = $this->renderer->isCalled(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
-        $this->assertTrue($renderWasCalled);
-
-        $attrs = $this->renderer->getAttrsItsCalledWith(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
-        $this->assertNotEmpty($attrs);
-        $this->assertNotEmpty($attrs[0]->getValue());
-
-        // ID of the model
-        $this->assertEquals(1, $attrs[0]->getValue()[0]->getValue());
-        // Title of the model
-        $this->assertEquals('hello', $attrs[0]->getValue()[0]->getLabel());
-    }
-
-    /** @test */
-    function can_get_list_items_from_each_model_relation() {
-        $this->subject->install();
-
-        $renderWasCalled = $this->renderer->isCalled(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
-        $this->assertTrue($renderWasCalled);
+		$this->assertTrue($renderWasCalled);
 
 		$attrs = $this->renderer->getAttrsItsCalledWith(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
-        $this->assertNotEmpty($attrs);
-        $this->assertNotEmpty($attrs[1]->getValue());
-        $this->assertNotEmpty($attrs[1]->getValue()[0]->getValue());
+		$this->assertNotEmpty($attrs);
+		$this->assertNotEmpty($attrs[1]->getValue());
+		$this->assertNotEmpty($attrs[1]->getValue()[0]->getValue());
 
-        //ID of the model
-        $this->assertEquals(1, $attrs[1]->getValue()[0]->getValue()[0]->getValue());
-        //Title of the model
-        $this->assertEquals('hello', $attrs[1]->getValue()[0]->getValue()[0]->getLabel());
-        //Description of the model
-        $this->assertEquals('world', $attrs[1]->getValue()[0]->getValue()[1]->getLabel());
-    }
+		//ID of the model
+		$this->assertEquals(1, $attrs[1]->getValue()[0]->getValue()[0]->getValue());
+		//Title of the model
+		$this->assertEquals('hello', $attrs[1]->getValue()[0]->getValue()[0]->getLabel());
+		//Description of the model
+		$this->assertEquals('world', $attrs[1]->getValue()[0]->getValue()[1]->getLabel());
+	}
 
-    /** @test */
-	function model_fields_are_loaded() {
+	/** @test */
+	function installs_the_field_components_for_the_model_currently_being_viewed() {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);
+		$this->assertNotEmpty($history);;
 
-		$fields = array_filter($history, function ($entry) {
+		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
+
 			return strpos($id, '_field_') !== false;
 		});
-		$this->assertCount(1, $fields);
+		$this->assertCount(1, $relations);
+
+		$entry = current($relations);
+		$title = $entry->getParams()[1];
+		$this->assertEquals('Signature', $title);
 	}
 }
