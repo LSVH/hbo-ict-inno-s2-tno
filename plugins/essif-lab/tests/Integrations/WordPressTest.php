@@ -90,7 +90,6 @@ class WordPressTest extends TestCase {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::REMOVE_ALL_ACTIONS_AND_EXEC);
-		var_dump($history);
 		$this->assertNotEmpty($history);
 	}
 
@@ -213,6 +212,7 @@ class WordPressTest extends TestCase {
 		$title = $entry->getParams()[1];
 		$this->assertEquals('Signature', $title);
 	}
+<<<<<<< HEAD
 
     private function create_a_relation($id): void {
         $hook = new Hook([Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => $id]);
@@ -222,3 +222,6 @@ class WordPressTest extends TestCase {
         $this->subject->install();
     }
 }
+=======
+}
+>>>>>>> f8a7025... Remove vardump
