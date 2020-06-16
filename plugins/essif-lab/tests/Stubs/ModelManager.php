@@ -5,7 +5,6 @@ namespace TNO\EssifLab\Tests\Stubs;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\ModelManagers\Contracts\BaseModelManager;
 use TNO\EssifLab\Models\Contracts\Model;
-use TNO\EssifLab\Tests\Stubs\Model as ConcreteModel;
 
 class ModelManager extends BaseModelManager {
 	use WithHistory;
@@ -40,6 +39,7 @@ class ModelManager extends BaseModelManager {
 		return true;
 	}
 
+<<<<<<< HEAD
     function select(Model $model, array $criteria = []): array {
         $this->recordHistory('select', [$model]);
         return [
@@ -50,6 +50,19 @@ class ModelManager extends BaseModelManager {
             ])
         ];
     }
+=======
+	function select(Model $model, array $criteria = []): array {
+		$this->recordHistory('select', [$model, $criteria]);
+		$fqn = get_class($model);
+		return [
+			new $fqn([
+				Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => 1,
+				Constants::TYPE_INSTANCE_TITLE_ATTR => 'hello',
+				Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => 'world',
+			])
+		];
+	}
+>>>>>>> 85b8762... Added actions and filters for target and input.
 
     function insertRelation(Model $from, Model $to): bool {
         $this->callRenderer(self::MODEL_MANAGER, $from, $to);
@@ -71,10 +84,16 @@ class ModelManager extends BaseModelManager {
 		return true;
 	}
 
+<<<<<<< HEAD
     function selectAllRelations(Model $from, Model $to): array {
+=======
+	function selectAllRelations(Model $from, Model $to): array {
+		$this->recordHistory('selectAllRelations', [$from, $to]);
+		$fqn = get_class($to);
+>>>>>>> 85b8762... Added actions and filters for target and input.
         return !empty($this->relations) ? $this->relations :
             [
-                new ConcreteModel([
+                new $fqn([
                     Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => 1,
                     Constants::TYPE_INSTANCE_TITLE_ATTR => 'hello',
                     Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => 'world',
