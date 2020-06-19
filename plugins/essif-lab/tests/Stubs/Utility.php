@@ -22,6 +22,7 @@ class Utility extends BaseUtility {
 <<<<<<< HEAD
         BaseUtility::GET_MODEL => [self::class, 'getModel'],
         BaseUtility::CREATE_MODEL_META => [self::class, 'createModelMeta'],
+        BaseUtility::UPDATE_MODEL_META => [self::class, 'updateModelMeta'],
         BaseUtility::DELETE_MODEL_META => [self::class, 'deleteModelMeta'],
 =======
 		BaseUtility::GET_MODEL => [self::class, 'getModel'],
@@ -115,10 +116,30 @@ class Utility extends BaseUtility {
 	    return true;
     }
 
+<<<<<<< HEAD
     static function deleteModelMeta(int $postId, string $key, $value = ''): bool {
         if (self::checkPostIdAndKey($postId, $key)){
             if (!empty($value)){
                 if (($value_key = array_search($value, self::$meta[$postId][$key])) !== false){
+=======
+    static function updateModelMeta(int $postId, string $key, $value): bool
+    {
+        if (!isset(self::$meta[$postId])) {
+            self::$meta[$postId] = array();
+        }
+        if (!isset(self::$meta[$postId][$key])) {
+            self::$meta[$postId][$key] = array();
+        }
+        self::$meta[$postId][$key][] = $value;
+        return true;
+    }
+
+    static function deleteModelMeta(int $postId, string $key, $value = ''): bool
+    {
+        if (self::checkPostIdAndKey($postId, $key)) {
+            if (!empty($value)) {
+                if (($value_key = array_search($value, self::$meta[$postId][$key])) !== false) {
+>>>>>>> cf9d98b... added immutable field to credentials
                     unset(self::$meta[$postId][$key][$value_key]);
                     return !in_array($value, self::$meta[$postId][$key]);
                 }
