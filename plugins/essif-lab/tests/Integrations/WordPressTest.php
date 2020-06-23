@@ -46,9 +46,9 @@ class WordPressTest extends TestCase {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
-		$hook = $history[1];
+		$hook = $history[2];
 		$target = $history[5];
-		$input = $history[2];
+		$input = $history[3];
 
 		$this->assertFalse($hook->getParams()[1]['show_ui']);
 		$this->assertFalse($target->getParams()[1]['show_ui']);
