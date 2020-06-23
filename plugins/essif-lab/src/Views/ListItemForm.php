@@ -3,7 +3,6 @@
 namespace TNO\EssifLab\Views;
 
 use TNO\EssifLab\Constants;
-use TNO\EssifLab\Integrations\Contracts\BaseIntegration;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use TNO\EssifLab\Views\Contracts\BaseView;
 use TNO\EssifLab\Views\Items\Contracts\Item;

@@ -33,8 +33,8 @@ abstract class TestCase extends PHPUnitTestCase {
 		parent::setUp();
 		if (! defined('ABSPATH')) {
 			define('ABSPATH', __DIR__);
-		};
-		$this->application = new Application('name', 'namespace', __DIR__);
+		}
+        $this->application = new Application('name', 'namespace', __DIR__);
 		$this->utility = new Utility();
 		$this->renderer = new ModelRenderer();
 		$this->manager = new ModelManager($this->application, $this->utility);

@@ -156,7 +156,7 @@ class Utility extends BaseUtility
                 }
             } else {
                 self::$meta[$postId][$key] = array();
-                return empty($meta[$postId][$key]) ? true : false;
+                return empty($meta[$postId][$key]);
             }
         }
         return false;
