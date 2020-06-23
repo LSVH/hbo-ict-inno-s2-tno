@@ -44,6 +44,10 @@ class WordPressDataHandler extends BaseIntegration {
             $new = $this->handleModelFieldDataSignature($data, $new);
         }
 
+        if (array_key_exists(Constants::FIELD_TYPE_CREDENTIAL_TYPE, $data)) {
+            $new = $this->handleModelFieldDataCredentialType($data, $new);
+        }
+
         if ($model->getTypeName() == 'credential'){
             $new = $this->handleModelFieldDataImmutable(array_key_exists(Constants::FIELD_TYPE_IMMUTABLE, $data), $new);
         }
@@ -56,6 +60,12 @@ class WordPressDataHandler extends BaseIntegration {
 
 		return $new;
 	}
+
+    private function handleModelFieldDataCredentialType(array $data, array $new): array {
+        $new[Constants::FIELD_TYPE_CREDENTIAL_TYPE] = $data[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
+
+        return $new;
+    }
 
     private function handleModelFieldDataImmutable(bool $immutable, array $new): array {
         $new[Constants::FIELD_TYPE_IMMUTABLE] = $immutable;
