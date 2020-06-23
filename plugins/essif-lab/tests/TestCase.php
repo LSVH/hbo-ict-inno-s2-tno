@@ -37,7 +37,11 @@ abstract class TestCase extends PHPUnitTestCase
 		{
 			define('ABSPATH', __DIR__);
 		}
+<<<<<<< HEAD
 		$this->application = new Application('name', 'namespace', __DIR__);
+=======
+        $this->application = new Application('name', 'namespace', __DIR__);
+>>>>>>> 37a4e41... fixed code smells
 		$this->utility = new Utility();
 		$this->renderer = new ModelRenderer();
 		$this->manager = new ModelManager($this->application, $this->utility);

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"name": "tno/essif-lab",
 	"type": "project",
 	"license": "mit",
@@ -19,5 +20,24 @@
 		"psr-4": {
 			"TNO\\EssifLab\\Tests\\": "tests/"
 		}
+=======
+  "name": "tno/essif-lab",
+  "type": "project",
+  "license": "mit",
+	"scripts": {
+		"test": "vendor/bin/phpunit"
+	},
+	"require": {
+	"php": ">=7.1",
+	"haydenpierce/class-finder": "^0.4.2",
+	"ext-json": "*"
+  },
+  "require-dev": {
+	"phpunit/phpunit": "^8"
+  },
+  "autoload": {
+	"psr-4": {
+	  "TNO\\EssifLab\\": "src/"
+>>>>>>> e79be7d... Added build job
 	}
 }

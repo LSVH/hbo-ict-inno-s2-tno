@@ -241,6 +241,7 @@ class WP extends BaseUtility
 		return add_post_meta($postId, $key, $value, false);
 	}
 
+<<<<<<< HEAD
 	static function updateModelMeta(int $postId, string $key, $value): bool
 	{
 		return update_post_meta($postId, $key, $value);
@@ -248,6 +249,9 @@ class WP extends BaseUtility
 
 	static function deleteModelMeta(int $postId, string $key, $value = ''): bool
 	{
+=======
+	static function deleteModelMeta(int $postId, string $key, $value = ''): bool {
+>>>>>>> 9f13c5b... removed unused methods
 		return delete_post_meta($postId, $key, $value);
 	}
 
