@@ -7,11 +7,11 @@ use TNO\EssifLab\Models\Contracts\Model;
 
 interface ModelRenderer
 {
-	function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string;
+    public function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string;
 
-	function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string;
+    public function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string;
 
-	function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string;
+    public function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string;
 
-	function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string;
+    public function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string;
 }

@@ -4,6 +4,8 @@ namespace TNO\ContactForm7\Views;
 
 class Button
 {
+<<<<<<< HEAD
+<<<<<<< HEAD
 	public static function custom_essif_lab_form_tag_handler(): string
 	{
 		$inputType = "Submit";
@@ -12,4 +14,26 @@ class Button
 
 		return "<br /><input type=\"".$inputType."\" value=\"".$inputValue."\" class=\"".$inputClass."\">";
 	}
+=======
+    public static function custom_essif_lab_form_tag_handler($attrs): string
+    {
+        $inputType = 'Submit';
+        $inputValue = 'Gegevens inladen';
+        $inputClass = 'wpcf7-form-control wpcf7-submit essif-lab';
+        $inputName = $attrs['name'];
+
+        return '<br /><input name="'.$inputName.'" type="'.$inputType.'" value="'.$inputValue.'" class="'.$inputClass.'">';
+    }
+>>>>>>> 44a9692... Applying patch StyleCI
 }
+=======
+    public static function custom_essif_lab_form_tag_handler($attrs) : string {
+        $inputType = "Submit";
+        $inputValue = "Gegevens inladen";
+        $inputClass = "wpcf7-form-control wpcf7-submit essif-lab";
+        $inputName = $attrs["name"];
+
+        return "<br /><input name=\"" . $inputName . "\" type=\"" . $inputType . "\" value=\"" . $inputValue . "\" class=\"" . $inputClass . "\">";
+    }
+}
+>>>>>>> 521d457... Changed hook to target, adjusted View for name/id

@@ -8,21 +8,21 @@ use TNO\EssifLab\Utilities\Contracts\Utility;
 
 interface ModelManager
 {
-	public function __construct(Application $application, Utility $utility);
+    public function __construct(Application $application, Utility $utility);
 
-	function insert(Model $model): bool;
+    public function insert(Model $model): int;
 
-	function delete(Model $model): bool;
+    public function delete(Model $model): bool;
 
-	function update(Model $model): bool;
+    public function update(Model $model): int;
 
-	function select(Model $model, array $criteria = []): array;
+    public function select(Model $model, array $criteria = []): array;
 
-	function insertRelation(Model $from, Model $to): bool;
+    public function insertRelation(Model $from, Model $to): bool;
 
-	function deleteRelation(Model $from, Model $to): bool;
+    public function deleteRelation(Model $from, Model $to): bool;
 
-	function deleteAllRelations(Model $model): bool;
+    public function deleteAllRelations(Model $model): bool;
 
-	function selectAllRelations(Model $from, Model $to): array;
+    public function selectAllRelations(Model $from, Model $to): array;
 }

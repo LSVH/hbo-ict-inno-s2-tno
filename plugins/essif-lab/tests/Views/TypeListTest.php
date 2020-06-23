@@ -9,74 +9,74 @@ use TNO\EssifLab\Views\TypeList;
 
 class TypeListTest extends TestCase
 {
-	/** @test */
-	function shows_no_result_message_with_empty_items()
-	{
-		$subject = new TypeList($this->integration, $this->model, []);
+    /** @test */
+    public function shows_no_result_message_with_empty_items()
+    {
+        $subject = new TypeList($this->integration, $this->model, []);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/No models found.*No models found/';
+        $expected = '/No models found.*No models found/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 
-	/** @test */
-	function shows_list_items_when_supplying_an_item_with_list_item_label()
-	{
-		$subject = new TypeList($this->integration, $this->model, [
-			new ItemNonDisplayable([
-				new ItemNonDisplayable([
-					new ItemDisplayable(1, 'hello'),
-					new ItemDisplayable(1, 'world'),
-				]),
-			], TypeList::LIST_ITEMS),
-		]);
+    /** @test */
+    public function shows_list_items_when_supplying_an_item_with_list_item_label()
+    {
+        $subject = new TypeList($this->integration, $this->model, [
+            new ItemNonDisplayable([
+                new ItemNonDisplayable([
+                    new ItemDisplayable(1, 'hello'),
+                    new ItemDisplayable(1, 'world'),
+                ]),
+            ], TypeList::LIST_ITEMS),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/No models found.*hello.*world/';
+        $expected = '/No models found.*hello.*world/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 
-	/** @test */
-	function shows_form_items_when_supplying_an_item_with_form_item_label()
-	{
-		$subject = new TypeList($this->integration, $this->model, [
-			new ItemNonDisplayable([
-				new ItemDisplayable(1, 'hello'),
-				new ItemDisplayable(1, 'world'),
-			], TypeList::FORM_ITEMS),
-		]);
+    /** @test */
+    public function shows_form_items_when_supplying_an_item_with_form_item_label()
+    {
+        $subject = new TypeList($this->integration, $this->model, [
+            new ItemNonDisplayable([
+                new ItemDisplayable(1, 'hello'),
+                new ItemDisplayable(1, 'world'),
+            ], TypeList::FORM_ITEMS),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/hello.*world.*No models found/';
+        $expected = '/hello.*world.*No models found/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 
-	/** @test */
-	function renders_form_and_list_items()
-	{
-		$subject = new TypeList($this->integration, $this->model, [
-			new ItemNonDisplayable([
-				new ItemDisplayable(1, 'hello'),
-				new ItemDisplayable(1, 'world'),
-			], TypeList::FORM_ITEMS),
-			new ItemNonDisplayable([
-				new ItemNonDisplayable([
-					new ItemDisplayable(1, 'foo'),
-					new ItemDisplayable(1, 'bar'),
-				]),
-			], TypeList::LIST_ITEMS),
-		]);
+    /** @test */
+    public function renders_form_and_list_items()
+    {
+        $subject = new TypeList($this->integration, $this->model, [
+            new ItemNonDisplayable([
+                new ItemDisplayable(1, 'hello'),
+                new ItemDisplayable(1, 'world'),
+            ], TypeList::FORM_ITEMS),
+            new ItemNonDisplayable([
+                new ItemNonDisplayable([
+                    new ItemDisplayable(1, 'foo'),
+                    new ItemDisplayable(1, 'bar'),
+                ]),
+            ], TypeList::LIST_ITEMS),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/hello.*world.*foo.*bar/';
+        $expected = '/hello.*world.*foo.*bar/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 }

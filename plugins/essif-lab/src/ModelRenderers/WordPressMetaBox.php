@@ -15,20 +15,21 @@ use TNO\EssifLab\Views\TypeList;
 
 class WordPressMetaBox implements Contracts\ModelRenderer
 {
-	function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new TypeList($integration, $model, $attrs);
+    public function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new TypeList($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 
-	function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new SignatureField($integration, $model, $attrs);
+    public function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new SignatureField($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	function renderSchemaLoader(Integration $integration, Model $model, array $attrs = []): string
 	{
@@ -40,11 +41,19 @@ class WordPressMetaBox implements Contracts\ModelRenderer
 >>>>>>> fd9aad4... changed schema to credential type
 		return $view->render();
 	}
+=======
+    public function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new CredentialTypeField($integration, $model, $attrs);
 
-	function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new ImmutableField($integration, $model, $attrs);
+        return $view->render();
+    }
+>>>>>>> 44a9692... Applying patch StyleCI
 
-		return $view->render();
-	}
+    public function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new ImmutableField($integration, $model, $attrs);
+
+        return $view->render();
+    }
 }

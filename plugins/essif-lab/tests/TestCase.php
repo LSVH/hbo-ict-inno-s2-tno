@@ -13,6 +13,7 @@ use TNO\EssifLab\Tests\Stubs\Utility;
 
 abstract class TestCase extends PHPUnitTestCase
 {
+<<<<<<< HEAD
 	protected $application;
 
 	/** @var Utility */
@@ -51,4 +52,39 @@ abstract class TestCase extends PHPUnitTestCase
 			Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => 'world',
 		]);
 	}
+=======
+    protected $application;
+
+    /** @var Utility */
+    protected $utility;
+
+    /** @var ModelManager */
+    protected $manager;
+
+    /** @var ModelRenderer */
+    protected $renderer;
+
+    /** @var Integration */
+    protected $integration;
+
+    /** @var Model */
+    protected $model;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', __DIR__);
+        }
+        $this->application = new Application('name', 'namespace', __DIR__);
+        $this->utility = new Utility();
+        $this->renderer = new ModelRenderer();
+        $this->manager = new ModelManager($this->application, $this->utility);
+        $this->integration = new Integration($this->application, $this->manager, $this->renderer, $this->utility);
+        $this->model = new Model([
+            Constants::TYPE_INSTANCE_TITLE_ATTR       => 'hello',
+            Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => 'world',
+        ]);
+    }
+>>>>>>> 44a9692... Applying patch StyleCI
 }

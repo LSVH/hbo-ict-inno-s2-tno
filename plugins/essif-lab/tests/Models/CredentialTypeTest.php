@@ -9,51 +9,56 @@ use TNO\EssifLab\Tests\TestCase;
 <<<<<<< HEAD:plugins/essif-lab/tests/Models/SchemaTest.php
 class SchemaTest extends TestCase
 {
+<<<<<<< HEAD
 =======
 class CredentialTypeTest extends TestCase {
 >>>>>>> fd9aad4... changed schema to credential type:plugins/essif-lab/tests/Models/CredentialTypeTest.php
 	protected $subject;
+=======
+    protected $subject;
+>>>>>>> 44a9692... Applying patch StyleCI
 
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->subject = new CredentialType();
-	}
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->subject = new CredentialType();
+    }
 
-	/** @test */
-	function should_not_hide_from_nav(): void
-	{
-		$actual = $this->subject->getTypeArgs();
+    /** @test */
+    public function should_not_hide_from_nav(): void
+    {
+        $actual = $this->subject->getTypeArgs();
 
-		$this->assertIsArray($actual);
-		$this->assertFalse($actual[Constants::TYPE_ARG_HIDE_FROM_NAV]);
-	}
+        $this->assertIsArray($actual);
+        $this->assertFalse($actual[Constants::TYPE_ARG_HIDE_FROM_NAV]);
+    }
 
-	/** @test */
-	function should_have_attribute_names(): void
-	{
-		$actual = $this->subject->getAttributeNames();
+    /** @test */
+    public function should_have_attribute_names(): void
+    {
+        $actual = $this->subject->getAttributeNames();
 
-		$expected = Constants::TYPE_DEFAULT_ATTRIBUTE_NAMES;
+        $expected = Constants::TYPE_DEFAULT_ATTRIBUTE_NAMES;
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 
-	/** @test */
-	function should_have_no_relations(): void
-	{
-		$actual = $this->subject->getRelations();
+    /** @test */
+    public function should_have_no_relations(): void
+    {
+        $actual = $this->subject->getRelations();
 
-		$expected = [];
+        $expected = [];
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 
-	/** @test */
-	function should_have_fields(): void
-	{
-		$actual = $this->subject->getFields();
+    /** @test */
+    public function should_have_fields(): void
+    {
+        $actual = $this->subject->getFields();
 
+<<<<<<< HEAD
 		$expected = array_merge(Constants::TYPE_DEFAULT_FIELDS, [
 <<<<<<< HEAD:plugins/essif-lab/tests/Models/SchemaTest.php
 			Constants::FIELD_TYPE_SCHEMA_LOADER,
@@ -61,7 +66,12 @@ class CredentialTypeTest extends TestCase {
 			Constants::FIELD_TYPE_CREDENTIAL_TYPE
 >>>>>>> fd9aad4... changed schema to credential type:plugins/essif-lab/tests/Models/CredentialTypeTest.php
 		]);
+=======
+        $expected = array_merge(Constants::TYPE_DEFAULT_FIELDS, [
+            Constants::FIELD_TYPE_CREDENTIAL_TYPE,
+        ]);
+>>>>>>> 44a9692... Applying patch StyleCI
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 }

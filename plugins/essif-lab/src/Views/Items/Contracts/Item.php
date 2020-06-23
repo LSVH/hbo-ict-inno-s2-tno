@@ -4,11 +4,11 @@ namespace TNO\EssifLab\Views\Items\Contracts;
 
 interface Item
 {
-	function __construct($value, string $label = null);
+    public function __construct($value, string $label = null);
 
-	function getValue();
+    public function getValue();
 
-	function getLabel(): string;
+    public function getLabel(): string;
 
-	function canDisplayValue(): bool;
+    public function canDisplayValue(): bool;
 }

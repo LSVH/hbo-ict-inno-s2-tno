@@ -4,21 +4,21 @@ namespace TNO\EssifLab\Models\Contracts;
 
 interface Model
 {
-	function __construct($attrs = []);
+    public function __construct($attrs = []);
 
-	function getSingularName(): string;
+    public function getSingularName(): string;
 
-	function getPluralName(): string;
+    public function getPluralName(): string;
 
-	function getTypeName(): string;
+    public function getTypeName(): string;
 
-	function getTypeArgs(): array;
+    public function getTypeArgs(): array;
 
-	function getAttributes(): array;
+    public function getAttributes(): array;
 
-	function getAttributeNames(): array;
+    public function getAttributeNames(): array;
 
-	function getFields(): array;
+    public function getFields(): array;
 
-	function getRelations(): array;
+    public function getRelations(): array;
 }

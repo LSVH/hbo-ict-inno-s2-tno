@@ -9,13 +9,13 @@ use TNO\EssifLab\Utilities\Contracts\Utility;
 
 interface Integration
 {
-	function __construct(Application $application, ModelManager $manager, ModelRenderer $renderer, Utility $utility);
+    public function __construct(Application $application, ModelManager $manager, ModelRenderer $renderer, Utility $utility);
 
-	function install(): void;
+    public function install(): void;
 
-	function getApplication(): Application;
+    public function getApplication(): Application;
 
-	function getModelManager(): ModelManager;
+    public function getModelManager(): ModelManager;
 
-	function getUtility(): Utility;
+    public function getUtility(): Utility;
 }

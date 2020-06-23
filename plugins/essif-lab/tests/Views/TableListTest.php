@@ -10,46 +10,46 @@ use TNO\EssifLab\Views\TableList;
 
 class TableListTest extends TestCase
 {
-	/** @test */
-	function renders_nothing_found_message_without_any_items()
-	{
-		$subject = new TableList($this->integration, $this->model, []);
+    /** @test */
+    public function renders_nothing_found_message_without_any_items()
+    {
+        $subject = new TableList($this->integration, $this->model, []);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/'.sprintf(TableList::NO_RESULTS, 'models').'/';
+        $expected = '/'.sprintf(TableList::NO_RESULTS, 'models').'/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 
-	/** @test */
-	function renders_nothing_found_message_without_any_non_displayable_items()
-	{
-		$subject = new TableList($this->integration, $this->model, [
-			new ItemDisplayable('hello', 'world'),
-		]);
+    /** @test */
+    public function renders_nothing_found_message_without_any_non_displayable_items()
+    {
+        $subject = new TableList($this->integration, $this->model, [
+            new ItemDisplayable('hello', 'world'),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/'.sprintf(TableList::NO_RESULTS, 'models').'/';
+        $expected = '/'.sprintf(TableList::NO_RESULTS, 'models').'/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 
-	/** @test */
-	function renders_correctly_with_non_displayable_items_with_displayable_items_as_value()
-	{
-		$subject = new TableList($this->integration, $this->model, [
-			new ItemNonDisplayable([
-				new Displayable(1, 'hello'),
-				new Displayable(1, 'world'),
-			]),
-		]);
+    /** @test */
+    public function renders_correctly_with_non_displayable_items_with_displayable_items_as_value()
+    {
+        $subject = new TableList($this->integration, $this->model, [
+            new ItemNonDisplayable([
+                new Displayable(1, 'hello'),
+                new Displayable(1, 'world'),
+            ]),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '/hello.*world/';
+        $expected = '/hello.*world/';
 
-		$this->assertRegExp($expected, $actual);
-	}
+        $this->assertRegExp($expected, $actual);
+    }
 }

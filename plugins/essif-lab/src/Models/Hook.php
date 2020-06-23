@@ -7,17 +7,17 @@ use TNO\EssifLab\Models\Contracts\BaseModel;
 
 class Hook extends BaseModel
 {
-	protected $singular = 'hook';
+    protected $singular = 'hook';
 
-	protected $relations = [
-		Target::class,
-	];
+    protected $relations = [
+        Target::class,
+    ];
 
-	protected $typeArgs = [
-		Constants::TYPE_ARG_HIDE_FROM_NAV => true,
-	];
+    protected $typeArgs = [
+        Constants::TYPE_ARG_HIDE_FROM_NAV => true,
+    ];
 
-	protected $attributeNames = [
-		Constants::TYPE_INSTANCE_SLUG_ATTR,
-	];
+    protected $attributeNames = [
+        Constants::TYPE_INSTANCE_SLUG_ATTR,
+    ];
 }

@@ -7,27 +7,27 @@ use TNO\ContactForm7\Utilities\Contracts\Utility;
 
 abstract class BaseIntegration implements Integration
 {
-	protected $application;
+    protected $application;
 
-	protected $manager;
+    protected $manager;
 
-	protected $renderer;
+    protected $renderer;
 
-	protected $utility;
+    protected $utility;
 
-	function __construct(Application $application, Utility $utility)
-	{
-		$this->application = $application;
-		$this->utility = $utility;
-	}
+    public function __construct(Application $application, Utility $utility)
+    {
+        $this->application = $application;
+        $this->utility = $utility;
+    }
 
-	function getApplication(): Application
-	{
-		return $this->application;
-	}
+    public function getApplication(): Application
+    {
+        return $this->application;
+    }
 
-	function getUtility(): Utility
-	{
-		return $this->utility;
-	}
+    public function getUtility(): Utility
+    {
+        return $this->utility;
+    }
 }
