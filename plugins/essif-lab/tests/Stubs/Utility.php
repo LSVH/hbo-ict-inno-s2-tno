@@ -66,15 +66,26 @@ class Utility extends BaseUtility {
 	function call(string $name, ...$parameters) {
 		$this->recordHistory($name, $parameters);
 
+<<<<<<< HEAD
 		$this->handleSubPluginApi($name, ...$parameters);
 >>>>>>> 85b8762... Added actions and filters for target and input.
 
+=======
+>>>>>>> 2d59fe4... Fixed utillity stub
 		if (array_key_exists($name, $this->callbackTriggeringFunctions)) {
+			if (count($parameters) > 3) {
+				$this->handleSubPluginActions($name, ...$parameters);
+			}
+
 			$callback = $this->callbackTriggeringFunctions[$name];
 			$callback(...$parameters);
 		}
 
 		if (array_key_exists($name, $this->valueReturningFunctions)) {
+			if (count($parameters) > 3) {
+				$this->handleSubPluginFilters($name, ...$parameters);
+			}
+
 			$callback = $this->valueReturningFunctions[$name];
 
 			return $callback(...$parameters);
@@ -83,6 +94,7 @@ class Utility extends BaseUtility {
 		return null;
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	static function handleSubPluginApi($name, array $params) {
 		if ($name === 'add_action') {
@@ -94,6 +106,9 @@ class Utility extends BaseUtility {
 				$params[1](['slug' => 'title']);
 =======
 	static function handleSubPluginApi($name, string $actionName, callable $actionHandler, ...$_) {
+=======
+	static function handleSubPluginActions($name, string $actionName, $actionHandler) {
+>>>>>>> 2d59fe4... Fixed utillity stub
 		$prefix = 'essif-lab_';
 
 		if ($name === 'add_action') {
@@ -116,6 +131,10 @@ class Utility extends BaseUtility {
 				}
 			}
 		}
+	}
+
+	static function handleSubPluginFilters($name, string $actionName, $actionHandler) {
+		$prefix = 'essif-lab_';
 
 		if ($name === 'add_filter') {
 			$command = $prefix.'select_';
