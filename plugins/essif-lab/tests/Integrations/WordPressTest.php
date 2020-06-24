@@ -46,9 +46,9 @@ class WordPressTest extends TestCase {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
-		$hook = $history[1];
+		$hook = $history[2];
 		$target = $history[5];
-		$input = $history[2];
+		$input = $history[3];
 
 		$this->assertFalse($hook->getParams()[1]['show_ui']);
 		$this->assertFalse($target->getParams()[1]['show_ui']);
@@ -167,9 +167,9 @@ class WordPressTest extends TestCase {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);;
+		$this->assertNotEmpty($history);
 
-		$relations = array_filter($history, function ($entry) {
+        $relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
 
 			return strpos($id, '_relation_') !== false;
@@ -223,9 +223,9 @@ class WordPressTest extends TestCase {
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);;
+		$this->assertNotEmpty($history);
 
-		$relations = array_filter($history, function ($entry) {
+        $relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
 
 			return strpos($id, '_field_') !== false;

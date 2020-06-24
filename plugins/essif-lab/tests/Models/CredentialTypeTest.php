@@ -3,15 +3,15 @@
 namespace TNO\EssifLab\Tests\Models;
 
 use TNO\EssifLab\Constants;
-use TNO\EssifLab\Models\Schema;
+use TNO\EssifLab\Models\CredentialType;
 use TNO\EssifLab\Tests\TestCase;
 
-class SchemaTest extends TestCase {
+class CredentialTypeTest extends TestCase {
 	protected $subject;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->subject = new Schema();
+		$this->subject = new CredentialType();
 	}
 
 	/** @test */
@@ -45,7 +45,7 @@ class SchemaTest extends TestCase {
 		$actual = $this->subject->getFields();
 
 		$expected = array_merge(Constants::TYPE_DEFAULT_FIELDS, [
-			Constants::FIELD_TYPE_SCHEMA_LOADER
+			Constants::FIELD_TYPE_CREDENTIAL_TYPE
 		]);
 
 		$this->assertEquals($expected, $actual);

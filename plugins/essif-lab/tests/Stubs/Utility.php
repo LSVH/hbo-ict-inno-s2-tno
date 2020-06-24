@@ -22,44 +22,83 @@ class Utility extends BaseUtility
         BaseUtility::GET_CURRENT_MODEL => [self::class, 'getCurrentModel'],
         BaseUtility::GET_MODEL => [self::class, 'getModel'],
         BaseUtility::CREATE_MODEL_META => [self::class, 'createModelMeta'],
-        BaseUtility::UPDATE_MODEL_META => [self::class, 'updateModelMeta'],
         BaseUtility::DELETE_MODEL_META => [self::class, 'deleteModelMeta'],
         BaseUtility::GET_MODEL_META => [self::class, 'getModelMeta'],
         BaseUtility::GET_MODELS => [self::class, 'getModels'],
     ];
 
-    function call(string $name, ...$parameters)
-    {
-        $this->recordHistory($name, $parameters);
+	function call(string $name, ...$parameters) {
+		$this->recordHistory($name, $parameters);
 
-        $this->handleSubPluginApi($name, $parameters);
+		if (array_key_exists($name, $this->callbackTriggeringFunctions)) {
+			if (count($parameters) > 3) {
+				$this->handleSubPluginActions($name, ...$parameters);
+			}
 
-        if (array_key_exists($name, $this->callbackTriggeringFunctions)) {
-            $callback = $this->callbackTriggeringFunctions[$name];
-            $callback(...$parameters);
-        }
+			$callback = $this->callbackTriggeringFunctions[$name];
+			$callback(...$parameters);
+		}
 
-        if (array_key_exists($name, $this->valueReturningFunctions)) {
-            $callback = $this->valueReturningFunctions[$name];
+		if (array_key_exists($name, $this->valueReturningFunctions)) {
+			if (count($parameters) > 3) {
+				$this->handleSubPluginFilters($name, ...$parameters);
+			}
 
-            return $callback(...$parameters);
-        }
+			$callback = $this->valueReturningFunctions[$name];
 
-        return null;
-    }
+			return $callback(...$parameters);
+		}
 
-    static function handleSubPluginApi($name, array $params)
-    {
-        if ($name === 'add_action') {
-            if ($params[0] === 'essif-lab_insert_hook') {
-                $params[1](['slug' => 'title']);
-            }
+		return null;
+	}
 
-            if ($params[0] === 'essif-lab_delete_hook') {
-                $params[1](['slug' => 'title']);
-            }
-        }
-    }
+	static function handleSubPluginActions($name, string $actionName, $actionHandler) {
+		$prefix = 'essif-lab_';
+
+		if ($name === 'add_action') {
+			$hook = ['hook-slug' => 'Hook title'];
+			$target = [1 => 'Target title'];
+			$input = ['input-title' => 'Input title'];
+
+			$commands = ['insert_', 'delete_'];
+			$models = [
+				'hook' => [$hook],
+				'target' => [$target, $hook],
+				'input' => [$input, $target],
+			];
+
+			foreach ($commands as $command) {
+				foreach ($models as $model => $params) {
+					if ($actionName === $prefix.$command.$model) {
+						$actionHandler(...$params);
+					}
+				}
+			}
+		}
+	}
+
+	static function handleSubPluginFilters($name, string $actionName, $actionHandler) {
+		$prefix = 'essif-lab_';
+
+		if ($name === 'add_filter') {
+			$command = $prefix.'select_';
+
+			$items = [];
+			$hookSlug = 'hook-slug';
+			$targetSlug = '1-hook-slug';
+
+			$models = [
+				'hook' => [$items],
+				'target' => [$items, $hookSlug],
+				'input' => [$items, $targetSlug],
+			];
+			foreach ($models as $model => $params) {
+				if ($actionName === $command.$model) {
+					$actionHandler(...$params);
+				}
+			}
+		}
+	}
 
     static function addHook(string $hook, callable $callback, int $priority = 10, int $accepted_args = 1): void
     {
@@ -94,18 +133,6 @@ class Utility extends BaseUtility
         return true;
     }
 
-    static function updateModelMeta(int $postId, string $key, $value): bool
-    {
-        if (!isset(self::$meta[$postId])) {
-            self::$meta[$postId] = array();
-        }
-        if (!isset(self::$meta[$postId][$key])) {
-            self::$meta[$postId][$key] = array();
-        }
-        self::$meta[$postId][$key][] = $value;
-        return true;
-    }
-
     static function deleteModelMeta(int $postId, string $key, $value = ''): bool
     {
         if (self::checkPostIdAndKey($postId, $key)) {
@@ -116,7 +143,7 @@ class Utility extends BaseUtility
                 }
             } else {
                 self::$meta[$postId][$key] = array();
-                return empty($meta[$postId][$key]) ? true : false;
+                return empty($meta[$postId][$key]);
             }
         }
         return false;
