@@ -2,7 +2,10 @@
   "name": "tno/essif-lab",
   "type": "project",
   "license": "mit",
-  "require": {
+	"scripts": {
+		"test": "vendor/bin/phpunit"
+	},
+	"require": {
 	"php": ">=7.1",
 	"haydenpierce/class-finder": "^0.4.2",
 	"ext-json": "*"
