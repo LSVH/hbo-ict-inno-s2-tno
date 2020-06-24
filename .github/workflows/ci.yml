@@ -2,18 +2,15 @@ name: PHP Composer
 
 on: [push]
 
+env:
+    COMPOSER_FILES: plugins/*/composer.json
+
 jobs:
     build:
-        env:
-            COMPOSER_FILES: plugins/*/composer.json
-
         runs-on: ubuntu-latest
 
         steps:
             -   uses: actions/checkout@v2
-
-            - name: Debug env variables
-              run: echo "$COMPOSER_FILES"
 
             -   name: Validate composer.json and composer.lock
                 run: |
@@ -37,5 +34,21 @@ jobs:
                         do composer install --prefer-dist --no-progress --no-suggest -d $(dirname "$i");
                     done;
 
-            -   name: Run test suite
-                run: composer run-script test
+            -   uses: actions/upload-artifact@v2
+                with:
+                    name: plugins
+                    path: plugins/*
+
+    test:
+        -   uses: actions/checkout@v2
+
+        -   uses: actions/download-artifact@v2
+            with:
+                name: plugins
+                path: plugins/
+
+        -   name: Run all tests
+            run: |
+                for i in $(ls -1 "$COMPOSER_FILES");
+                    do composer run-script test -d $(dirname "$i");
+                done;
