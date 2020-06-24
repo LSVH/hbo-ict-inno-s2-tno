@@ -6,16 +6,19 @@ use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Input;
 use TNO\EssifLab\Tests\TestCase;
 
-class InputTest extends TestCase {
+class InputTest extends TestCase
+{
 	protected $subject;
 
-	protected function setUp(): void {
+	protected function setUp(): void
+	{
 		parent::setUp();
 		$this->subject = new Input();
 	}
 
 	/** @test */
-	function should_hide_from_nav(): void {
+	function should_hide_from_nav(): void
+	{
 		$actual = $this->subject->getTypeArgs();
 
 		$this->assertIsArray($actual);
@@ -23,7 +26,8 @@ class InputTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_attribute_names(): void {
+	function should_have_attribute_names(): void
+	{
 		$actual = $this->subject->getAttributeNames();
 
 		$expected = array_merge(Constants::TYPE_DEFAULT_ATTRIBUTE_NAMES, [Constants::TYPE_INSTANCE_SLUG_ATTR]);
@@ -32,7 +36,8 @@ class InputTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_no_relations(): void {
+	function should_have_no_relations(): void
+	{
 		$actual = $this->subject->getRelations();
 
 		$expected = [];
@@ -41,7 +46,8 @@ class InputTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_fields(): void {
+	function should_have_fields(): void
+	{
 		$actual = $this->subject->getFields();
 
 		$expected = Constants::TYPE_DEFAULT_FIELDS;

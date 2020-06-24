@@ -11,16 +11,23 @@ use TNO\EssifLab\Tests\TestCase;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use TNO\EssifLab\Utilities\WP;
 
-class WordPressTest extends TestCase {
+class WordPressTest extends TestCase
+{
 	protected $subject;
 
+<<<<<<< HEAD
     protected function setUp(): void {
+=======
+	protected function setUp(): void
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		parent::setUp();
 		$this->subject = new WordPress($this->application, $this->manager, $this->renderer, $this->utility);
 	}
 
 	/** @test */
-	function installs_the_admin_menu_item() {
+	function installs_the_admin_menu_item()
+	{
 		$this->subject->install();
 
 		$title = $this->application->getName();
@@ -42,7 +49,27 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
+<<<<<<< HEAD
 	function installs_all_model_types() {
+=======
+	function installs_the_admin_menu_item_and_adds_non_hidden_model_types()
+	{
+		$this->subject->install();
+
+		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
+		$hook = $history[1];
+		$target = $history[5];
+		$input = $history[2];
+
+		$this->assertFalse($hook->getParams()[1]['show_ui']);
+		$this->assertFalse($target->getParams()[1]['show_ui']);
+		$this->assertFalse($input->getParams()[1]['show_ui']);
+	}
+
+	/** @test */
+	function installs_all_model_types()
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(BaseUtility::CREATE_MODEL_TYPE);
@@ -51,7 +78,8 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
-	function installs_all_model_types_their_save_handlers() {
+	function installs_all_model_types_their_save_handlers()
+	{
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_ACTION);
@@ -65,22 +93,24 @@ class WordPressTest extends TestCase {
 		$this->assertCount(7, $fields);
 	}
 
-    /** @test */
-    function installs_all_model_types_their_delete_handlers() {
-        $this->subject->install();
+	/** @test */
+	function installs_all_model_types_their_delete_handlers()
+	{
+		$this->subject->install();
 
-        $history = $this->utility->getHistoryByFuncName(WP::ADD_ACTION);
-        $this->assertNotEmpty($history);
+		$history = $this->utility->getHistoryByFuncName(WP::ADD_ACTION);
+		$this->assertNotEmpty($history);
 
-        $fields = array_filter($history, function ($entry) {
-            $hookName = $entry->getParams()[0];
+		$fields = array_filter($history, function ($entry) {
+			$hookName = $entry->getParams()[0];
 
-            return strpos($hookName, 'delete_post') !== false;
-        });
-        $this->assertCount(7, $fields);
-    }
+			return strpos($hookName, 'delete_post') !== false;
+		});
+		$this->assertCount(7, $fields);
+	}
 
 	/** @test */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	function registers_to_hide_nav_for_certain_models() {
@@ -101,6 +131,10 @@ class WordPressTest extends TestCase {
 =======
 =======
 	function installs_all_model_types_their_save_handlers_and_removes_all_actions_before_updating() {
+=======
+	function installs_all_model_types_their_save_handlers_and_removes_all_actions_before_updating()
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		$_POST['namespace'][Constants::FIELD_TYPE_SIGNATURE] = 'hello';
 		$this->subject->install();
 
@@ -108,73 +142,89 @@ class WordPressTest extends TestCase {
 		$this->assertNotEmpty($history);
 	}
 
-    /** @test */
-    function installs_all_model_types_their_delete_handlers_and_removes_all_actions_before_updating() {
-        $_POST['namespace'][Constants::FIELD_TYPE_SIGNATURE] = 'hello';
-        $this->subject->install();
+	/** @test */
+	function installs_all_model_types_their_delete_handlers_and_removes_all_actions_before_updating()
+	{
+		$_POST['namespace'][Constants::FIELD_TYPE_SIGNATURE] = 'hello';
+		$this->subject->install();
 
-        $history = $this->utility->getHistoryByFuncName(WP::REMOVE_ALL_ACTIONS_AND_EXEC);
-        $this->assertNotEmpty($history);
-    }
-
-    /** @test */
-    function installs_all_model_types_their_save_handlers_and_adds_a_relation() {
-        $id = 5;
-        $this->create_a_relation($id);
-
-        $managerWasCalled = $this->manager->isCalled(ModelManager::MODEL_MANAGER);
-        $this->assertTrue($managerWasCalled);
-
-        $modelFrom = $this->manager->getModel1ItsCalledWith(ModelManager::MODEL_MANAGER);
-        $this->assertNotEmpty($modelFrom);
-
-        $modelTo = $this->manager->getModel2ItsCalledWith(ModelManager::MODEL_MANAGER);
-        $this->assertNotEmpty($modelTo);
-
-        $modelIds = [$modelFrom->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR], $modelTo->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR]];
-        $this->assertContains(5, $modelIds);
-
-        $relations = $this->manager->selectAllRelations($modelFrom, $modelTo);
-        $result = false;
-        foreach ($relations as $model){
-            if ($model == $modelTo) $result = true;
-        }
-        $this->assertTrue($result);
-    }
-
-    /** @test */
-    function installs_all_model_types_their_save_handlers_and_adds_a_relation_and_then_removes_it() {
-        $id = 5;
-        $this->create_a_relation($id);
-        $_POST['namespace'] = [];
-        $_POST['namespace'][Constants::ACTION_NAME_REMOVE_RELATION] = $id;
-        $this->subject->install();
-
-        $managerWasCalled = $this->manager->isCalled(ModelManager::MODEL_MANAGER);
-        $this->assertTrue($managerWasCalled);
-
-        $model1 = $this->manager->getModel1ItsCalledWith(ModelManager::MODEL_MANAGER);
-        $this->assertNotEmpty($model1);
-
-        $model2 = $this->manager->getModel2ItsCalledWith(ModelManager::MODEL_MANAGER);
-        $this->assertNotEmpty($model2);
-
-        $from = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
-        $to = $this->utility->call(BaseUtility::GET_MODEL, $id);
-        $relations = $this->manager->selectAllRelations($from, $to);
-        foreach ($relations as $model){
-            $this->assertFalse($model == $to);
-        }
-    }
+		$history = $this->utility->getHistoryByFuncName(WP::REMOVE_ALL_ACTIONS_AND_EXEC);
+		$this->assertNotEmpty($history);
+	}
 
 	/** @test */
+<<<<<<< HEAD
 >>>>>>> 7e2d6c5... Refactored save handler and added test
 	function installs_the_relation_components_for_the_model_currently_being_viewed() {
 >>>>>>> 999f393... Added save post handler for signature
+=======
+	function installs_all_model_types_their_save_handlers_and_adds_a_relation()
+	{
+		$id = 5;
+		$this->create_a_relation($id);
+
+		$managerWasCalled = $this->manager->isCalled(ModelManager::MODEL_MANAGER);
+		$this->assertTrue($managerWasCalled);
+
+		$modelFrom = $this->manager->getModel1ItsCalledWith(ModelManager::MODEL_MANAGER);
+		$this->assertNotEmpty($modelFrom);
+
+		$modelTo = $this->manager->getModel2ItsCalledWith(ModelManager::MODEL_MANAGER);
+		$this->assertNotEmpty($modelTo);
+
+		$modelIds = [
+			$modelFrom->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+			$modelTo->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+		];
+		$this->assertContains(5, $modelIds);
+
+		$relations = $this->manager->selectAllRelations($modelFrom, $modelTo);
+		$result = false;
+		foreach ($relations as $model)
+		{
+			if ($model == $modelTo)
+			{
+				$result = true;
+			}
+		}
+		$this->assertTrue($result);
+	}
+
+	/** @test */
+	function installs_all_model_types_their_save_handlers_and_adds_a_relation_and_then_removes_it()
+	{
+		$id = 5;
+		$this->create_a_relation($id);
+		$_POST['namespace'] = [];
+		$_POST['namespace'][Constants::ACTION_NAME_REMOVE_RELATION] = $id;
+		$this->subject->install();
+
+		$managerWasCalled = $this->manager->isCalled(ModelManager::MODEL_MANAGER);
+		$this->assertTrue($managerWasCalled);
+
+		$model1 = $this->manager->getModel1ItsCalledWith(ModelManager::MODEL_MANAGER);
+		$this->assertNotEmpty($model1);
+
+		$model2 = $this->manager->getModel2ItsCalledWith(ModelManager::MODEL_MANAGER);
+		$this->assertNotEmpty($model2);
+
+		$from = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
+		$to = $this->utility->call(BaseUtility::GET_MODEL, $id);
+		$relations = $this->manager->selectAllRelations($from, $to);
+		foreach ($relations as $model)
+		{
+			$this->assertFalse($model == $to);
+		}
+	}
+
+	/** @test */
+	function installs_the_relation_components_for_the_model_currently_being_viewed()
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);;
+		$this->assertNotEmpty($history);
 
 		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
@@ -189,7 +239,8 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
-	function installs_the_relation_components_with_relation_specific_form_items() {
+	function installs_the_relation_components_with_relation_specific_form_items()
+	{
 		$this->subject->install();
 
 		$renderWasCalled = $this->renderer->isCalled(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
@@ -206,7 +257,8 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
-	function installs_the_relation_components_with_relation_specific_list_items() {
+	function installs_the_relation_components_with_relation_specific_list_items()
+	{
 		$this->subject->install();
 
 		$renderWasCalled = $this->renderer->isCalled(ModelRenderer::LIST_AND_FORM_VIEW_RENDERER);
@@ -226,11 +278,12 @@ class WordPressTest extends TestCase {
 	}
 
 	/** @test */
-	function installs_the_field_components_for_the_model_currently_being_viewed() {
+	function installs_the_field_components_for_the_model_currently_being_viewed()
+	{
 		$this->subject->install();
 
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
-		$this->assertNotEmpty($history);;
+		$this->assertNotEmpty($history);
 
 		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
@@ -245,6 +298,7 @@ class WordPressTest extends TestCase {
 	}
 <<<<<<< HEAD
 
+<<<<<<< HEAD
     private function create_a_relation($id): void {
         $hook = new Hook([Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => $id]);
         $_POST['namespace'] = [];
@@ -256,3 +310,14 @@ class WordPressTest extends TestCase {
 =======
 }
 >>>>>>> f8a7025... Remove vardump
+=======
+	private function create_a_relation($id): void
+	{
+		$hook = new Hook([Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => $id]);
+		$_POST['namespace'] = [];
+		$_POST['namespace'][Constants::ACTION_NAME_ADD_RELATION] = ['hook' => $hook->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR]];
+		$_POST['namespace'][Constants::ACTION_NAME_RELATION_ACTION] = 'hook';
+		$this->subject->install();
+	}
+}
+>>>>>>> 8d3b645... Reformatted to editorconfig

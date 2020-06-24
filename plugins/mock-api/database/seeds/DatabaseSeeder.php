@@ -12,8 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::table('credential_verify_request')->insert([
-            'id' => 1,
-            'callbackURL' => 'http://localhost/',
+            'id'              => 1,
+            'callbackURL'     => 'http://localhost/',
             'credentialTypes' => '{ "type": "https://schema.org/PostalAddress",  "issuer": "some-id-of-the-BRP" }',
         ]);
     }

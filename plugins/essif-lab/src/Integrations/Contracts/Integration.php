@@ -7,8 +7,9 @@ use TNO\EssifLab\ModelManagers\Contracts\ModelManager;
 use TNO\EssifLab\ModelRenderers\Contracts\ModelRenderer;
 use TNO\EssifLab\Utilities\Contracts\Utility;
 
-interface Integration {
-	function __construct(Application $application, ModelManager $manager,ModelRenderer $renderer, Utility $utility);
+interface Integration
+{
+	function __construct(Application $application, ModelManager $manager, ModelRenderer $renderer, Utility $utility);
 
 	function install(): void;
 

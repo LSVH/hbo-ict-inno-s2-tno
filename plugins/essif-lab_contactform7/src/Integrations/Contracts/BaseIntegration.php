@@ -5,7 +5,8 @@ namespace TNO\ContactForm7\Integrations\Contracts;
 use TNO\ContactForm7\Applications\Contracts\Application;
 use TNO\ContactForm7\Utilities\Contracts\Utility;
 
-abstract class BaseIntegration implements Integration {
+abstract class BaseIntegration implements Integration
+{
 	protected $application;
 
 	protected $manager;
@@ -14,16 +15,19 @@ abstract class BaseIntegration implements Integration {
 
 	protected $utility;
 
-	function __construct(Application $application, Utility $utility) {
+	function __construct(Application $application, Utility $utility)
+	{
 		$this->application = $application;
 		$this->utility = $utility;
 	}
 
-	function getApplication(): Application {
+	function getApplication(): Application
+	{
 		return $this->application;
 	}
 
-	function getUtility(): Utility {
+	function getUtility(): Utility
+	{
 		return $this->utility;
 	}
 }

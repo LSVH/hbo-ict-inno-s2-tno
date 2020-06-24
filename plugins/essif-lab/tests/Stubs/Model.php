@@ -5,16 +5,22 @@ namespace TNO\EssifLab\Tests\Stubs;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\BaseModel;
 
-class Model extends BaseModel {
+class Model extends BaseModel
+{
 	protected $singular = 'model';
 
 	protected $relations = [
-		Model::class
+		Model::class,
 	];
 
 	protected $fields = [
 		Constants::FIELD_TYPE_SIGNATURE,
+<<<<<<< HEAD
 		Constants::FIELD_TYPE_SCHEMA_LOADER,
+		Constants::FIELD_TYPE_IMMUTABLE,
+=======
+		Constants::FIELD_TYPE_CREDENTIAL_TYPE,
         Constants::FIELD_TYPE_IMMUTABLE
+>>>>>>> fd9aad4... changed schema to credential type
 	];
 }

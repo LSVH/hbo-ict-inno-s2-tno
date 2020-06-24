@@ -2,7 +2,8 @@
 
 namespace TNO\EssifLab;
 
-abstract class Constants {
+abstract class Constants
+{
 	const TYPE_NAMESPACE = 'TNO\EssifLab\Models';
 
 	const TYPE_INSTANCE_IDENTIFIER_ATTR = 'ID';
@@ -35,16 +36,21 @@ abstract class Constants {
 
 <<<<<<< HEAD
 	const ACTION_NAME_RELATION_ACTION = 'relation_action';
+<<<<<<< HEAD
 =======
 	const FIELD_TYPE_SCHEMA_LOADER = 'schema_loader';
 >>>>>>> b250e8e... Added schema loader field
+=======
 
-    const FIELD_TYPE_IMMUTABLE = 'immutable';
+	const FIELD_TYPE_CREDENTIAL_TYPE = 'credential type';
+>>>>>>> fd9aad4... changed schema to credential type
+
+	const FIELD_TYPE_IMMUTABLE = 'immutable';
 
 	const TYPE_DEFAULT_ATTRIBUTE_NAMES = [
 		self::TYPE_INSTANCE_IDENTIFIER_ATTR,
 		self::TYPE_INSTANCE_TITLE_ATTR,
-        self::TYPE_INSTANCE_DESCRIPTION_ATTR,
+		self::TYPE_INSTANCE_DESCRIPTION_ATTR,
 	];
 
 	const TYPE_DEFAULT_FIELDS = [

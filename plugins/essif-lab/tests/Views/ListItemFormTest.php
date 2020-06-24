@@ -8,9 +8,11 @@ use TNO\EssifLab\Tests\TestCase;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use TNO\EssifLab\Views\ListItemForm;
 
-class ListItemFormTest extends TestCase {
+class ListItemFormTest extends TestCase
+{
 	/** @test */
-	function does_only_render_the_first_item() {
+	function does_only_render_the_first_item()
+	{
 		$subject = new ListItemForm($this->integration, $this->model, [
 			new ItemDisplayable('hello', 'world'),
 			new ItemDisplayable('foo', 'bar'),
@@ -20,7 +22,7 @@ class ListItemFormTest extends TestCase {
 
 		$expected = [
 			'/.*hello.*world.*/',
-			'/.*foo.*bar.*/'
+			'/.*foo.*bar.*/',
 		];
 
 		$this->assertRegExp($expected[0], $actual);
@@ -28,7 +30,8 @@ class ListItemFormTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_nothing_without_any_items() {
+	function renders_nothing_without_any_items()
+	{
 		$subject = new ListItemForm($this->integration, $this->model, []);
 
 		$actual = $subject->render();
@@ -39,7 +42,8 @@ class ListItemFormTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_nothing_without_any_displayable_items() {
+	function renders_nothing_without_any_displayable_items()
+	{
 		$subject = new ListItemForm($this->integration, $this->model, [
 			new ItemDisplayable('', 'value is empty so not displayable'),
 			new ItemNonDisplayable(['array']),
@@ -53,7 +57,8 @@ class ListItemFormTest extends TestCase {
 	}
 
 	/** @test */
-	function filters_out_preceding_non_displayable_items_and_renders_with_first_displayable() {
+	function filters_out_preceding_non_displayable_items_and_renders_with_first_displayable()
+	{
 		$subject = new ListItemForm($this->integration, $this->model, [
 			new ItemNonDisplayable(['Array']),
 			new ItemDisplayable('hello', 'world'),
@@ -63,7 +68,7 @@ class ListItemFormTest extends TestCase {
 
 		$expected = [
 			'/.*hello.*world.*/',
-			'/.*Array.*/'
+			'/.*Array.*/',
 		];
 
 		$this->assertRegExp($expected[0], $actual);
@@ -71,7 +76,8 @@ class ListItemFormTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_edit_and_remove_buttons() {
+	function renders_edit_and_remove_buttons()
+	{
 		$subject = new ListItemForm($this->integration, $this->model, [
 			new ItemDisplayable('hello', 'world'),
 		]);
@@ -80,7 +86,7 @@ class ListItemFormTest extends TestCase {
 
 		$expected = [
 			'/.*<button.*value="hello".*>'.ListItemForm::REMOVE.'<\/button>.*/',
-			'/.*<a.*>'.ListItemForm::EDIT.'<\/a>.*/'
+			'/.*<a.*>'.ListItemForm::EDIT.'<\/a>.*/',
 		];
 
 		$this->assertRegExp($expected[0], $actual);

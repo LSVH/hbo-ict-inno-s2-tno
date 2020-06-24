@@ -6,6 +6,7 @@ use TNO\EssifLab\Constants;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use TNO\EssifLab\Utilities\WP;
 
+<<<<<<< HEAD
 class Utility extends BaseUtility {
 	use WithHistory;
 
@@ -18,11 +19,23 @@ class Utility extends BaseUtility {
 	protected $callbackTriggeringFunctions = [
 		WP::ADD_ACTION => [self::class, 'addHook'],
 		WP::ADD_FILTER => [self::class, 'addHook'],
+=======
+class Utility extends BaseUtility
+{
+	use WithHistory;
+
+	static $meta = [];
+
+	protected $callbackTriggeringFunctions = [
+		WP::ADD_ACTION   => [self::class, 'addHook'],
+		WP::ADD_FILTER   => [self::class, 'addHook'],
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		WP::ADD_META_BOX => [self::class, 'addMetaBox'],
 	];
 
 	protected $valueReturningFunctions = [
 		BaseUtility::GET_CURRENT_MODEL => [self::class, 'getCurrentModel'],
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         BaseUtility::GET_MODEL => [self::class, 'getModel'],
@@ -74,6 +87,24 @@ class Utility extends BaseUtility {
 >>>>>>> 2d59fe4... Fixed utillity stub
 		if (array_key_exists($name, $this->callbackTriggeringFunctions)) {
 			if (count($parameters) > 3) {
+=======
+		BaseUtility::GET_MODEL         => [self::class, 'getModel'],
+		BaseUtility::CREATE_MODEL_META => [self::class, 'createModelMeta'],
+		BaseUtility::UPDATE_MODEL_META => [self::class, 'updateModelMeta'],
+		BaseUtility::DELETE_MODEL_META => [self::class, 'deleteModelMeta'],
+		BaseUtility::GET_MODEL_META    => [self::class, 'getModelMeta'],
+		BaseUtility::GET_MODELS        => [self::class, 'getModels'],
+	];
+
+	function call(string $name, ...$parameters)
+	{
+		$this->recordHistory($name, $parameters);
+
+		if (array_key_exists($name, $this->callbackTriggeringFunctions))
+		{
+			if (count($parameters) > 3)
+			{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 				$this->handleSubPluginActions($name, ...$parameters);
 			}
 
@@ -81,8 +112,10 @@ class Utility extends BaseUtility {
 			$callback(...$parameters);
 		}
 
-		if (array_key_exists($name, $this->valueReturningFunctions)) {
-			if (count($parameters) > 3) {
+		if (array_key_exists($name, $this->valueReturningFunctions))
+		{
+			if (count($parameters) > 3)
+			{
 				$this->handleSubPluginFilters($name, ...$parameters);
 			}
 
@@ -94,6 +127,7 @@ class Utility extends BaseUtility {
 		return null;
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	static function handleSubPluginApi($name, array $params) {
@@ -109,23 +143,31 @@ class Utility extends BaseUtility {
 =======
 	static function handleSubPluginActions($name, string $actionName, $actionHandler) {
 >>>>>>> 2d59fe4... Fixed utillity stub
+=======
+	static function handleSubPluginActions($name, string $actionName, $actionHandler)
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		$prefix = 'essif-lab_';
 
-		if ($name === 'add_action') {
+		if ($name === 'add_action')
+		{
 			$hook = ['hook-slug' => 'Hook title'];
 			$target = [1 => 'Target title'];
 			$input = ['input-title' => 'Input title'];
 
 			$commands = ['insert_', 'delete_'];
 			$models = [
-				'hook' => [$hook],
+				'hook'   => [$hook],
 				'target' => [$target, $hook],
-				'input' => [$input, $target],
+				'input'  => [$input, $target],
 			];
 
-			foreach ($commands as $command) {
-				foreach ($models as $model => $params) {
-					if ($actionName === $prefix.$command.$model) {
+			foreach ($commands as $command)
+			{
+				foreach ($models as $model => $params)
+				{
+					if ($actionName === $prefix.$command.$model)
+					{
 						$actionHandler(...$params);
 					}
 				}
@@ -133,10 +175,12 @@ class Utility extends BaseUtility {
 		}
 	}
 
-	static function handleSubPluginFilters($name, string $actionName, $actionHandler) {
+	static function handleSubPluginFilters($name, string $actionName, $actionHandler)
+	{
 		$prefix = 'essif-lab_';
 
-		if ($name === 'add_filter') {
+		if ($name === 'add_filter')
+		{
 			$command = $prefix.'select_';
 
 			$items = [];
@@ -144,12 +188,14 @@ class Utility extends BaseUtility {
 			$targetSlug = '1-hook-slug';
 
 			$models = [
-				'hook' => [$items],
+				'hook'   => [$items],
 				'target' => [$items, $hookSlug],
-				'input' => [$items, $targetSlug],
+				'input'  => [$items, $targetSlug],
 			];
-			foreach ($models as $model => $params) {
-				if ($actionName === $command.$model) {
+			foreach ($models as $model => $params)
+			{
+				if ($actionName === $command.$model)
+				{
 					$actionHandler(...$params);
 				}
 >>>>>>> 85b8762... Added actions and filters for target and input.
@@ -157,11 +203,17 @@ class Utility extends BaseUtility {
 		}
 	}
 
+<<<<<<< HEAD
 	static function addHook(string $hook, callable $callback, int $priority = 10, int $accepted_args = 1): void {
+=======
+	static function addHook(string $hook, callable $callback, int $priority = 10, int $accepted_args = 1): void
+	{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 		$params = range(0, $accepted_args);
 		$callback(...$params);
 	}
 
+<<<<<<< HEAD
 	static function addMetaBox($id, $title, $callback, $screen) {
 		$callback();
 	}
@@ -246,6 +298,30 @@ class Utility extends BaseUtility {
 			self::$meta[$postId] = [];
 		}
 		if (! isset(self::$meta[$postId][$key])) {
+=======
+	static function addMetaBox($id, $title, $callback, $screen)
+	{
+		$callback();
+	}
+
+	static function getModel(int $id): Model
+	{
+		return self::createModelWithId($id);
+	}
+
+	static function getCurrentModel(): Model
+	{
+		return self::createModelWithId(1);
+	}
+
+	static function createModelMeta(int $postId, string $key, $value): bool
+	{
+		if (!isset(self::$meta[$postId]))
+		{
+			self::$meta[$postId] = [];
+		}
+		if (!isset(self::$meta[$postId][$key]))
+		{
 			self::$meta[$postId][$key] = [];
 		}
 		self::$meta[$postId][$key][] = $value;
@@ -253,6 +329,23 @@ class Utility extends BaseUtility {
 		return true;
 	}
 
+	static function updateModelMeta(int $postId, string $key, $value): bool
+	{
+		if (!isset(self::$meta[$postId]))
+		{
+			self::$meta[$postId] = [];
+		}
+		if (!isset(self::$meta[$postId][$key]))
+		{
+>>>>>>> 8d3b645... Reformatted to editorconfig
+			self::$meta[$postId][$key] = [];
+		}
+		self::$meta[$postId][$key][] = $value;
+
+		return true;
+	}
+
+<<<<<<< HEAD
 	static function deleteModelMeta(int $postId, string $key, $value = ''): bool {
 		if (self::checkPostIdAndKey($postId, $key)) {
 			if (! empty($value)) {
@@ -262,6 +355,22 @@ class Utility extends BaseUtility {
 					return ! in_array($value, self::$meta[$postId][$key]);
 				}
 			} else {
+=======
+	static function deleteModelMeta(int $postId, string $key, $value = ''): bool
+	{
+		if (self::checkPostIdAndKey($postId, $key))
+		{
+			if (!empty($value))
+			{
+				if (($value_key = array_search($value, self::$meta[$postId][$key])) !== false)
+				{
+					unset(self::$meta[$postId][$key][$value_key]);
+
+					return !in_array($value, self::$meta[$postId][$key]);
+				}
+			} else
+			{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 				self::$meta[$postId][$key] = [];
 
 				return empty($meta[$postId][$key]) ? true : false;
@@ -271,6 +380,7 @@ class Utility extends BaseUtility {
 		return false;
 	}
 
+<<<<<<< HEAD
 	static function getModelMeta(int $postId, string $key): array {
 		if (isset(self::$meta) && isset(self::$meta[$postId]) && isset(self::$meta[$postId][$key])) {
 			return self::$meta[$postId][$key];
@@ -309,6 +419,22 @@ class Utility extends BaseUtility {
     }
 =======
 		if (! empty($args) && ! empty($args['post__in'])) {
+=======
+	static function getModelMeta(int $postId, string $key): array
+	{
+		if (isset(self::$meta) && isset(self::$meta[$postId]) && isset(self::$meta[$postId][$key]))
+		{
+			return self::$meta[$postId][$key];
+		}
+
+		return [1];
+	}
+
+	static function getModels(array $args = []): array
+	{
+		if (!empty($args) && !empty($args['post__in']))
+		{
+>>>>>>> 8d3b645... Reformatted to editorconfig
 			return array_map(function ($id) {
 				return self::createModelWithId($id);
 			}, $args['post__in']);
@@ -317,14 +443,23 @@ class Utility extends BaseUtility {
 		return [self::createModelWithId(1)];
 	}
 
+<<<<<<< HEAD
 	static function createModelWithId($id): Model {
 		return new Model([
 			Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => $id,
 			Constants::TYPE_INSTANCE_TITLE_ATTR => 'hello',
+=======
+	static function createModelWithId($id): Model
+	{
+		return new Model([
+			Constants::TYPE_INSTANCE_IDENTIFIER_ATTR  => $id,
+			Constants::TYPE_INSTANCE_TITLE_ATTR       => 'hello',
+>>>>>>> 8d3b645... Reformatted to editorconfig
 			Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => 'world',
 		]);
 	}
 
+<<<<<<< HEAD
 	private static function checkPostIdAndKey(int $postId, string $key): bool {
 		return isset(self::$meta) && isset(self::$meta[$postId]) && isset(self::$meta[$postId][$key]);
 	}
@@ -334,3 +469,15 @@ class Utility extends BaseUtility {
 	}
 >>>>>>> 85b8762... Added actions and filters for target and input.
 }
+=======
+	private static function checkPostIdAndKey(int $postId, string $key): bool
+	{
+		return isset(self::$meta) && isset(self::$meta[$postId]) && isset(self::$meta[$postId][$key]);
+	}
+
+	public function clearMeta(): void
+	{
+		self::$meta = [];
+	}
+}
+>>>>>>> 8d3b645... Reformatted to editorconfig

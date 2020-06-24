@@ -3,17 +3,21 @@
 namespace TNO\EssifLab\Tests\Models;
 
 use TNO\EssifLab\Constants;
-use TNO\EssifLab\Models\Issuer;
+use TNO\EssifLab\Models\CredentialType;
 use TNO\EssifLab\Tests\TestCase;
 
-class IssuerTest extends TestCase
+<<<<<<< HEAD:plugins/essif-lab/tests/Models/SchemaTest.php
+class SchemaTest extends TestCase
 {
+=======
+class CredentialTypeTest extends TestCase {
+>>>>>>> fd9aad4... changed schema to credential type:plugins/essif-lab/tests/Models/CredentialTypeTest.php
 	protected $subject;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
-		$this->subject = new Issuer();
+		$this->subject = new CredentialType();
 	}
 
 	/** @test */
@@ -51,7 +55,11 @@ class IssuerTest extends TestCase
 		$actual = $this->subject->getFields();
 
 		$expected = array_merge(Constants::TYPE_DEFAULT_FIELDS, [
-			Constants::FIELD_TYPE_SIGNATURE,
+<<<<<<< HEAD:plugins/essif-lab/tests/Models/SchemaTest.php
+			Constants::FIELD_TYPE_SCHEMA_LOADER,
+=======
+			Constants::FIELD_TYPE_CREDENTIAL_TYPE
+>>>>>>> fd9aad4... changed schema to credential type:plugins/essif-lab/tests/Models/CredentialTypeTest.php
 		]);
 
 		$this->assertEquals($expected, $actual);

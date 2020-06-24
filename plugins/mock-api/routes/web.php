@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +13,16 @@
 |
 */
 
+use Laravel\Lumen\Routing\Router;
+
 $router->get('/', function () use ($router) {
     return $router->router->version();
 });
 
-$router->group(['prefix'=>'api/'], function() use($router){
-
-        $router->get('/credentialverifyrequest', 'CredentialVerifyRequestController@index');
-        $router->post('/credentialverifyrequest', 'CredentialVerifyRequestController@create');
-        $router->get('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@show');
-        $router->put('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@update');
-        $router->delete('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@destroy');
-
+$router->group(['prefix' => 'api/'], function () use ($router) {
+    $router->get('/credentialverifyrequest', 'CredentialVerifyRequestController@index');
+    $router->post('/credentialverifyrequest', 'CredentialVerifyRequestController@create');
+    $router->get('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@show');
+    $router->put('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@update');
+    $router->delete('/credentialverifyrequest/{id}', 'CredentialVerifyRequestController@destroy');
 });

@@ -2,14 +2,17 @@
 
 namespace TNO\EssifLab\Tests\Stubs;
 
-trait WithHistory {
+trait WithHistory
+{
 	protected $history = [];
 
-	protected function recordHistory(string $funcName, array $parameters = [], callable $handleParameters = null) {
+	protected function recordHistory(string $funcName, array $parameters = [], callable $handleParameters = null)
+	{
 		$wasCalled = count($this->getHistoryByFuncName($funcName));
 		$this->history[] = new History($funcName, $parameters, $wasCalled + 1);
 
-		if (!empty($handleParameters) && is_array($parameters) && !empty($parameters)) {
+		if (!empty($handleParameters) && is_array($parameters) && !empty($parameters))
+		{
 			array_map(function ($parameter) use ($handleParameters) {
 				$handleParameters($parameter);
 			}, $parameters);
@@ -18,9 +21,11 @@ trait WithHistory {
 
 	/**
 	 * @param string $funcName
+	 *
 	 * @return History[]
 	 */
-	function getHistoryByFuncName(string $funcName): array {
+	function getHistoryByFuncName(string $funcName): array
+	{
 		return array_slice(array_filter($this->history, function (History $history) use ($funcName) {
 			return $history->getFuncName() === $funcName;
 		}), 0);

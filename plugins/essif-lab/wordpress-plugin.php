@@ -11,7 +11,8 @@
 defined('ABSPATH') or die();
 
 $classAutoloader = __DIR__.'/vendor/autoload.php';
-if (file_exists($classAutoloader)) {
+if (file_exists($classAutoloader))
+{
 	require_once($classAutoloader);
 }
 
@@ -27,7 +28,8 @@ use TNO\EssifLab\Utilities\Contracts\Utility;
 use TNO\EssifLab\Utilities\WP;
 
 $wpPluginApi = ABSPATH.'wp-admin/includes/plugin.php';
-if (! function_exists('get_plugin_data') && file_exists($wpPluginApi)) {
+if (!function_exists('get_plugin_data') && file_exists($wpPluginApi))
+{
 	require_once($wpPluginApi);
 }
 
