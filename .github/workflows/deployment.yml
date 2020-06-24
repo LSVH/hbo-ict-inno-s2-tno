@@ -1,0 +1,12 @@
+name: "Deployment Workflow"
+
+on: [push]
+
+jobs:
+    trigger_webhook:
+        name: "Trigger webhook"
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2

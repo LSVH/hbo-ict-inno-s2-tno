@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 .idea
+=======
+.env
+>>>>>>> 9826cd5... Added env example for docker-compose
 vendor
 <<<<<<< HEAD
 composer.lock
