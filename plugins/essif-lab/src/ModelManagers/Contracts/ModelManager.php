@@ -6,7 +6,8 @@ use TNO\EssifLab\Applications\Contracts\Application;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\Utility;
 
-interface ModelManager {
+interface ModelManager
+{
 	public function __construct(Application $application, Utility $utility);
 
 	function insert(Model $model): bool;

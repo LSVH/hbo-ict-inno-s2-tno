@@ -7,9 +7,11 @@ use TNO\EssifLab\Tests\Stubs\Model;
 use TNO\EssifLab\Tests\TestCase;
 use TNO\EssifLab\Views\SignatureField;
 
-class SignatureFieldTest extends TestCase {
+class SignatureFieldTest extends TestCase
+{
 	/** @test */
-	function does_render_input() {
+	function does_render_input()
+	{
 		$subject = new SignatureField($this->integration, $this->model);
 
 		$actual = $subject->render();
@@ -19,7 +21,8 @@ class SignatureFieldTest extends TestCase {
 	}
 
 	/** @test */
-	function does_render_with_name_attr() {
+	function does_render_with_name_attr()
+	{
 		$subject = new SignatureField($this->integration, $this->model);
 
 		$actual = $subject->render();
@@ -29,7 +32,8 @@ class SignatureFieldTest extends TestCase {
 	}
 
 	/** @test */
-	function does_render_with_signature_value() {
+	function does_render_with_signature_value()
+	{
 		$subject = new SignatureField($this->integration, new Model([
 			Constants::TYPE_INSTANCE_DESCRIPTION_ATTR => json_encode([
 				Constants::FIELD_TYPE_SIGNATURE => 'hello world',

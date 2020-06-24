@@ -1,16 +1,18 @@
-(function( $ ) {
-	$( window ).load(function() {
+(function ($) {
+	$(window).load(function () {
 		$(".wpcf7 .essif-lab").click(function (e) {
 			e.preventDefault();
 			sendMockCall();
 		});
 
-		function sendMockCall() {
+		function sendMockCall()
+		{
 			$.ajax({
 				type: 'GET',
 				url: 'http://localhost:8000/api/credentialverifyrequest/1',
 				success: function (data) {
-					if (data != null) {
+					if (data != null)
+					{
 						console.log(data);
 						$('input[name=postalCode]').val(data["credentialData"]["data"]["postcalCode"]);
 						$('input[name=streetAddress]').val(data["credentialData"]["data"]["streetAddress"]);
@@ -22,4 +24,4 @@
 			});
 		}
 	});
-})( jQuery );
+})(jQuery);

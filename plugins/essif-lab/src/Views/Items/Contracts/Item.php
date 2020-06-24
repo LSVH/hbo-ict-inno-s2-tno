@@ -2,7 +2,8 @@
 
 namespace TNO\EssifLab\Views\Items\Contracts;
 
-interface Item {
+interface Item
+{
 	function __construct($value, string $label = null);
 
 	function getValue();

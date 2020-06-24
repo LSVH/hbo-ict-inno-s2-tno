@@ -5,19 +5,22 @@ namespace TNO\EssifLab\Views;
 use TNO\EssifLab\Views\Contracts\BaseView;
 use TNO\EssifLab\Views\Items\Contracts\Item;
 
-class TableListItem extends BaseView {
+class TableListItem extends BaseView
+{
 	const PRIMARY_COL_CLASSES = [
 		'column-title',
 		'column-primary',
 		'has-row-actions',
 	];
 
-	function render(): string {
+	function render(): string
+	{
 		$first = true;
 		$classes = implode(' ', self::PRIMARY_COL_CLASSES);
 
 		return implode('', array_map(function (Item $item) use (&$first, $classes) {
-			if ($first) {
+			if ($first)
+			{
 				$first = false;
 				$itemForm = $this->renderItemForm($item);
 
@@ -28,7 +31,8 @@ class TableListItem extends BaseView {
 		}, $this->getDisplayableItems()));
 	}
 
-	private function renderItemForm(Item $item) {
+	private function renderItemForm(Item $item)
+	{
 		$instance = new ListItemForm($this->integration, $this->model, [$item]);
 
 		return '<div class="row-actions">'.$instance->render().'</div>';

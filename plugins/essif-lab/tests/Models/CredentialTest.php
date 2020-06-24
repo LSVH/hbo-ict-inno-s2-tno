@@ -9,16 +9,19 @@ use TNO\EssifLab\Models\Issuer;
 use TNO\EssifLab\Models\Schema;
 use TNO\EssifLab\Tests\TestCase;
 
-class CredentialTest extends TestCase {
+class CredentialTest extends TestCase
+{
 	protected $subject;
 
-	protected function setUp(): void {
+	protected function setUp(): void
+	{
 		parent::setUp();
 		$this->subject = new Credential();
 	}
 
 	/** @test */
-	function should_not_hide_from_nav(): void {
+	function should_not_hide_from_nav(): void
+	{
 		$actual = $this->subject->getTypeArgs();
 
 		$this->assertIsArray($actual);
@@ -26,7 +29,8 @@ class CredentialTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_attribute_names(): void {
+	function should_have_attribute_names(): void
+	{
 		$actual = $this->subject->getAttributeNames();
 
 		$expected = Constants::TYPE_DEFAULT_ATTRIBUTE_NAMES;
@@ -35,7 +39,8 @@ class CredentialTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_relations(): void {
+	function should_have_relations(): void
+	{
 		$actual = $this->subject->getRelations();
 
 		$expected = [
@@ -48,7 +53,8 @@ class CredentialTest extends TestCase {
 	}
 
 	/** @test */
-	function should_have_fields(): void {
+	function should_have_fields(): void
+	{
 		$actual = $this->subject->getFields();
 
 		$expected = Constants::TYPE_DEFAULT_FIELDS;

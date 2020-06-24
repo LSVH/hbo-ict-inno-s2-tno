@@ -4,7 +4,8 @@ namespace TNO\EssifLab\Models;
 
 use TNO\EssifLab\Models\Contracts\BaseModel;
 
-class ValidationPolicy extends BaseModel {
+class ValidationPolicy extends BaseModel
+{
 	protected $singular = 'validation policy';
 
 	protected $plural = 'validation policies';

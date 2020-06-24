@@ -7,9 +7,11 @@ use TNO\EssifLab\Tests\Stubs\ItemNonDisplayable;
 use TNO\EssifLab\Tests\TestCase;
 use TNO\EssifLab\Views\TableListItem;
 
-class TableListItemTest extends TestCase {
+class TableListItemTest extends TestCase
+{
 	/** @test */
-	function renders_nothing_without_any_items() {
+	function renders_nothing_without_any_items()
+	{
 		$subject = new TableListItem($this->integration, $this->model, []);
 
 		$actual = $subject->render();
@@ -20,7 +22,8 @@ class TableListItemTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_nothing_without_any_displayable_items() {
+	function renders_nothing_without_any_displayable_items()
+	{
 		$subject = new TableListItem($this->integration, $this->model, [
 			new ItemDisplayable('', 'value is empty so not displayable'),
 			new ItemNonDisplayable(['array']),
@@ -34,7 +37,8 @@ class TableListItemTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_first_item_with_row_actions() {
+	function renders_first_item_with_row_actions()
+	{
 		$subject = new TableListItem($this->integration, $this->model, [
 			new ItemDisplayable('hello', 'world'),
 			new ItemDisplayable('foo', 'bar'),

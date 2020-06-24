@@ -5,11 +5,12 @@ namespace TNO\EssifLab\Models;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\BaseModel;
 
-class Hook extends BaseModel {
+class Hook extends BaseModel
+{
 	protected $singular = 'hook';
 
 	protected $relations = [
-		Target::class
+		Target::class,
 	];
 
 	protected $typeArgs = [

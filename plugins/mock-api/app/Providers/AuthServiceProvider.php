@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     private const API_TOKEN = 'api_token';
+
     /**
      * Register any application services.
      *

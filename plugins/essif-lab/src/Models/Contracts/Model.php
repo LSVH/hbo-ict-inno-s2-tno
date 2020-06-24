@@ -2,7 +2,8 @@
 
 namespace TNO\EssifLab\Models\Contracts;
 
-interface Model {
+interface Model
+{
 	function __construct($attrs = []);
 
 	function getSingularName(): string;

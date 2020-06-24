@@ -2,7 +2,8 @@
 
 namespace TNO\ContactForm7\Applications\Contracts;
 
-interface Application {
+interface Application
+{
 	function getName(): string;
 
 	function getNamespace(): string;

@@ -7,9 +7,11 @@ use TNO\EssifLab\Tests\Stubs\ItemNonDisplayable;
 use TNO\EssifLab\Tests\TestCase;
 use TNO\EssifLab\Views\TypeList;
 
-class TypeListTest extends TestCase {
+class TypeListTest extends TestCase
+{
 	/** @test */
-	function shows_no_result_message_with_empty_items() {
+	function shows_no_result_message_with_empty_items()
+	{
 		$subject = new TypeList($this->integration, $this->model, []);
 
 		$actual = $subject->render();
@@ -20,7 +22,8 @@ class TypeListTest extends TestCase {
 	}
 
 	/** @test */
-	function shows_list_items_when_supplying_an_item_with_list_item_label() {
+	function shows_list_items_when_supplying_an_item_with_list_item_label()
+	{
 		$subject = new TypeList($this->integration, $this->model, [
 			new ItemNonDisplayable([
 				new ItemNonDisplayable([
@@ -38,7 +41,8 @@ class TypeListTest extends TestCase {
 	}
 
 	/** @test */
-	function shows_form_items_when_supplying_an_item_with_form_item_label() {
+	function shows_form_items_when_supplying_an_item_with_form_item_label()
+	{
 		$subject = new TypeList($this->integration, $this->model, [
 			new ItemNonDisplayable([
 				new ItemDisplayable(1, 'hello'),
@@ -54,7 +58,8 @@ class TypeListTest extends TestCase {
 	}
 
 	/** @test */
-	function renders_form_and_list_items() {
+	function renders_form_and_list_items()
+	{
 		$subject = new TypeList($this->integration, $this->model, [
 			new ItemNonDisplayable([
 				new ItemDisplayable(1, 'hello'),
