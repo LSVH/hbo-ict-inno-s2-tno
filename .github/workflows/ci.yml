@@ -4,13 +4,22 @@ on: [push]
 
 jobs:
     build:
+        env:
+            COMPOSER_FILES: plugins/*/composer.json
+
         runs-on: ubuntu-latest
 
         steps:
             -   uses: actions/checkout@v2
 
+            - name: Debug env variables
+              run: echo "$COMPOSER_FILES"
+
             -   name: Validate composer.json and composer.lock
-                run: composer validate
+                run: |
+                    for i in $(ls -1 "$COMPOSER_FILES");
+                        do composer validate "$i";
+                    done;
 
             -   name: Cache Composer packages
                 id: composer-cache
@@ -23,7 +32,10 @@ jobs:
 
             -   name: Install dependencies
                 if: steps.composer-cache.outputs.cache-hit != 'true'
-                run: composer install --prefer-dist --no-progress --no-suggest
+                run: |
+                    for i in $(ls -1 "$COMPOSER_FILES");
+                        do composer install --prefer-dist --no-progress --no-suggest -d $(dirname "$i");
+                    done;
 
             -   name: Run test suite
                 run: composer run-script test

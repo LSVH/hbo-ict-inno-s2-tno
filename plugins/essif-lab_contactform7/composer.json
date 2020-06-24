@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"name": "tno/contact-form-7",
 	"type": "project",
 	"license": "mit",
@@ -20,4 +21,31 @@
 			"TNO\\ContactForm7\\": "src/"
 		}
 	}
+=======
+  "name": "tno/essif-lab_contactform7",
+  "type": "project",
+  "license": "mit",
+  "description": "TNO eSSIf-Lab, sub plugin for Contact Form 7",
+  "scripts": {
+    "test": "vendor/bin/phpunit --coverage-text --colors=never"
+  },
+  "require": {
+    "php": ">=7.1",
+    "haydenpierce/class-finder": "^0.4.2",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TNO\\ContactForm7\\Tests\\": "tests/"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "TNO\\ContactForm7\\": "src/"
+    }
+  }
+>>>>>>> 4ed931f... Added test scripts and description
 }

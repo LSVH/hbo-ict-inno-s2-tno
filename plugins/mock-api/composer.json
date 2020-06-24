@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "laravel/lumen",
     "description": "The Laravel Lumen Framework.",
     "keywords": [
@@ -6,8 +7,15 @@
         "laravel",
         "lumen"
     ],
+=======
+    "name": "tno/essif-lab_mock-api",
+>>>>>>> 4ed931f... Added test scripts and description
     "license": "MIT",
     "type": "project",
+    "description": "TNO eSSIf-Lab, mock api",
+    "scripts": {
+        "test": "vendor/bin/phpunit --coverage-text --colors=never"
+    },
     "require": {
         "php": "^7.2.5",
         "laravel/lumen-framework": "^7.0"
@@ -37,10 +45,5 @@
         "optimize-autoloader": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "scripts": {
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ]
-    }
+    "prefer-stable": true
 }
