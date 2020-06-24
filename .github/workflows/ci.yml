@@ -51,7 +51,7 @@ jobs:
                     path: plugins/
 
             -   name: Decompress artifact
-                run: unzip all-plugins.zip
+                run: ls -l
                 working-directory: plugins
 
             -   name: Run all tests
