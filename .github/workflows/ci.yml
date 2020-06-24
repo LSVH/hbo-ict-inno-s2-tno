@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Continues Integration
 
 on: [push]
 
@@ -51,7 +51,7 @@ jobs:
                     path: plugins/
 
             -   name: Decompress artifact
-                run: ls -l
+                run: ls -l essif-lab/
                 working-directory: plugins
 
             -   name: Run all tests
