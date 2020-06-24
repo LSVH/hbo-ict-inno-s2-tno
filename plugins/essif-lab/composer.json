@@ -2,8 +2,9 @@
   "name": "tno/essif-lab",
   "type": "project",
   "license": "mit",
+	"description": "TNO eSSIf-Lab, main plugin",
 	"scripts": {
-		"test": "vendor/bin/phpunit"
+		"test": "vendor/bin/phpunit --coverage-text --colors=never"
 	},
 	"require": {
 	"php": ">=7.1",
