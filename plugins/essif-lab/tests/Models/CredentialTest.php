@@ -6,7 +6,7 @@ use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Credential;
 use TNO\EssifLab\Models\Input;
 use TNO\EssifLab\Models\Issuer;
-use TNO\EssifLab\Models\Schema;
+use TNO\EssifLab\Models\CredentialType;
 use TNO\EssifLab\Tests\TestCase;
 
 class CredentialTest extends TestCase {
@@ -41,7 +41,7 @@ class CredentialTest extends TestCase {
 		$expected = [
 			Input::class,
 			Issuer::class,
-			Schema::class,
+			CredentialType::class,
 		];
 
 		$this->assertEquals($expected, $actual);

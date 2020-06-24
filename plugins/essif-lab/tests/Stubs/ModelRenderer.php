@@ -10,7 +10,7 @@ class ModelRenderer implements \TNO\EssifLab\ModelRenderers\Contracts\ModelRende
 
 	const FIELD_SIGNATURE_RENDERER = 'FieldSignature';
 
-	const FIELD_SCHEMA_LOADER_RENDERER = 'FieldSchemaLoaderRenderer';
+	const FIELD_CREDENTIAL_TYPE_RENDERER = 'FieldCredentialTypeRenderer';
 
     const FIELD_IMMUTABLE_RENDERER = 'FieldImmutableRenderer';
 
@@ -39,8 +39,8 @@ class ModelRenderer implements \TNO\EssifLab\ModelRenderers\Contracts\ModelRende
 		return $this->callRenderer(self::FIELD_SIGNATURE_RENDERER, $integration, $model, $attrs);
 	}
 
-    function renderSchemaLoader(Integration $integration, Model $model, array $attrs = []): string {
-		return $this->callRenderer(self::FIELD_SCHEMA_LOADER_RENDERER, $integration, $model, $attrs);
+    function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string {
+		return $this->callRenderer(self::FIELD_CREDENTIAL_TYPE_RENDERER, $integration, $model, $attrs);
 	}
 
     function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string

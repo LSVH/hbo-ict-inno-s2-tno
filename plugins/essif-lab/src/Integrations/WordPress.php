@@ -2,13 +2,10 @@
 
 namespace TNO\EssifLab\Integrations;
 
-use InvalidArgumentException;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\Contracts\BaseIntegration;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
-use TNO\EssifLab\Utilities\Exceptions\ExistingRelation;
-use TNO\EssifLab\Utilities\Exceptions\NotExistingRelation;
 use TNO\EssifLab\Utilities\WP;
 use TNO\EssifLab\Views\Items\Displayable;
 use TNO\EssifLab\Views\Items\MultiDimensional;
@@ -110,8 +107,8 @@ class WordPress extends BaseIntegration {
 			case Constants::FIELD_TYPE_SIGNATURE:
 				return $this->renderer->renderFieldSignature($this, $model);
 
-			case Constants::FIELD_TYPE_SCHEMA_LOADER:
-				return $this->renderer->renderSchemaLoader($this, $model);
+			case Constants::FIELD_TYPE_CREDENTIAL_TYPE:
+				return $this->renderer->renderCredentialType($this, $model);
 
             case Constants::FIELD_TYPE_IMMUTABLE:
                 return $this->renderer->renderFieldImmutable($this, $model);
