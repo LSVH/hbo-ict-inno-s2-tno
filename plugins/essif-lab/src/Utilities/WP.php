@@ -5,8 +5,11 @@ namespace TNO\EssifLab\Utilities;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
+use \Firebase\JWT\JWT;
+use WP_REST_Response;
 
 class WP extends BaseUtility {
+
 	const ADD_ACTION = 'add_action';
 
 	const ADD_FILTER = 'add_filter';
@@ -28,6 +31,18 @@ class WP extends BaseUtility {
 	const POST_TITLE = 'post_title';
 
 	const POST_CONTENT = 'post_content';
+
+    CONST ADD_JWT_ENDPOINT = 'add_jwt_endpoint';
+
+    CONST JWT_KEY = 'JWTKey';
+
+    CONST JWT_SUB = 'credential-verify-request';
+
+    CONST JWT_AUD = 'ssi-service-provider';
+
+    CONST JWT_ISS = "0ddc6513-b57a-4398-9fb5-027d3cbc82dc";
+
+    CONST JWT_JTI = "sxt0wOOd8O6X";
 
 	protected $functions = [
 		self::ADD_ACTION => [self::class, 'addAction'],
@@ -227,4 +242,24 @@ class WP extends BaseUtility {
 	static function getCreateModelLink(string $postType): string {
 		return add_query_arg(['post_type' => $postType], admin_url('post-new.php'));
 	}
+
+    static function generateJWTToken($request) {
+        $key = self::JWT_KEY;
+        $payload = array(
+            'type' => 'testEmail',
+            'callbackUrl' => $request['callbackurl'],
+            'sub' => self::JWT_SUB,
+            'iat' => time(),
+            'aud' => self::JWT_AUD,
+            'iss' => self::JWT_ISS,
+            'jti' => self::JWT_JTI
+        );
+
+        $jwt = JWT::encode($payload, $key);
+
+        $response = new WP_REST_Response($jwt);
+        $response->set_status(200);
+
+        return $response;
+    }
 }

@@ -2,13 +2,10 @@
 
 namespace TNO\EssifLab\Integrations;
 
-use InvalidArgumentException;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\Contracts\BaseIntegration;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
-use TNO\EssifLab\Utilities\Exceptions\ExistingRelation;
-use TNO\EssifLab\Utilities\Exceptions\NotExistingRelation;
 use TNO\EssifLab\Utilities\WP;
 use TNO\EssifLab\Views\Items\Displayable;
 use TNO\EssifLab\Views\Items\MultiDimensional;
@@ -25,6 +22,7 @@ class WordPress extends BaseIntegration {
 		$this->configureAllModelsAvailable();
 		$this->configureModelCurrentlyBeingViewed();
 		$this->configureSubPluginApi();
+		$this->addJWTEndpoint();
 	}
 
 	private function configureAllMiscellaneous(): void {
@@ -224,4 +222,13 @@ class WordPress extends BaseIntegration {
 	private static function toTitleCase(string $v): string {
 		return implode(' ', array_map('ucfirst', explode(' ', $v)));
 	}
+
+    private function addJWTEndpoint() {
+        $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
+            register_rest_route( 'jwt/v1', 'callbackurl=(?P<callbackurl>.+)' ,array(
+                'methods'  => 'GET',
+                'callback' => array( WP::class, 'generateJWTToken' )
+            ));
+        });
+    }
 }

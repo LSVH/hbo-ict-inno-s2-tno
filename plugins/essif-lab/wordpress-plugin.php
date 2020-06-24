@@ -12,7 +12,7 @@ defined('ABSPATH') or die();
 
 $classAutoloader = __DIR__.'/vendor/autoload.php';
 if (file_exists($classAutoloader)) {
-	require_once($classAutoloader);
+    require_once($classAutoloader);
 }
 
 use TNO\EssifLab\Applications\Contracts\Application;
@@ -28,45 +28,45 @@ use TNO\EssifLab\Utilities\WP;
 
 $wpPluginApi = ABSPATH.'wp-admin/includes/plugin.php';
 if (! function_exists('get_plugin_data') && file_exists($wpPluginApi)) {
-	require_once($wpPluginApi);
+    require_once($wpPluginApi);
 }
 
 $getApplication = function (): Application {
-	$pluginData = get_plugin_data(__FILE__, false, false);
+    $pluginData = get_plugin_data(__FILE__, false, false);
 
-	$name = function () use ($pluginData): string {
-		return array_key_exists('Name', $pluginData) ? $pluginData['Name'] : 'App';
-	};
+    $name = function () use ($pluginData): string {
+        return array_key_exists('Name', $pluginData) ? $pluginData['Name'] : 'App';
+    };
 
-	$namespace = function () use ($pluginData): string {
-		return array_key_exists('TextDomain', $pluginData) ? $pluginData['TextDomain'] : 'MyApp';
-	};
+    $namespace = function () use ($pluginData): string {
+        return array_key_exists('TextDomain', $pluginData) ? $pluginData['TextDomain'] : 'MyApp';
+    };
 
-	$appDir = function (): string {
-		return plugin_dir_path(__FILE__);
-	};
+    $appDir = function (): string {
+        return plugin_dir_path(__FILE__);
+    };
 
-	return new Plugin($name(), $namespace(), $appDir());
+    return new Plugin($name(), $namespace(), $appDir());
 };
 
 $getUtility = function (): Utility {
-	return new WP();
+    return new WP();
 };
 
 $getModelRenderer = function (): ModelRenderer {
-	return new WordPressMetaBox();
+    return new WordPressMetaBox();
 };
 
 $getModelManager = function (Application $application) use ($getUtility): ModelManager {
-	return new WordPressPostTypes($application, $getUtility());
+    return new WordPressPostTypes($application, $getUtility());
 };
 
 $getIntegration = function (Application $application) use (
-	$getModelManager,
-	$getModelRenderer,
-	$getUtility
+    $getModelManager,
+    $getModelRenderer,
+    $getUtility
 ): Integration {
-	return new WordPress($application, $getModelManager($application), $getModelRenderer(), $getUtility());
+    return new WordPress($application, $getModelManager($application), $getModelRenderer(), $getUtility());
 };
 
 $getIntegration($getApplication())->install();

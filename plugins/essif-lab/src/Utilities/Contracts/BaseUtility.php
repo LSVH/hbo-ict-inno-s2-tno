@@ -5,6 +5,8 @@ namespace TNO\EssifLab\Utilities\Contracts;
 use TNO\EssifLab\Utilities\Exceptions\InvalidUtility;
 
 abstract class BaseUtility implements Utility {
+    public const ADD_JWT_ENDPOINT = 'addJWTEndpoint';
+
 	public const CREATE_MODEL = 'createModel';
 
 	public const UPDATE_MODEL = 'updateModel';
@@ -48,6 +50,7 @@ abstract class BaseUtility implements Utility {
 			self::GET_MODEL_META => [static::class, 'getModelMeta'],
 			self::GET_EDIT_MODEL_LINK => [static::class, 'getEditModelLink'],
 			self::GET_CREATE_MODEL_LINK => [static::class, 'getCreateModelLink'],
+            self::ADD_JWT_ENDPOINT => [static::class, 'addJWTEndpoint'],
 		], $this->functions, $functions);
 	}
 
