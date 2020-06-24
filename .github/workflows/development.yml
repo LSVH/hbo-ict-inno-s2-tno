@@ -36,11 +36,6 @@ jobs:
                         do composer install --prefer-dist --no-progress --no-suggest -d $(dirname "$i");
                     done;
 
-            -   uses: actions/upload-artifact@v2
-                with:
-                    name: all-plugins
-                    path: plugins/*
-
             -   name: Run all tests
                 run: |
                     for i in $(ls -1 "$COMPOSER_FILES");
