@@ -50,6 +50,10 @@ jobs:
                     name: all-plugins
                     path: plugins/
 
+            -   name: Decompress artifact
+                run: unzip all-plugins.zip
+                working-directory: plugins
+
             -   name: Run all tests
                 run: |
                     for i in $(ls -1 "$COMPOSER_FILES");
