@@ -1,4 +1,4 @@
-name: Continues Integration
+name: "Development Workflow"
 
 on: [push]
 
@@ -6,7 +6,9 @@ env:
     COMPOSER_FILES: plugins/*/composer.json
 
 jobs:
-    build:
+    build_test:
+        name: "Build and Test"
+
         runs-on: ubuntu-latest
 
         steps:
@@ -38,21 +40,6 @@ jobs:
                 with:
                     name: all-plugins
                     path: plugins/*
-
-    test:
-        needs: build
-
-        runs-on: ubuntu-latest
-
-        steps:
-            -   uses: actions/download-artifact@v2
-                with:
-                    name: all-plugins
-                    path: plugins/
-
-            -   name: Decompress artifact
-                run: ls -l essif-lab/
-                working-directory: plugins
 
             -   name: Run all tests
                 run: |
