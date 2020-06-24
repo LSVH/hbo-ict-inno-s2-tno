@@ -1,4 +1,11 @@
 .idea
 vendor
+<<<<<<< HEAD
 composer.lock
 .phpunit.result.cache
+=======
+
+# Tools
+.idea
+.phpunit.result.cache
+>>>>>>> ab5745f... Removed composer.lock
