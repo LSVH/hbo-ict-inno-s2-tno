@@ -36,17 +36,22 @@ jobs:
 
             -   uses: actions/upload-artifact@v2
                 with:
-                    name: plugins
+                    name: all-plugins
                     path: plugins/*
 
     test:
-        -   uses: actions/download-artifact@v2
-            with:
-                name: plugins
-                path: plugins/
+        needs: build
 
-        -   name: Run all tests
-            run: |
-                for i in $(ls -1 "$COMPOSER_FILES");
-                    do composer run-script test -d $(dirname "$i");
-                done;
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/download-artifact@v2
+                with:
+                    name: all-plugins
+                    path: plugins/
+
+            -   name: Run all tests
+                run: |
+                    for i in $(ls -1 "$COMPOSER_FILES");
+                        do composer run-script test -d $(dirname "$i");
+                    done;
