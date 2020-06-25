@@ -14,12 +14,9 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
-            -   name: Debug with ls
-                run: ls -1 plugins/*/composer.json
-
             -   name: Validate composer.json and composer.lock
                 run: |
-                    for i in $(ls -1 "$COMPOSER_CONFIGS");
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
                         do composer validate "$i";
                     done;
 
@@ -35,7 +32,7 @@ jobs:
             -   name: Install dependencies for development
                 if: steps.composer-cache.outputs.cache-hit != 'true'
                 run: |
-                    for i in $(ls -1 "$COMPOSER_CONFIGS");
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
                         do composer install \
                             --prefer-dist \
                             --no-progress \
@@ -45,6 +42,6 @@ jobs:
 
             -   name: Run all tests
                 run: |
-                    for i in $(ls -1 "$COMPOSER_CONFIGS");
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
                         do composer run-script test -d $(dirname "$i");
                     done;
