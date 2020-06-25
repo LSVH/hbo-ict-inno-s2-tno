@@ -1,0 +1,8 @@
+preset: recommended
+risky: true
+tab-width: 4
+use-tabs: false
+finder:
+    exclude:
+        - "vendor"
+    name: "*.php"
