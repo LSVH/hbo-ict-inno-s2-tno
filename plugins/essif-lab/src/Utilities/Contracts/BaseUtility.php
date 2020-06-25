@@ -5,8 +5,6 @@ namespace TNO\EssifLab\Utilities\Contracts;
 use TNO\EssifLab\Utilities\Exceptions\InvalidUtility;
 
 abstract class BaseUtility implements Utility {
-    public const ADD_JWT_ENDPOINT = 'addJWTEndpoint';
-
 	public const CREATE_MODEL = 'createModel';
 
 	public const UPDATE_MODEL = 'updateModel';
@@ -31,7 +29,10 @@ abstract class BaseUtility implements Utility {
 
 	public const GET_CREATE_MODEL_LINK = 'getCreateModelLink';
 
-	protected $functions = [];
+    public const ADD_JWT_ENDPOINT = 'addJWTEndpoint';
+
+
+    protected $functions = [];
 
 	function __construct(array $functions = []) {
 		$this->functions = array_merge([

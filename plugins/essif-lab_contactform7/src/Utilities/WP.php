@@ -88,7 +88,7 @@ class WP extends BaseUtility
 
     function addEssifLabFormTag () {
         add_action('wpcf7_init',
-            wpcf7_add_form_tag('essif_lab', array ( Button::class, 'custom_essif_lab_form_tag_handler' ) )
+            wpcf7_add_form_tag('essif_lab', array ( Button::class, 'custom_essif_lab_form_tag_handler' ), array( 'name-attr' => true ) )
         );
     }
 
