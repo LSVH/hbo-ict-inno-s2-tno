@@ -3,7 +3,7 @@ name: "Development Workflow"
 on: [push]
 
 env:
-    COMPOSER_FILES: plugins/*/composer.json
+    COMPOSER_CONFIGS: plugins/*/composer.json
 
 jobs:
     build_test:
@@ -15,11 +15,11 @@ jobs:
             -   uses: actions/checkout@v2
 
             -   name: Debug with ls
-                run: ls -al && ls -al plugins/
+                run: ls -1 "$COMPOSER_CONFIGS"
 
             -   name: Validate composer.json and composer.lock
                 run: |
-                    for i in $(ls -1 "$COMPOSER_FILES");
+                    for i in $(ls -1 "$COMPOSER_CONFIGS");
                         do composer validate "$i";
                     done;
 
@@ -35,7 +35,7 @@ jobs:
             -   name: Install dependencies for development
                 if: steps.composer-cache.outputs.cache-hit != 'true'
                 run: |
-                    for i in $(ls -1 "$COMPOSER_FILES");
+                    for i in $(ls -1 "$COMPOSER_CONFIGS");
                         do composer install \
                             --prefer-dist \
                             --no-progress \
@@ -45,6 +45,6 @@ jobs:
 
             -   name: Run all tests
                 run: |
-                    for i in $(ls -1 "$COMPOSER_FILES");
+                    for i in $(ls -1 "$COMPOSER_CONFIGS");
                         do composer run-script test -d $(dirname "$i");
                     done;
