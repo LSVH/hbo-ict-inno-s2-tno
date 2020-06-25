@@ -38,11 +38,11 @@ jobs:
                             -d $(dirname "$i");
                     done;
 
-             -   name: Check composer vendors existence
-                 id: has_composer_vendors
-                 uses: andstor/file-existence-action@v1
-                 with:
-                     files: "$COMPOSER_VENDORS"
+            -   name: Check composer vendors existence
+                id: has_composer_vendors
+                uses: andstor/file-existence-action@v1
+                with:
+                    files: "$COMPOSER_VENDORS"
 
             -   name: Publish to Registry
                 uses: elgohr/Publish-Docker-Github-Action@master
