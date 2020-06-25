@@ -99,13 +99,10 @@ class WordPressSubPluginApi extends BaseIntegration {
 	}
 
 	private static function getTitle(array $models): string {
-		return strval(current(end($models)));
+        return strval(current(reset($models)));
 	}
 
 	private static function getSlug(array $models): string {
-	    return strval(key(end($models)));
-//		return implode('__', array_map(function (array $param) {
-//			return key($param);
-//		}, $models));
+	    return strval(key(reset($models)));
 	}
 }

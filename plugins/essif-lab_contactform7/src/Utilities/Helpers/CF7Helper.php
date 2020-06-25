@@ -16,10 +16,10 @@ class CF7Helper extends WP
         $res = [];
         if ($post->post_content != null) {
             $post_content = $post->post_content;
-            $post_content = (string)strstr($post_content, 'TNO', true);
-            $re = '/\[(?:\w+\*?\s+)?([^][]+)]/';
+            $post_content = preg_split("/\s1\s/", $post_content)[0];
+            $re = '/\[(?!.*(submit|essif_lab))(?:\w+\*?\s+)?([^][]+)]/';
             preg_match_all($re, $post_content, $fields);
-            $slugs = array_unique($fields[1]);
+            $slugs = array_unique($fields[2]);
             $titles = str_replace("-"," ", $slugs);
             $res = [$slugs, $titles ];
         }
@@ -35,7 +35,9 @@ class CF7Helper extends WP
     function getAllInputs()
     {
         $cf7Forms = parent::getAllForms();
-        return array_map(null, array($cf7Forms->ID, $cf7Forms->post_title), $this->extractInputsFromForm($cf7Forms));
+        return array_map(function ($form){
+            return array($form->ID, $form->post_title, $this->extractInputsFromForm($form));
+        }, $cf7Forms);
     }
 
     function addAllOnActivate()
@@ -66,17 +68,15 @@ class CF7Helper extends WP
          *  Insert the inputs
          */
         foreach ($this->getAllInputs() as $input) {
-            $target = $input[0];
-            $targetHook = parent::selectInput([$target[0] => $target[1]]);
+            $targetId = $input[0];
+            $targetHook = parent::selectInput([$targetId[0] => $targetId[1]]);
 
-            $slugs = $input[1][0];
-            $titles = $input[1][1];
+            $slugs = $input[2][0];
+            $titles = $input[2][1];
             $inputs = [ $slugs, $titles ];
 
-            foreach ($inputs as $inp) {
-                if (!in_array($inp, $targetHook)) {
-                    parent::insertInput($inp[0], $inp[1], $target[0]);
-                }
+            for ($i = 0; $i < count($inputs[0]); $i++){
+                parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
             }
         }
     }

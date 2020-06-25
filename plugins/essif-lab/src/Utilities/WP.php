@@ -200,6 +200,7 @@ class WP extends BaseUtility {
 
 		$postAttrs = [
 			'post_type' => $model->getTypeName(),
+            'post_status' => 'publish',
 		];
 		if (array_key_exists(Constants::TYPE_INSTANCE_IDENTIFIER_ATTR, $modelAttrs)) {
 			$postAttrs[self::POST_ID] = $modelAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR];

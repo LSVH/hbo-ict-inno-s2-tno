@@ -8,6 +8,7 @@ use TNO\ContactForm7\Views\Button;
 
 class WP extends BaseUtility
 {
+    private const HOOK = "hook";
     private const TARGET = "target";
     private const INPUT = "input";
     private $cf7helper;
@@ -32,7 +33,7 @@ class WP extends BaseUtility
 
     function insertHook(string $slug = self::SLUG, string $title = self::TITLE)
     {
-        $this->insert("hook", [$slug => $title]);
+        $this->insert(self::HOOK, [$slug => $title]);
     }
 
     function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
@@ -52,7 +53,7 @@ class WP extends BaseUtility
 
     function deleteHook(string $slug = self::SLUG, string $title = self::TITLE)
     {
-        $this->delete("hook", [$slug => $title]);
+        $this->delete(self::HOOK, [$slug => $title]);
     }
 
     function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
@@ -71,7 +72,7 @@ class WP extends BaseUtility
     }
 
     function selectHook(string $slug = self::SLUG, string $title = self::TITLE) : array  {
-        return $this->select("hook", [$slug => $title]);
+        return $this->select(self::HOOK, [$slug => $title]);
     }
 
     function selectTarget(array $items = [], string $hookSlug = self::SLUG) : array  {
@@ -107,6 +108,6 @@ class WP extends BaseUtility
 
     function addDeactivateHook(CF7Helper $cf7Helper)
     {
-//        register_deactivation_hook( PLUGIN_DIR, array( $cf7Helper, 'deleteAllOnDeactivate' ) );
+        register_deactivation_hook( PLUGIN_DIR, array( $cf7Helper, 'deleteAllOnDeactivate' ) );
     }
 }
