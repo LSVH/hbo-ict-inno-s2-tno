@@ -11,7 +11,6 @@ on:
 env:
     DOCKER_IMAGE_NAME: wp-essif-lab
     COMPOSER_CONFIGS: plugins/*/composer.json
-    COMPOSER_VENDORS: plugins/*/vendor
 
 jobs:
     build_push:
@@ -22,16 +21,9 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
-            -   name: Check composer configs existence
-                id: has_composer_configs
-                uses: andstor/file-existence-action@v1
-                with:
-                    files: "plugins/*/composer.json"
-
             -   name: Install dependencies for deployment
-                if: steps.has_composer_configs.outputs.files_exists == 'true'
                 run: |
-                    for i in $(ls -1 "$COMPOSER_CONFIGS");
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
                         do composer install \
                             --no-ansi \
                             --no-dev \
@@ -43,12 +35,6 @@ jobs:
                             --optimize-autoloader \
                             -d $(dirname "$i");
                     done;
-
-            -   name: Check composer vendors existence
-                id: has_composer_vendors
-                uses: andstor/file-existence-action@v1
-                with:
-                    files: "$COMPOSER_VENDORS"
 
             -   name: Publish to Registry
                 uses: elgohr/Publish-Docker-Github-Action@master
