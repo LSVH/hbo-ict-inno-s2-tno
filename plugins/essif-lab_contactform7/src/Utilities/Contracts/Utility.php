@@ -26,6 +26,6 @@ interface Utility {
     function addEssifLabFormTag();
     function loadCustomScripts();
 
-    function addActivateHook(CF7Helper $cf7Helper, String $appDir);
-    function addDeactivateHook(CF7Helper $cf7Helper, String $appDir);
+    function addActivateHook(CF7Helper $cf7Helper);
+    function addDeactivateHook(CF7Helper $cf7Helper);
 }

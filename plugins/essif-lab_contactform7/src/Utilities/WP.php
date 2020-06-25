@@ -100,13 +100,13 @@ class WP extends BaseUtility
         add_action( 'wp_enqueue_scripts', array( $this , 'loadCustomJs' ) );
     }
 
-    function addActivateHook(CF7Helper $cf7Helper, String $appDir)
+    function addActivateHook(CF7Helper $cf7Helper)
     {
-        register_deactivation_hook( $appDir, array( $cf7Helper, 'addAllOnActivate' ) );
+        register_activation_hook( PLUGIN_DIR, array( $cf7Helper, 'addAllOnActivate' ) );
     }
 
-    function addDeactivateHook(CF7Helper $cf7Helper, String $appDir)
+    function addDeactivateHook(CF7Helper $cf7Helper)
     {
-        register_deactivation_hook( $appDir, array( $cf7Helper, 'deleteAllOnDeactivate' ) );
+//        register_deactivation_hook( PLUGIN_DIR, array( $cf7Helper, 'deleteAllOnDeactivate' ) );
     }
 }

@@ -10,7 +10,7 @@ class WordPress extends BaseIntegration {
         $this->utility->addEssifLabFormTag();
         $this->utility->loadCustomScripts();
 
-        $this->utility->addActivateHook($cf7Helper, $this->application->getAppDir());
-        $this->utility->addDeactivateHook($cf7Helper, $this->application->getAppDir());
+        $this->utility->addActivateHook($cf7Helper);
+        $this->utility->addDeactivateHook($cf7Helper);
     }
 }

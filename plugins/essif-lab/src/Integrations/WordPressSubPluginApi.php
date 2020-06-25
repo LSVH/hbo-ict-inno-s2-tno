@@ -103,8 +103,9 @@ class WordPressSubPluginApi extends BaseIntegration {
 	}
 
 	private static function getSlug(array $models): string {
-		return implode('__', array_map(function (array $param) {
-			return key($param);
-		}, $models));
+	    return strval(key(end($models)));
+//		return implode('__', array_map(function (array $param) {
+//			return key($param);
+//		}, $models));
 	}
 }
