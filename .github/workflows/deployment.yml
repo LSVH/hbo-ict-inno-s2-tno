@@ -16,6 +16,19 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
 
+            -   name: Add foo package
+                run: mkdir -p package/foo/ && touch package/foo/package.json
+            -   name: Add bar package
+                run: mkdir -p package/bar/ && touch package/bar/package.json
+            -   name: Check if files exist
+                uses: andstor/file-existence-action@v1
+                id: check_files
+                with:
+                    files: "packages/*/package.json"
+            -   name: Result
+                if: steps.check_files.outputs.files_exists == 'true'
+                run: echo "Files exist"
+
             -   name: Check composer configs existence
                 id: has_composer_configs
                 uses: andstor/file-existence-action@v1
