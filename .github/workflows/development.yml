@@ -15,6 +15,7 @@ jobs:
             -   uses: actions/checkout@v2
 
             -   name: Validate composer.json and composer.lock
+                continue-on-error: true
                 run: |
                     for i in $(ls -1 $COMPOSER_CONFIGS);
                         do composer validate "$i";
