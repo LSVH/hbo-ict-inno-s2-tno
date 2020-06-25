@@ -4,8 +4,8 @@ namespace TNO\EssifLab\ModelRenderers;
 
 use TNO\EssifLab\Integrations\Contracts\Integration;
 use TNO\EssifLab\Models\Contracts\Model;
+use TNO\EssifLab\Views\CredentialTypeField;
 use TNO\EssifLab\Views\ImmutableField;
-use TNO\EssifLab\Views\SchemaLoaderField;
 use TNO\EssifLab\Views\SignatureField;
 use TNO\EssifLab\Views\TypeList;
 
@@ -25,9 +25,9 @@ class WordPressMetaBox implements Contracts\ModelRenderer
 		return $view->render();
 	}
 
-	function renderSchemaLoader(Integration $integration, Model $model, array $attrs = []): string
+	function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
 	{
-		$view = new SchemaLoaderField($integration, $model, $attrs);
+		$view = new CredentialTypeField($integration, $model, $attrs);
 
 		return $view->render();
 	}

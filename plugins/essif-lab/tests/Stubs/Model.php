@@ -15,7 +15,7 @@ class Model extends BaseModel
 
 	protected $fields = [
 		Constants::FIELD_TYPE_SIGNATURE,
-		Constants::FIELD_TYPE_SCHEMA_LOADER,
-		Constants::FIELD_TYPE_IMMUTABLE,
+		Constants::FIELD_TYPE_CREDENTIAL_TYPE,
+        Constants::FIELD_TYPE_IMMUTABLE
 	];
 }

@@ -16,6 +16,6 @@ class Credential extends BaseModel
 	protected $relations = [
 		Input::class,
 		Issuer::class,
-		Schema::class,
+		CredentialType::class,
 	];
 }

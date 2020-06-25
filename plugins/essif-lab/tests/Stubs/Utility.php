@@ -170,20 +170,16 @@ class Utility extends BaseUtility
 	{
 		if (self::checkPostIdAndKey($postId, $key))
 		{
-			if (!empty($value))
+			$value_key = array_search(empty($value) ? [] : $value, self::$meta[$postId][$key]);
+			if ($value_key)
 			{
-				if (($value_key = array_search($value, self::$meta[$postId][$key])) !== false)
-				{
-					unset(self::$meta[$postId][$key][$value_key]);
+				unset(self::$meta[$postId][$key][$value_key]);
 
-					return !in_array($value, self::$meta[$postId][$key]);
-				}
-			} else
-			{
-				self::$meta[$postId][$key] = [];
-
-				return empty($meta[$postId][$key]) ? true : false;
+				return !in_array($value, self::$meta[$postId][$key]);
 			}
+			self::$meta[$postId][$key] = [];
+
+			return empty($meta[$postId][$key]);
 		}
 
 		return false;
