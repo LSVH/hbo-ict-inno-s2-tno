@@ -57,19 +57,22 @@ class CF7Helper extends WP
         /**
          *  Insert the targets
          */
+
+        // TODO: fix selectTarget to actually get the targets :)
         $targets = parent::selectTarget();
-        foreach ($this->getAllTargets() as $key => $target) {
-            if (!in_array($target, $targets)) {
-                parent::insertTarget($key, $target);
+        foreach ($this->getAllTargets() as $id => $title) {
+            if (!in_array($title, $targets)) {
+                parent::insertTarget($id, $title);
             }
         }
 
         /**
          *  Insert the inputs
          */
+
+        // TODO: Link Inputs to Targets
         foreach ($this->getAllInputs() as $input) {
             $targetId = $input[0];
-            $targetHook = parent::selectInput([$targetId[0] => $targetId[1]]);
 
             $slugs = $input[2][0];
             $titles = $input[2][1];

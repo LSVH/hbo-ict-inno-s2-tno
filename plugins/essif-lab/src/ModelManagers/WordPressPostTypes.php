@@ -18,11 +18,11 @@ class WordPressPostTypes extends BaseModelManager {
 		$this->relationKey = $application->getNamespace().'_'.Constants::MANAGER_TYPE_RELATION_ID_NAME;
 	}
 
-	function insert(Model $model): bool {
+	function insert(Model $model): int {
 		return $this->utility->call(BaseUtility::CREATE_MODEL, $model);
 	}
 
-	function update(Model $model): bool {
+	function update(Model $model): int {
 		if (self::getModelId($model) < 0) {
 			throw new MissingIdentifier($model->getSingularName());
 		}

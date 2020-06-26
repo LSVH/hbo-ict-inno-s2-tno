@@ -40,7 +40,18 @@ class WordPressSubPluginApi extends BaseIntegration {
 			if (self::isArrayOfArrays($params)) {
 				$instance = new $instance(self::getProps($params));
 
-				$this->manager->insert($instance);
+                $instanceId = $this->manager->insert($instance);
+
+                // TODO: Fix everything getting added 3 times
+                if ($instance instanceof Target) {
+                    $instanceAttrs = $instance->getAttributes();
+                    $instanceAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR] = $instanceId;
+                    $instance->setAttributes($instanceAttrs);
+
+                    $hook = $this->manager->select(new Hook(), [WP::POST_NAME => $params[1]])[0];
+
+                    $this->manager->insertRelation($instance, $hook);
+                }
 			}
 		}, 1, $params);
 	}
