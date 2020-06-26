@@ -34,8 +34,6 @@ class WP extends BaseUtility {
 
     CONST ADD_JWT_ENDPOINT = 'add_jwt_endpoint';
 
-    CONST JWT_KEY = 'JWTKey';
-
     CONST JWT_SUB = 'credential-verify-request';
 
     CONST JWT_AUD = 'ssi-service-provider';
@@ -97,7 +95,7 @@ class WP extends BaseUtility {
 		register_post_type($postType, $args);
 	}
 
-	static function createModel(Model $model): bool {
+	static function createModel(Model $model): int {
 		$result = wp_insert_post(self::mapModelToPost($model), true);
 		if (! is_int($result)) {
 			throw $result;
@@ -241,7 +239,6 @@ class WP extends BaseUtility {
 	}
 
     static function generateJWTToken($request) {
-        $key = self::JWT_KEY;
         $payload = array(
             'type' => 'testEmail',
             'callbackUrl' => $request['callbackurl'],
@@ -252,11 +249,17 @@ class WP extends BaseUtility {
             'jti' => self::JWT_JTI
         );
 
+        $key = self::getSharedSecret();
+
         $jwt = JWT::encode($payload, $key);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
 
         return $response;
+    }
+
+    static function getSharedSecret() : string {
+        return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 }
