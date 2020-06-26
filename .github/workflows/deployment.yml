@@ -36,9 +36,8 @@ jobs:
                             -d $(dirname "$i");
                     done;
 
-            -   name: Publish to Registry
+            -   name: Build docker image and publish to registry
                 uses: elgohr/Publish-Docker-Github-Action@master
-                if: steps.has_composer_vendors.outputs.files_exists == 'true'
                 with:
                     name: ${{ github.repository }}/$DOCKER_IMAGE_NAME
                     username: ${{ github.actor }}
