@@ -36,10 +36,15 @@ jobs:
                             -d $(dirname "$i");
                     done;
 
+            -   name: Extract branch name
+                run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+                id: extract_branch
+                shell: bash
+
             -   name: Build docker image and publish to registry
                 uses: elgohr/Publish-Docker-Github-Action@master
                 with:
-                    name: ${GITHUB_REPOSITORY}/${GITHUB_REF##*/}
+                    name: ${{ format('{0}/{1}', github.repository, steps.extract_branch.outputs.branch)  }}
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
                     registry: docker.pkg.github.com
