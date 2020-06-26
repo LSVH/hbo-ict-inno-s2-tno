@@ -1,0 +1,49 @@
+name: "Development Workflow"
+
+on: [push]
+
+env:
+    COMPOSER_CONFIGS: plugins/*/composer.json
+
+jobs:
+    build_test:
+        name: "Build and test the application"
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Validate composer.json and composer.lock
+                continue-on-error: true
+                run: |
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
+                        do composer validate "$i";
+                    done;
+
+            -   name: Cache Composer packages
+                id: composer-cache
+                uses: actions/cache@v2
+                with:
+                    path: |
+                        **/vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-
+
+            -   name: Install dependencies for development
+                if: steps.composer-cache.outputs.cache-hit != 'true'
+                run: |
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
+                        do composer install \
+                            --prefer-dist \
+                            --no-progress \
+                            --no-suggest \
+                            -d $(dirname "$i");
+                    done;
+
+            -   name: Run all tests
+                run: |
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
+                        do composer run-script test -d $(dirname "$i");
+                    done;

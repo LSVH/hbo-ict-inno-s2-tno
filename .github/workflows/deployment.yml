@@ -1,0 +1,45 @@
+name: "Deployment Workflow"
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+env:
+    DOCKER_IMAGE_NAME: wp-essif-lab
+    COMPOSER_CONFIGS: plugins/*/composer.json
+
+jobs:
+    build_push:
+        name: "Build and push docker image"
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Install dependencies for deployment
+                run: |
+                    for i in $(ls -1 $COMPOSER_CONFIGS);
+                        do composer install \
+                            --no-ansi \
+                            --no-dev \
+                            --no-interaction \
+                            --no-plugins \
+                            --no-progress \
+                            --no-scripts \
+                            --no-suggest \
+                            --optimize-autoloader \
+                            -d $(dirname "$i");
+                    done;
+
+            -   name: Build docker image and publish to registry
+                uses: elgohr/Publish-Docker-Github-Action@master
+                with:
+                    name: ${{ github.repository }}/$DOCKER_IMAGE_NAME
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
+                    registry: docker.pkg.github.com

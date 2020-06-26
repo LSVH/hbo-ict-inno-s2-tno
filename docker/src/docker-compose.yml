@@ -13,8 +13,7 @@ services:
         depends_on:
             - db
             - wp
-        build:
-            context: .
+        image: ${APP_IMG}
         environment:
             WP_HOST: ${WP_HOST} # default: http://localhost
             WP_USER: ${WP_USER} # default: admin

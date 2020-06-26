@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ -z "$WP_HOST" ]]; then
+	WP_HOST=http://localhost
+fi;
+
+if [[ -z "$WP_TITLE" ]]; then
+	WP_TITLE="My WordPress Site"
+fi;
+
+if [[ -z "$WP_USER" ]]; then
+	WP_USER=admin
+fi;
+
+if [[ -z "$WP_EMAIL" ]]; then
+	WP_EMAIL=admin@wordpress.local
+fi;
+
+if [[ -z "$DB_HOST" ]]; then
+	DB_HOST=db
+fi;
+
+if [[ -z "$DB_NAME" ]]; then
+	DB_NAME=wordpress
+fi;
+
+if [[ -z "$DB_USER" ]]; then
+	DB_NAME=wordpress_user
+fi;
+
+if [[ -z "$DB_PORT" ]]; then
+	DB_PORT=3306
+fi;
+
+echo "Configuration:"
+echo "- WP_HOST=$WP_HOST"
+echo "- WP_TITLE=$WP_TITLE"
+echo "- WP_USER=$WP_USER"
+echo "- WP_EMAIL=$WP_EMAIL"
+echo "- WP_PASS=$WP_PASS"
+echo "- DB_HOST=$DB_HOST"
+echo "- DB_PORT=$DB_PORT"
+
+wait-for-it --timeout=120 --host="$DB_HOST" --port="$DB_PORT"
+
+# Install the WordPress core
+wp core install \
+	--url="$WP_HOST" \
+	--title="$WP_TITLE" \
+	--admin_user="$WP_USER" \
+	--admin_email="$WP_EMAIL" \
+	--admin_password="$WP_PASS" \
+	--allow-root &
+wait $!
+
+# Install third party plugins, our plugins already are already installed
+wp plugin install \
+	$(cat /usr/local/etc/third-party-plugins.txt) \
+	--allow-root &
+wait $!
+
+# Activate all the plugins in the wp-content/plugins directory
+wp plugin activate $(wp plugin list --field=name --allow-root) --allow-root
+
+exit 0

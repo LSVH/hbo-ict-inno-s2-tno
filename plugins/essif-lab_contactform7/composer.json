@@ -1,7 +1,11 @@
 {
-	"name": "tno/contact-form-7",
+	"name": "tno/essif-lab_contactform7",
 	"type": "project",
 	"license": "mit",
+	"description": "TNO eSSIf-Lab, sub plugin for Contact Form 7",
+	"scripts": {
+		"test": "vendor/bin/phpunit --coverage-text --colors=never"
+	},
 	"require": {
 		"php": ">=7.1",
 		"haydenpierce/class-finder": "^0.4.2",
