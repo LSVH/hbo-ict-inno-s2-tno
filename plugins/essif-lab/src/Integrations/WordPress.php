@@ -225,10 +225,7 @@ class WordPress extends BaseIntegration {
 
     private function addJWTEndpoint() {
         $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
-            register_rest_route( 'jwt/v1', 'callbackurl=(?P<callbackurl>.+)' ,array(
-                'methods'  => 'GET',
-                'callback' => array( WP::class, 'generateJWTToken' )
-            ));
+            $this->utility->call(BaseUtility::REGISTER_REST_ROUTE);
         });
     }
 }

@@ -262,4 +262,11 @@ class WP extends BaseUtility {
     static function getSharedSecret() : string {
         return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
+
+    static function registerRestRoute() : bool {
+        return register_rest_route( 'jwt/v1', 'callbackurl=(?P<callbackurl>.+)' ,array(
+            'methods'  => 'GET',
+            'callback' => array( WP::class, 'generateJWTToken' )
+        ));
+    }
 }

@@ -25,6 +25,7 @@ class Utility extends BaseUtility
         BaseUtility::DELETE_MODEL_META => [self::class, 'deleteModelMeta'],
         BaseUtility::GET_MODEL_META => [self::class, 'getModelMeta'],
         BaseUtility::GET_MODELS => [self::class, 'getModels'],
+        BaseUtility::REGISTER_REST_ROUTE => [self::class, 'registerRestRoute'],
     ];
 
 	function call(string $name, ...$parameters) {
@@ -35,8 +36,8 @@ class Utility extends BaseUtility
 				$this->handleSubPluginActions($name, ...$parameters);
 			}
 
-			$callback = $this->callbackTriggeringFunctions[$name];
-			$callback(...$parameters);
+            $callback = $this->callbackTriggeringFunctions[$name];
+            $callback(...$parameters);
 		}
 
 		if (array_key_exists($name, $this->valueReturningFunctions)) {
@@ -183,5 +184,9 @@ class Utility extends BaseUtility
 
     public function clearMeta(): void {
 	    self::$meta = array();
+    }
+
+    static function registerRestRoute() : bool {
+	    return true;
     }
 }

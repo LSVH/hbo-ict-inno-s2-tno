@@ -237,6 +237,14 @@ class WordPressTest extends TestCase {
 		$this->assertEquals('Signature', $title);
 	}
 
+    /** @test */
+    function adds_a_JWT_endpoint() {
+        $this->subject->install();
+
+        $history = $this->utility->getHistoryByFuncName(BaseUtility::REGISTER_REST_ROUTE);
+        $this->assertNotEmpty($history);
+    }
+
     private function create_a_relation($id): void {
         $hook = new Hook([Constants::TYPE_INSTANCE_IDENTIFIER_ATTR => $id]);
         $_POST['namespace'] = [];
