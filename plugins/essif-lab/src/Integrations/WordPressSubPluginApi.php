@@ -5,6 +5,7 @@ namespace TNO\EssifLab\Integrations;
 use ReflectionClass;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\Contracts\BaseIntegration;
+use TNO\EssifLab\ModelManagers\Exceptions\UnknownModel;
 use TNO\EssifLab\Models\Hook;
 use TNO\EssifLab\Models\Input;
 use TNO\EssifLab\Models\Target;
@@ -42,15 +43,21 @@ class WordPressSubPluginApi extends BaseIntegration {
 
                 $instanceId = $this->manager->insert($instance);
 
-                // TODO: Fix everything getting added 3 times
-                if ($instance instanceof Target) {
+                if (!($instance instanceof Hook)) {
                     $instanceAttrs = $instance->getAttributes();
                     $instanceAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR] = $instanceId;
                     $instance->setAttributes($instanceAttrs);
 
-                    $hook = $this->manager->select(new Hook(), [WP::POST_NAME => $params[1]])[0];
+                    $relatedModelId = null;
+                    if ($instance instanceof Target) {
+                        $relatedModelId = $this->manager->select(new Hook(), [WP::POST_NAME => $params[1]])[0];
+                    } elseif ($instance instanceof Input) {
+                        $relatedModelId = $this->manager->select(new Target(), [WP::POST_NAME => $params[1]])[0];
+                    } else {
+                        throw new UnknownModel(get_class($instance));
+                    }
 
-                    $this->manager->insertRelation($instance, $hook);
+                    $this->manager->insertRelation($instance, $relatedModelId);
                 }
 			}
 		}, 1, $params);

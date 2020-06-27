@@ -69,8 +69,7 @@ class CF7Helper extends WP
         /**
          *  Insert the inputs
          */
-
-        // TODO: Link Inputs to Targets
+        // TODO: make inputs not be inserted if they already exist
         foreach ($this->getAllInputs() as $input) {
             $targetId = $input[0];
 
