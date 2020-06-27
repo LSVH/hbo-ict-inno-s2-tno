@@ -35,6 +35,7 @@ class WordPressSubPluginApi extends BaseIntegration {
 		}
 	}
 
+	// TODO: figure out why this action is immediately executed instead of waiting for the trigger
 	private function addActionInsert(string $instance, int $params) {
 		$triggerName = self::getTriggerName(self::TRIGGER_PRE.'insert_', $instance);
 		$this->utility->call(WP::ADD_ACTION, $triggerName, function (...$params) use ($instance) {
@@ -85,6 +86,7 @@ class WordPressSubPluginApi extends BaseIntegration {
 	}
 
 	private function applyFilterSelectAllRelations(string $model, string $relation) {
+	    // TODO: Change trigger name to be different from applyFilterSelect
 		$triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
 		$this->utility->call(WP::ADD_FILTER, $triggerName, function ($items, $parentSlug) use ($model, $relation) {
 			$items = is_array($items) ? $items : [];
