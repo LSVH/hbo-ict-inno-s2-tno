@@ -12,153 +12,154 @@ use TNO\EssifLab\Utilities\Contracts\Utility;
 
 class WordPressPostTypes extends BaseModelManager
 {
-	private $relationKey;
+    private $relationKey;
 
-	public function __construct(Application $application, Utility $utility)
-	{
-		parent::__construct($application, $utility);
-		$this->relationKey = $application->getNamespace().'_'.Constants::MANAGER_TYPE_RELATION_ID_NAME;
-	}
+    public function __construct(Application $application, Utility $utility)
+    {
+        parent::__construct($application, $utility);
+        $this->relationKey = $application->getNamespace().'_'.Constants::MANAGER_TYPE_RELATION_ID_NAME;
+    }
 
-	function insert(Model $model): int
-	{
-		return $this->utility->call(BaseUtility::CREATE_MODEL, $model);
-	}
+    public function insert(Model $model): int
+    {
+        return $this->utility->call(BaseUtility::CREATE_MODEL, $model);
+    }
 
-	function update(Model $model): int
-	{
-		if (self::getModelId($model) < 0)
-		{
-			throw new UnknownModel($model->getSingularName());
-		}
+    public function update(Model $model): int
+    {
+        if (self::getModelId($model) < 0) {
+            throw new UnknownModel($model->getSingularName());
+        }
 
-		return $this->insert($model);
-	}
+        return $this->insert($model);
+    }
 
-	function select(Model $model, array $criteria = []): array
-	{
-		$args = array_merge([
-			Constants::MODEL_TYPE_INDICATOR => $model->getTypeName(),
-		], $criteria);
+    public function select(Model $model, array $criteria = []): array
+    {
+        $args = array_merge([
+            Constants::MODEL_TYPE_INDICATOR => $model->getTypeName(),
+        ], $criteria);
 
-		return $this->utility->call(BaseUtility::GET_MODELS, $args);
-	}
+        return $this->utility->call(BaseUtility::GET_MODELS, $args);
+    }
 
-	function delete(Model $model): bool
-	{
-		$id = $this->getGivenOrCurrentModelId($model);
+    public function delete(Model $model): bool
+    {
+        $id = $this->getGivenOrCurrentModelId($model);
 
-		$resultRelations = $this->deleteAllRelations($model);
+        $resultRelations = $this->deleteAllRelations($model);
 
-		$result = $this->utility->call(BaseUtility::DELETE_MODEL, $id);
+        $result = $this->utility->call(BaseUtility::DELETE_MODEL, $id);
 
-		return ($result !== null || $result !== false) && ($resultRelations !== null || $resultRelations !== false);
-	}
+        return ($result !== null || $result !== false) && ($resultRelations !== null || $resultRelations !== false);
+    }
 
-	function insertRelation(Model $from, Model $to): bool
-	{
-		$fromId = $this->getGivenOrCurrentModelId($from);
-		$toId = $this->getModelId($to);
+    public function insertRelation(Model $from, Model $to): bool
+    {
+        $fromId = $this->getGivenOrCurrentModelId($from);
+        $toId = $this->getModelId($to);
 
-		if ($toId < 0)
-		{
-			throw new UnknownModel($to->getSingularName());
-		}
+        if ($toId < 0) {
+            throw new UnknownModel($to->getSingularName());
+        }
 
-		$relationFromToKey = $this->relationKey.$to->getTypeName();
-		$fromTo = boolval($this->utility->call(BaseUtility::CREATE_MODEL_META, $fromId, $relationFromToKey, $toId));
+        $relationFromToKey = $this->relationKey.$to->getTypeName();
+        $fromTo = boolval($this->utility->call(BaseUtility::CREATE_MODEL_META, $fromId, $relationFromToKey, $toId));
 
-		$relationToFromKey = $this->relationKey.$from->getTypeName();
-		$toFrom = boolval($this->utility->call(BaseUtility::CREATE_MODEL_META, $toId, $relationToFromKey, $fromId));
+        $relationToFromKey = $this->relationKey.$from->getTypeName();
+        $toFrom = boolval($this->utility->call(BaseUtility::CREATE_MODEL_META, $toId, $relationToFromKey, $fromId));
 
-		return $fromTo && $toFrom;
-	}
+        return $fromTo && $toFrom;
+    }
 
-	function deleteRelation(Model $from, Model $to): bool
-	{
-		$fromId = $this->getGivenOrCurrentModelId($from);
-		$toId = $this->getModelId($to);
+    public function deleteRelation(Model $from, Model $to): bool
+    {
+        $fromId = $this->getGivenOrCurrentModelId($from);
+        $toId = $this->getModelId($to);
 
-		if ($toId < 0)
-		{
-			throw new UnknownModel($to->getSingularName());
-		}
+        if ($toId < 0) {
+            throw new UnknownModel($to->getSingularName());
+        }
 
-		$relationFromToKey = $this->relationKey.$to->getTypeName();
-		$fromTo = $this->utility->call(BaseUtility::DELETE_MODEL_META, $fromId, $relationFromToKey, $toId);
+        $relationFromToKey = $this->relationKey.$to->getTypeName();
+        $fromTo = $this->utility->call(BaseUtility::DELETE_MODEL_META, $fromId, $relationFromToKey, $toId);
 
-		$relationToFromKey = $this->relationKey.$from->getTypeName();
-		$toFrom = $this->utility->call(BaseUtility::DELETE_MODEL_META, $toId, $relationToFromKey, $fromId);
+        $relationToFromKey = $this->relationKey.$from->getTypeName();
+        $toFrom = $this->utility->call(BaseUtility::DELETE_MODEL_META, $toId, $relationToFromKey, $fromId);
 
-		return $fromTo && $toFrom;
-	}
+        return $fromTo && $toFrom;
+    }
 
-	function deleteAllRelations(Model $from): bool
-	{
-		$result = true;
-		$fromId = $this->getGivenOrCurrentModelId($from);
-		BaseModelManager::forEachModel($from->getRelations(), function (Model $to) use (&$result, $from, $fromId) {
-			if (
-			!empty($toIds = $this->utility->call(BaseUtility::GET_MODEL_META, $fromId,
-				$this->relationKey.$to->getTypeName()))
-			)
-			{
-				$relationFromToKey = $this->relationKey.$to->getTypeName();
-				$relationToFromKey = $this->relationKey.$from->getTypeName();
-				$result = $this->utility->call(BaseUtility::DELETE_MODEL_META, $fromId, $relationFromToKey);
-				foreach ($toIds as $id)
-				{
-					if ($result)
-					{
-						$result = $this->utility->call(BaseUtility::DELETE_MODEL_META, $id, $relationToFromKey,
-							$fromId);
-					}
-				}
-			}
-		});
+    public function deleteAllRelations(Model $from): bool
+    {
+        $result = true;
+        $fromId = $this->getGivenOrCurrentModelId($from);
+        BaseModelManager::forEachModel($from->getRelations(), function (Model $to) use (&$result, $from, $fromId) {
+            if (
+            !empty($toIds = $this->utility->call(
+                BaseUtility::GET_MODEL_META,
+                $fromId,
+                $this->relationKey.$to->getTypeName()
+            ))
+            ) {
+                $relationFromToKey = $this->relationKey.$to->getTypeName();
+                $relationToFromKey = $this->relationKey.$from->getTypeName();
+                $result = $this->utility->call(BaseUtility::DELETE_MODEL_META, $fromId, $relationFromToKey);
+                foreach ($toIds as $id) {
+                    if ($result) {
+                        $result = $this->utility->call(
+                            BaseUtility::DELETE_MODEL_META,
+                            $id,
+                            $relationToFromKey,
+                            $fromId
+                        );
+                    }
+                }
+            }
+        });
 
-		return $result;
-	}
+        return $result;
+    }
 
-	function selectAllRelations(Model $from, Model $to): array
-	{
-		$fromId = $this->getGivenOrCurrentModelId($from);
+    public function selectAllRelations(Model $from, Model $to): array
+    {
+        $fromId = $this->getGivenOrCurrentModelId($from);
 
-		$relationFromToKey = $this->relationKey.$to->getTypeName();
-		$relationIds = $this->utility->call(BaseUtility::GET_MODEL_META, $fromId, $relationFromToKey);
+        $relationFromToKey = $this->relationKey.$to->getTypeName();
+        $relationIds = $this->utility->call(BaseUtility::GET_MODEL_META, $fromId, $relationFromToKey);
 
-		$args = array_merge(Constants::TYPE_DEFAULT_TYPE_ARGS, [
-			'post__in' => $relationIds,
-		]);
+        $args = array_merge(Constants::TYPE_DEFAULT_TYPE_ARGS, [
+            'post__in' => $relationIds,
+        ]);
 
-		return empty($relationIds) ? [] : $this->utility->call(BaseUtility::GET_MODELS, $args);
-	}
+        return empty($relationIds) ? [] : $this->utility->call(BaseUtility::GET_MODELS, $args);
+    }
 
-	private function getGivenOrCurrentModelId(Model $model): int
-	{
-		$id = $this->getModelId($model);
+    private function getGivenOrCurrentModelId(Model $model): int
+    {
+        $id = $this->getModelId($model);
 
-		if ($id > 0)
-		{
-			return $id;
-		}
+        if ($id > 0) {
+            return $id;
+        }
 
-		$currentModel = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
-		$currentModelAttrs = empty($currentModel) ? [] : $currentModel->getAttributes();
-		if (array_key_exists(Constants::TYPE_INSTANCE_IDENTIFIER_ATTR, $currentModelAttrs))
-		{
-			return $currentModelAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR];
-		}
+        $currentModel = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
+        $currentModelAttrs = empty($currentModel) ? [] : $currentModel->getAttributes();
+        if (array_key_exists(Constants::TYPE_INSTANCE_IDENTIFIER_ATTR, $currentModelAttrs)) {
+            return $currentModelAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR];
+        }
 
-		throw new UnknownModel($model->getSingularName());
-	}
+        throw new UnknownModel($model->getSingularName());
+    }
 
-	private static function getModelId(Model $model): int
-	{
-		$attributes = $model->getAttributes();
-		$idKey = Constants::TYPE_INSTANCE_IDENTIFIER_ATTR;
+    private static function getModelId(Model $model): int
+    {
+        $attributes = $model->getAttributes();
+        $idKey = Constants::TYPE_INSTANCE_IDENTIFIER_ATTR;
 
-		return array_key_exists($idKey,
-			$attributes) && intval($attributes[$idKey]) !== 0 ? intval($attributes[$idKey]) : -1;
-	}
+        return array_key_exists(
+            $idKey,
+            $attributes
+        ) && intval($attributes[$idKey]) !== 0 ? intval($attributes[$idKey]) : -1;
+    }
 }

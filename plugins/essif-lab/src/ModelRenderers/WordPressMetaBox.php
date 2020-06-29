@@ -11,31 +11,31 @@ use TNO\EssifLab\Views\TypeList;
 
 class WordPressMetaBox implements Contracts\ModelRenderer
 {
-	function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new TypeList($integration, $model, $attrs);
+    public function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new TypeList($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 
-	function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new SignatureField($integration, $model, $attrs);
+    public function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new SignatureField($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 
-	function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new CredentialTypeField($integration, $model, $attrs);
+    public function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new CredentialTypeField($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 
-	function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
-	{
-		$view = new ImmutableField($integration, $model, $attrs);
+    public function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
+    {
+        $view = new ImmutableField($integration, $model, $attrs);
 
-		return $view->render();
-	}
+        return $view->render();
+    }
 }

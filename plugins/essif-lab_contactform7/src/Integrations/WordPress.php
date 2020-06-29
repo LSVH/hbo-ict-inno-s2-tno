@@ -7,12 +7,12 @@ use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 
 class WordPress extends BaseIntegration
 {
-	function install(CF7Helper $cf7Helper): void
-	{
-		$this->utility->addEssifLabFormTag();
-		$this->utility->loadCustomScripts();
+    public function install(CF7Helper $cf7Helper): void
+    {
+        $this->utility->addEssifLabFormTag();
+        $this->utility->loadCustomScripts();
 
-		$this->utility->addActivateHook($cf7Helper);
-		$this->utility->addDeactivateHook($cf7Helper);
-	}
+        $this->utility->addActivateHook($cf7Helper);
+        $this->utility->addDeactivateHook($cf7Helper);
+    }
 }

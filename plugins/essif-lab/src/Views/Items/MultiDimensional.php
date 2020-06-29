@@ -6,15 +6,14 @@ use TNO\EssifLab\Views\Items\Contracts\BaseItem;
 
 class MultiDimensional extends BaseItem
 {
-	protected $canDisplayValue = false;
+    protected $canDisplayValue = false;
 
-	public function getValue()
-	{
-		if (is_array($this->value))
-		{
-			return $this->value;
-		}
+    public function getValue()
+    {
+        if (is_array($this->value)) {
+            return $this->value;
+        }
 
-		return [];
-	}
+        return [];
+    }
 }

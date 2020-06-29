@@ -7,7 +7,7 @@ use TNO\EssifLab\Models\Contracts\Model;
 
 interface View
 {
-	function __construct(Integration $integration, Model $model, array $items = []);
+    public function __construct(Integration $integration, Model $model, array $items = []);
 
-	function render(): string;
+    public function render(): string;
 }

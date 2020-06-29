@@ -5,25 +5,28 @@ namespace TNO\EssifLab\Views;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Views\Contracts\BaseField;
 
-class CredentialTypeField extends BaseField {
-	const STYLE = 'style';
+class CredentialTypeField extends BaseField
+{
+    const STYLE = 'style';
 
-	const TARGET = 'target';
+    const TARGET = 'target';
 
-	function render(): string {
-	    $name = $this->getFieldName(Constants::FIELD_TYPE_CREDENTIAL_TYPE);
-	    $value = $this->getFieldValue();
+    public function render(): string
+    {
+        $name = $this->getFieldName(Constants::FIELD_TYPE_CREDENTIAL_TYPE);
+        $value = $this->getFieldValue();
         $attrs = $this->getElementAttributes([
-            'type' => 'text',
+            'type'  => 'text',
             'class' => 'regular-text',
-            'name' => $name,
+            'name'  => $name,
             'value' => $value,
         ]);
 
         return '<input'.$attrs.'/>';
-	}
+    }
 
-    private function getFieldValue() : string {
+    private function getFieldValue(): string
+    {
         $attrs = $this->model->getAttributes();
         if (!array_key_exists(Constants::TYPE_INSTANCE_DESCRIPTION_ATTR, $attrs)) {
             return '';

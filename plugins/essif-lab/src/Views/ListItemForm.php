@@ -9,35 +9,34 @@ use TNO\EssifLab\Views\Items\Contracts\Item;
 
 class ListItemForm extends BaseView
 {
-	const REMOVE = 'Remove item';
+    const REMOVE = 'Remove item';
 
-	const EDIT = 'Edit';
+    const EDIT = 'Edit';
 
-	function render(): string
-	{
-		$items = $this->getDisplayableItems();
-		if (empty($items) || !is_array($items))
-		{
-			return '';
-		}
+    public function render(): string
+    {
+        $items = $this->getDisplayableItems();
+        if (empty($items) || !is_array($items)) {
+            return '';
+        }
 
-		$item = current($items);
+        $item = current($items);
 
-		return $this->renderRemove($item).' | '.$this->renderEdit($item);
-	}
+        return $this->renderRemove($item).' | '.$this->renderEdit($item);
+    }
 
-	private function renderRemove(Item $item)
-	{
-		$name = $this->integration->getApplication()->getNamespace().'['.Constants::ACTION_NAME_REMOVE_RELATION.']';
+    private function renderRemove(Item $item)
+    {
+        $name = $this->integration->getApplication()->getNamespace().'['.Constants::ACTION_NAME_REMOVE_RELATION.']';
 
-		return '<button name="'.$name.'" value="'.$item->getValue().'" class="button-link">'.self::REMOVE.'</button>';
-	}
+        return '<button name="'.$name.'" value="'.$item->getValue().'" class="button-link">'.self::REMOVE.'</button>';
+    }
 
-	private function renderEdit(Item $item)
-	{
-		$url = $this->integration->getUtility()->call(BaseUtility::GET_EDIT_MODEL_LINK, $item->getValue());
-		$title = self::EDIT.' '.$item->getLabel();
+    private function renderEdit(Item $item)
+    {
+        $url = $this->integration->getUtility()->call(BaseUtility::GET_EDIT_MODEL_LINK, $item->getValue());
+        $title = self::EDIT.' '.$item->getLabel();
 
-		return '<a href="'.$url.'" title="'.$title.'" class="button-link">'.self::EDIT.'</a>';
-	}
+        return '<a href="'.$url.'" title="'.$title.'" class="button-link">'.self::EDIT.'</a>';
+    }
 }

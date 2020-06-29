@@ -10,93 +10,93 @@ use TNO\EssifLab\Views\ListItemForm;
 
 class ListItemFormTest extends TestCase
 {
-	/** @test */
-	function does_only_render_the_first_item()
-	{
-		$subject = new ListItemForm($this->integration, $this->model, [
-			new ItemDisplayable('hello', 'world'),
-			new ItemDisplayable('foo', 'bar'),
-		]);
+    /** @test */
+    public function does_only_render_the_first_item()
+    {
+        $subject = new ListItemForm($this->integration, $this->model, [
+            new ItemDisplayable('hello', 'world'),
+            new ItemDisplayable('foo', 'bar'),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = [
-			'/.*hello.*world.*/',
-			'/.*foo.*bar.*/',
-		];
+        $expected = [
+            '/.*hello.*world.*/',
+            '/.*foo.*bar.*/',
+        ];
 
-		$this->assertRegExp($expected[0], $actual);
-		$this->assertNotRegExp($expected[1], $actual);
-	}
+        $this->assertRegExp($expected[0], $actual);
+        $this->assertNotRegExp($expected[1], $actual);
+    }
 
-	/** @test */
-	function renders_nothing_without_any_items()
-	{
-		$subject = new ListItemForm($this->integration, $this->model, []);
+    /** @test */
+    public function renders_nothing_without_any_items()
+    {
+        $subject = new ListItemForm($this->integration, $this->model, []);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '';
+        $expected = '';
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 
-	/** @test */
-	function renders_nothing_without_any_displayable_items()
-	{
-		$subject = new ListItemForm($this->integration, $this->model, [
-			new ItemDisplayable('', 'value is empty so not displayable'),
-			new ItemNonDisplayable(['array']),
-		]);
+    /** @test */
+    public function renders_nothing_without_any_displayable_items()
+    {
+        $subject = new ListItemForm($this->integration, $this->model, [
+            new ItemDisplayable('', 'value is empty so not displayable'),
+            new ItemNonDisplayable(['array']),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = '';
+        $expected = '';
 
-		$this->assertEquals($expected, $actual);
-	}
+        $this->assertEquals($expected, $actual);
+    }
 
-	/** @test */
-	function filters_out_preceding_non_displayable_items_and_renders_with_first_displayable()
-	{
-		$subject = new ListItemForm($this->integration, $this->model, [
-			new ItemNonDisplayable(['Array']),
-			new ItemDisplayable('hello', 'world'),
-		]);
+    /** @test */
+    public function filters_out_preceding_non_displayable_items_and_renders_with_first_displayable()
+    {
+        $subject = new ListItemForm($this->integration, $this->model, [
+            new ItemNonDisplayable(['Array']),
+            new ItemDisplayable('hello', 'world'),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = [
-			'/.*hello.*world.*/',
-			'/.*Array.*/',
-		];
+        $expected = [
+            '/.*hello.*world.*/',
+            '/.*Array.*/',
+        ];
 
-		$this->assertRegExp($expected[0], $actual);
-		$this->assertNotRegExp($expected[1], $actual);
-	}
+        $this->assertRegExp($expected[0], $actual);
+        $this->assertNotRegExp($expected[1], $actual);
+    }
 
-	/** @test */
-	function renders_edit_and_remove_buttons()
-	{
-		$subject = new ListItemForm($this->integration, $this->model, [
-			new ItemDisplayable('hello', 'world'),
-		]);
+    /** @test */
+    public function renders_edit_and_remove_buttons()
+    {
+        $subject = new ListItemForm($this->integration, $this->model, [
+            new ItemDisplayable('hello', 'world'),
+        ]);
 
-		$actual = $subject->render();
+        $actual = $subject->render();
 
-		$expected = [
-			'/.*<button.*value="hello".*>'.ListItemForm::REMOVE.'<\/button>.*/',
-			'/.*<a.*>'.ListItemForm::EDIT.'<\/a>.*/',
-		];
+        $expected = [
+            '/.*<button.*value="hello".*>'.ListItemForm::REMOVE.'<\/button>.*/',
+            '/.*<a.*>'.ListItemForm::EDIT.'<\/a>.*/',
+        ];
 
-		$this->assertRegExp($expected[0], $actual);
-		$this->assertRegExp($expected[1], $actual);
+        $this->assertRegExp($expected[0], $actual);
+        $this->assertRegExp($expected[1], $actual);
 
-		$history = $this->utility->getHistoryByFuncName(BaseUtility::GET_EDIT_MODEL_LINK);
-		$this->assertCount(1, $history);
+        $history = $this->utility->getHistoryByFuncName(BaseUtility::GET_EDIT_MODEL_LINK);
+        $this->assertCount(1, $history);
 
-		$entry = current($history);
-		$params = $entry->getParams();
-		$this->assertEquals('hello', $params[0]);
-	}
+        $entry = current($history);
+        $params = $entry->getParams();
+        $this->assertEquals('hello', $params[0]);
+    }
 }

@@ -7,81 +7,81 @@ use TNO\EssifLab\Models\Contracts\Model;
 
 class ModelRenderer implements \TNO\EssifLab\ModelRenderers\Contracts\ModelRenderer
 {
-	const LIST_AND_FORM_VIEW_RENDERER = 'ListAndFormView';
+    const LIST_AND_FORM_VIEW_RENDERER = 'ListAndFormView';
 
-	const FIELD_SIGNATURE_RENDERER = 'FieldSignature';
+    const FIELD_SIGNATURE_RENDERER = 'FieldSignature';
 
-	const FIELD_CREDENTIAL_TYPE_RENDERER = 'FieldCredentialTypeRenderer';
+    const FIELD_CREDENTIAL_TYPE_RENDERER = 'FieldCredentialTypeRenderer';
 
-	const FIELD_IMMUTABLE_RENDERER = 'FieldImmutableRenderer';
+    const FIELD_IMMUTABLE_RENDERER = 'FieldImmutableRenderer';
 
-	private $isCalled = [];
+    private $isCalled = [];
 
-	/**
-	 * @var Integration[]
-	 */
-	private $lastIntegrationItsCalledWith = [];
+    /**
+     * @var Integration[]
+     */
+    private $lastIntegrationItsCalledWith = [];
 
-	/**
-	 * @var Model[]
-	 */
-	private $lastModelItsCalledWith = [];
+    /**
+     * @var Model[]
+     */
+    private $lastModelItsCalledWith = [];
 
-	/**
-	 * @var array
-	 */
-	private $lastAttrsItsCalledWith = [];
+    /**
+     * @var array
+     */
+    private $lastAttrsItsCalledWith = [];
 
-	function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
-	{
-		return $this->callRenderer(self::LIST_AND_FORM_VIEW_RENDERER, $integration, $model, $attrs);
-	}
+    public function renderListAndFormView(Integration $integration, Model $model, array $attrs = []): string
+    {
+        return $this->callRenderer(self::LIST_AND_FORM_VIEW_RENDERER, $integration, $model, $attrs);
+    }
 
-	function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
-	{
-		return $this->callRenderer(self::FIELD_SIGNATURE_RENDERER, $integration, $model, $attrs);
-	}
+    public function renderFieldSignature(Integration $integration, Model $model, array $attrs = []): string
+    {
+        return $this->callRenderer(self::FIELD_SIGNATURE_RENDERER, $integration, $model, $attrs);
+    }
 
-    function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
-	{
-		return $this->callRenderer(self::FIELD_CREDENTIAL_TYPE_RENDERER, $integration, $model, $attrs);
-	}
+    public function renderCredentialType(Integration $integration, Model $model, array $attrs = []): string
+    {
+        return $this->callRenderer(self::FIELD_CREDENTIAL_TYPE_RENDERER, $integration, $model, $attrs);
+    }
 
-	function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
-	{
-		return $this->callRenderer(self::FIELD_IMMUTABLE_RENDERER, $integration, $model, $attrs);
-	}
+    public function renderFieldImmutable(Integration $integration, Model $model, array $attrs = []): string
+    {
+        return $this->callRenderer(self::FIELD_IMMUTABLE_RENDERER, $integration, $model, $attrs);
+    }
 
-	public function isCalled(string $renderer): bool
-	{
-		return array_key_exists($renderer, $this->isCalled) && boolval($this->isCalled[$renderer]);
-	}
+    public function isCalled(string $renderer): bool
+    {
+        return array_key_exists($renderer, $this->isCalled) && boolval($this->isCalled[$renderer]);
+    }
 
-	public function getIntegrationItsCalledWith(string $renderer): ?Integration
-	{
-		return array_key_exists($renderer, $this->lastIntegrationItsCalledWith)
-			? $this->lastIntegrationItsCalledWith[$renderer] : null;
-	}
+    public function getIntegrationItsCalledWith(string $renderer): ?Integration
+    {
+        return array_key_exists($renderer, $this->lastIntegrationItsCalledWith)
+            ? $this->lastIntegrationItsCalledWith[$renderer] : null;
+    }
 
-	public function getModelItsCalledWith(string $renderer): ?Model
-	{
-		return array_key_exists($renderer, $this->lastModelItsCalledWith)
-			? $this->lastModelItsCalledWith[$renderer] : null;
-	}
+    public function getModelItsCalledWith(string $renderer): ?Model
+    {
+        return array_key_exists($renderer, $this->lastModelItsCalledWith)
+            ? $this->lastModelItsCalledWith[$renderer] : null;
+    }
 
-	public function getAttrsItsCalledWith(string $renderer): ?array
-	{
-		return array_key_exists($renderer, $this->lastAttrsItsCalledWith)
-			? $this->lastAttrsItsCalledWith[$renderer] : null;
-	}
+    public function getAttrsItsCalledWith(string $renderer): ?array
+    {
+        return array_key_exists($renderer, $this->lastAttrsItsCalledWith)
+            ? $this->lastAttrsItsCalledWith[$renderer] : null;
+    }
 
-	private function callRenderer(string $renderer, Integration $integration, Model $model, array $attrs = []): string
-	{
-		$this->isCalled[$renderer] = true;
-		$this->lastIntegrationItsCalledWith[$renderer] = $integration;
-		$this->lastModelItsCalledWith[$renderer] = $model;
-		$this->lastAttrsItsCalledWith[$renderer] = $attrs;
+    private function callRenderer(string $renderer, Integration $integration, Model $model, array $attrs = []): string
+    {
+        $this->isCalled[$renderer] = true;
+        $this->lastIntegrationItsCalledWith[$renderer] = $integration;
+        $this->lastModelItsCalledWith[$renderer] = $model;
+        $this->lastAttrsItsCalledWith[$renderer] = $attrs;
 
-		return "@ModelRendererStub\n";
-	}
+        return "@ModelRendererStub\n";
+    }
 }

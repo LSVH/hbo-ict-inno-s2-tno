@@ -8,11 +8,11 @@ use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 
 interface Integration
 {
-	function __construct(Application $application, Utility $utility);
+    public function __construct(Application $application, Utility $utility);
 
-	function install(CF7Helper $cf7Helper): void;
+    public function install(CF7Helper $cf7Helper): void;
 
-	function getApplication(): Application;
+    public function getApplication(): Application;
 
-	function getUtility(): Utility;
+    public function getUtility(): Utility;
 }

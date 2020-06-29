@@ -4,9 +4,9 @@ namespace TNO\EssifLab\Applications\Contracts;
 
 interface Application
 {
-	function getName(): string;
+    public function getName(): string;
 
-	function getNamespace(): string;
+    public function getNamespace(): string;
 
-	function getAppDir(): string;
+    public function getAppDir(): string;
 }

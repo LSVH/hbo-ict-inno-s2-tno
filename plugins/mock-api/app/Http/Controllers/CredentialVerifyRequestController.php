@@ -20,17 +20,19 @@ class CredentialVerifyRequestController extends Controller
     public function index()
     {
         $credentialVerifyRequest = CredentialVerifyRequest::all();
+
         return response()->json($credentialVerifyRequest);
     }
 
     public function create(Request $request)
     {
-        $credentialVerifyRequest = new CredentialVerifyRequest;
+        $credentialVerifyRequest = new CredentialVerifyRequest();
         $credentialVerifyRequest->requestId = $request->requestId;
         $credentialVerifyRequest->callbackURL = $request->callbackURL;
         $credentialVerifyRequest->credentialTypes = $request->credentialTypes;
 
         $credentialVerifyRequest->save();
+
         return response()->json($credentialVerifyRequest);
     }
 
@@ -41,17 +43,18 @@ class CredentialVerifyRequestController extends Controller
             $return_data = [
                 'id'             => $credentialVerifyRequest->id,
                 'callbackURL'    => $credentialVerifyRequest->callbackURL,
-                "credentialData" => [
-                    "type" => "https://schema.org/PostalAddress",
-                    "data" => [
-                        "postcalCode"   => "1234 AA",
-                        "streetAddress" => "Streetname 123",
+                'credentialData' => [
+                    'type' => 'https://schema.org/PostalAddress',
+                    'data' => [
+                        'postcalCode'   => '1234 AA',
+                        'streetAddress' => 'Streetname 123',
                     ],
                 ],
             ];
         } else {
             $return_data = response()->json($credentialVerifyRequest);
         }
+
         return response()->json($return_data);
     }
 
@@ -63,6 +66,7 @@ class CredentialVerifyRequestController extends Controller
         $credentialVerifyRequest->callbackURL = $request->input('callbackURL');
         $credentialVerifyRequest->credentialTypes = $request->input('credentialTypes');
         $credentialVerifyRequest->save();
+
         return response()->json($credentialVerifyRequest);
     }
 
@@ -70,6 +74,7 @@ class CredentialVerifyRequestController extends Controller
     {
         $credentialVerifyRequest = CredentialVerifyRequest::find($id);
         $credentialVerifyRequest->delete();
+
         return response()->json('credentialVerifyRequest removed successfully');
     }
 }
