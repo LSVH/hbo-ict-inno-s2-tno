@@ -104,17 +104,23 @@ class CF7Helper extends WP
         /**
          *  Delete the inputs.
          */
+        $inputNames = [];
+        foreach ($this->getAllTargets() as $slug => $title) {
+            $inputs = parent::selectInput($slug);
+            $inputNames = array_merge(array_map(function ($input) {
+                return $input->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+            }, $inputs), $inputNames);
+        }
         foreach ($this->getAllInputs() as $input) {
-            $target = $input[0];
-            $targetHook = parent::selectInput([$target[0] => $target[1]]);
+            $targetId = $input[0];
 
-            $slugs = $input[1][0];
-            $titles = $input[1][1];
+            $slugs = $input[2][0];
+            $titles = $input[2][1];
             $inputs = [$slugs, $titles];
 
-            foreach ($inputs as $inp) {
-                if (in_array($inp, $targetHook)) {
-                    parent::deleteInput($inp[0], $inp[1], $target[0]);
+            for ($i = 0; $i < count($inputs[0]); $i++) {
+                if (in_array($inputs[0][$i], $inputNames)) {
+                    parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
                 }
             }
         }
