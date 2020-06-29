@@ -262,19 +262,23 @@ class CF7Helper extends WP
          *  Delete the targets.
          */
         $targets = parent::selectTarget();
-        if (!empty($targets)) {
-            foreach ($this->getAllTargets() as $key => $target) {
-                if (in_array($target, $targets)) {
-                    parent::deleteTarget($key, $target);
-                }
+        $targetNames = array_map(function ($target) {
+            return $target->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+        }, $targets);
+        foreach ($this->getAllTargets() as $name => $title) {
+            if (in_array($name, $targetNames)) {
+                parent::deleteTarget($name, $title);
             }
         }
 
         /**
          *  Delete the hook.
          */
-        $usedHook = parent::selectHook();
-        if (in_array($hook, $usedHook)) {
+        $hooks = parent::selectHook();
+        $hookNames = array_map(function ($hook) {
+            return $hook->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+        }, $hooks);
+        if (in_array(self::SLUG, $hookNames)) {
             parent::deleteHook();
         }
     }
