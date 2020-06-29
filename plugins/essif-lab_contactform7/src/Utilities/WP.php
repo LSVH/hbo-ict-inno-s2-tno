@@ -176,9 +176,9 @@ class WP extends BaseUtility
         $this->delete(self::HOOK, [$slug => $title]);
     }
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function deleteTarget(string $name, string $title)
     {
-        $this->delete(self::TARGET, [$id => $title], $hookSlug);
+        $this->delete(self::TARGET, [$name => $title]);
     }
 
     public function deleteInput(string $slug, string $title, int $targetId)
