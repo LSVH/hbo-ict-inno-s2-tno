@@ -49,10 +49,10 @@ class CF7Helper extends WP
         /**
          *  Insert the hook
          */
-        $usedHook = parent::selectHook();
-        if (!in_array($hook, $usedHook)) {
-            parent::insertHook();
-        }
+//        $usedHook = parent::selectHook();
+//        if (!in_array($hook, $usedHook)) {
+//            parent::insertHook();
+//        }
 
         /**
          *  Insert the targets
@@ -62,7 +62,7 @@ class CF7Helper extends WP
         $targets = parent::selectTarget();
         foreach ($this->getAllTargets() as $id => $title) {
             if (!in_array($title, $targets)) {
-                parent::insertTarget($id, $title);
+//                parent::insertTarget($id, $title);
             }
         }
 
@@ -70,6 +70,7 @@ class CF7Helper extends WP
          *  Insert the inputs
          */
         // TODO: make inputs not be inserted if they already exist
+        $inputs = parent::selectInput();
         foreach ($this->getAllInputs() as $input) {
             $targetId = $input[0];
 
@@ -78,7 +79,7 @@ class CF7Helper extends WP
             $inputs = [ $slugs, $titles ];
 
             for ($i = 0; $i < count($inputs[0]); $i++){
-                parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
+//                parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
             }
         }
     }

@@ -86,11 +86,10 @@ class WordPressSubPluginApi extends BaseIntegration {
 	}
 
 	private function applyFilterSelectAllRelations(string $model, string $relation) {
-	    // TODO: Change trigger name to be different from applyFilterSelect
 		$triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
 		$this->utility->call(WP::ADD_FILTER, $triggerName, function ($items, $parentSlug) use ($model, $relation) {
 			$items = is_array($items) ? $items : [];
-			$parentInstances = $this->manager->select(new $relation(), ['post_name' => $parentSlug]);
+			$parentInstances = $this->manager->select(new $relation(), ['name' => $parentSlug]);
 			$from = empty ($parentInstances) ? null : current($parentInstances);
 
 			if (empty($from)) {
