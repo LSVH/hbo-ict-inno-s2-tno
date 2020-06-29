@@ -272,7 +272,7 @@ class WP extends BaseUtility
     public static function generateJWTToken($request)
     {
         $payload = [
-            'type'        => 'testEmail',
+            'type'        => $request['inputslug'],
             'callbackUrl' => $request['callbackurl'],
             'sub'         => self::JWT_SUB,
             'iat'         => time(),
@@ -298,7 +298,7 @@ class WP extends BaseUtility
 
     public static function registerRestRoute(): bool
     {
-        return register_rest_route('jwt/v1', 'callbackurl=(?P<callbackurl>.+)', [
+        return register_rest_route('jwt/v1', 'callbackurl=(?P<callbackurl>.+)/inputslug=(?P<inputslug>.+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'generateJWTToken'],
         ]);
