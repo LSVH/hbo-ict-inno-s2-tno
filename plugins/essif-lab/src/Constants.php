@@ -48,8 +48,12 @@ abstract class Constants
 =======
     const ACTION_NAME_RELATION_ACTION = 'relation_action';
 
+<<<<<<< HEAD
     const FIELD_TYPE_CREDENTIAL_TYPE = 'credential type';
 >>>>>>> 44a9692... Applying patch StyleCI
+=======
+    const FIELD_TYPE_CREDENTIAL_TYPE = 'credential_type';
+>>>>>>> c291f2b... added correct credential_type to jwt
 
     const FIELD_TYPE_IMMUTABLE = 'immutable';
 
