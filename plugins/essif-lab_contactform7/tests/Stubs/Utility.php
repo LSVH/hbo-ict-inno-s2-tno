@@ -26,7 +26,7 @@ class Utility extends BaseUtility
         array_push($this->history, $histObj);
     }
 
-    public function getTargetsFromForms(array $cf7Forms, string $post_title, string $id)
+    public function getTargetsFromForms(array $cf7Forms)
     {
         $histObj = new History('getTargetsFromForms');
         array_push($this->history, $histObj);
@@ -86,7 +86,7 @@ class Utility extends BaseUtility
         $this->select('target', $items, $hookSlug, $target);
     }
 
-    public function selectInput(array $items = [], string $targetSlug = self::SLUG)
+    public function selectInput(string $targetSlug, array $items = [])
     {
         $mockHelper = new CF7Helper();
         $input = $mockHelper->getTestInput();
