@@ -30,9 +30,9 @@ class WP extends BaseUtility
         return get_posts($args);
     }
 
-    public function getTargetsFromForms(array $cf7Forms, string $post_title, string $id)
+    public function getTargetsFromForms(array $cf7Forms)
     {
-        return wp_list_pluck($cf7Forms, 'post_title', 'ID');
+        return wp_list_pluck($cf7Forms, 'post_title', 'post_name');
     }
 
     public function insertHook(string $slug = self::SLUG, string $title = self::TITLE)
@@ -40,9 +40,9 @@ class WP extends BaseUtility
         $this->insert(self::HOOK, [$slug => $title]);
     }
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG)
     {
-        $this->insert(self::TARGET, [$id => $title], $hookSlug);
+        $this->insert(self::TARGET, [$name => $title], $hookSlug);
     }
 
     public function insertInput(string $slug, string $title, int $targetId)
@@ -52,7 +52,7 @@ class WP extends BaseUtility
 
     private function insert($suffix, ...$params)
     {
-        do_action(self::ACTION_PREFIX.'insert_'.$suffix, ...$params);
+        do_action(self::ACTION_PREFIX . 'insert_' . $suffix, ...$params);
     }
 
     public function deleteHook(string $slug = self::SLUG, string $title = self::TITLE)
@@ -72,12 +72,12 @@ class WP extends BaseUtility
 
     private function delete($suffix, ...$params)
     {
-        do_action(self::ACTION_PREFIX.'delete_'.$suffix, ...$params);
+        do_action(self::ACTION_PREFIX . 'delete_' . $suffix, ...$params);
     }
 
-    public function selectHook(string $slug = self::SLUG, string $title = self::TITLE): array
+    public function selectHook(string $slug = self::SLUG): array
     {
-        return $this->select(self::HOOK, [$slug => $title]);
+        return $this->select(self::HOOK, null);
     }
 
     public function selectTarget(array $items = [], string $hookSlug = self::SLUG): array
@@ -92,22 +92,23 @@ class WP extends BaseUtility
 
     private function select($suffix, ...$params): array
     {
-        return apply_filters(self::ACTION_PREFIX.'select_'.$suffix, ...$params);
+        return apply_filters(self::ACTION_PREFIX . 'select_' . $suffix, ...$params);
     }
 
     public function addEssifLabFormTag()
     {
-        add_action(
-            'wpcf7_init',
-            wpcf7_add_form_tag('essif_lab', [Button::class, 'custom_essif_lab_form_tag_handler'], ['name-attr' => true])
-        );
+        add_action('wpcf7_init', function () {
+            wpcf7_add_form_tag('essif_lab',
+                [Button::class, 'custom_essif_lab_form_tag_handler',],
+                ['name-attr' => true,]);
+        });
     }
 
     public function loadCustomJs()
     {
         wp_enqueue_script(
             'EssifLab_ContactForm7-CustomJs',
-            plugin_dir_url(__FILE__).'../js/script.js',
+            plugin_dir_url(__FILE__) . '../js/script.js',
             ['jquery'],
             '',
             false

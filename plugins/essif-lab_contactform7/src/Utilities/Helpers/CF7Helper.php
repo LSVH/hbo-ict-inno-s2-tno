@@ -3,6 +3,7 @@
 namespace TNO\ContactForm7\Utilities\Helpers;
 
 use TNO\ContactForm7\Utilities\WP;
+use TNO\EssifLab\Constants;
 
 class CF7Helper extends WP
 {
@@ -31,7 +32,7 @@ class CF7Helper extends WP
     {
         $cf7Forms = parent::getAllForms();
 
-        return parent::getTargetsFromForms($cf7Forms, 'post_title', 'ID');
+        return parent::getTargetsFromForms($cf7Forms);
     }
 
     public function getAllInputs()
@@ -45,27 +46,27 @@ class CF7Helper extends WP
 
     public function addAllOnActivate()
     {
-        $hook = [
-            'contact-form-7' => 'Contact Form 7',
-        ];
-
         /**
          *  Insert the hook.
          */
-        $usedHook = parent::selectHook();
-        if (!in_array($hook, $usedHook)) {
+        $hooks = parent::selectHook();
+        $hookNames = array_map(function ($hook) {
+            return $hook->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+        }, $hooks);
+        if (!in_array(self::SLUG, $hookNames)) {
             parent::insertHook();
         }
 
         /**
          *  Insert the targets.
          */
-
-        // TODO: fix selectTarget to actually get the targets :)
         $targets = parent::selectTarget();
-        foreach ($this->getAllTargets() as $id => $title) {
-            if (!in_array($title, $targets)) {
-                parent::insertTarget($id, $title);
+        $targetNames = array_map(function ($target) {
+            return $target->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+        }, $targets);
+        foreach ($this->getAllTargets() as $name => $title) {
+            if (!in_array($name, $targetNames)) {
+                parent::insertTarget($name, $title);
             }
         }
 

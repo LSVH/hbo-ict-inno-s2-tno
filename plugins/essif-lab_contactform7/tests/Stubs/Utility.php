@@ -37,9 +37,9 @@ class Utility extends BaseUtility
         $this->insert('hook', [$slug => $title]);
     }
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG)
     {
-        $this->insert('target', [$id => $title], $hookSlug);
+        $this->insert('target', [$name => $title], $hookSlug);
     }
 
     public function insertInput(string $slug, string $title, int $targetId)
