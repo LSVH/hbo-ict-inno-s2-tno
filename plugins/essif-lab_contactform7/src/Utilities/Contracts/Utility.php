@@ -22,7 +22,7 @@ interface Utility
 
     public function deleteHook(string $slug = self::SLUG, string $title = self::TITLE);
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG);
+    public function deleteTarget(string $name, string $title);
 
     public function deleteInput(string $slug, string $title, int $targetId);
 
