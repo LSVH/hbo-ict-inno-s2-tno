@@ -80,6 +80,8 @@ class WordPressSubPluginApi extends BaseIntegration
                 $this->applyFilterSelect($type);
             }
         }
+
+        $this->applyFilterGenerateJti();
     }
 
     // TODO: figure out why this action is immediately executed instead of waiting for the trigger
@@ -255,6 +257,13 @@ class WordPressSubPluginApi extends BaseIntegration
 
             return array_merge($items, $relations);
         }, 1, 2);
+    }
+
+    private function applyFilterGenerateJti() {
+        $triggerName = self::TRIGGER_PRE.'generate_jti';
+        $this->utility->call(WP::ADD_FILTER, $triggerName, function () {
+            return uniqid();
+        }, 1, 1);
     }
 
     private static function isArrayOfArrays(array $value): bool
