@@ -86,11 +86,11 @@ class Utility extends BaseUtility
         $this->select('target', $items, $hookSlug, $target);
     }
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG)
+    public function selectInput(array $items = [], string $targetSlug = self::SLUG)
     {
         $mockHelper = new CF7Helper();
         $input = $mockHelper->getTestInput();
-        $this->select('input', $items, $hookSlug, $input);
+        $this->select('input', $items, $targetSlug, $input);
     }
 
     private function select($suffix, ...$params)

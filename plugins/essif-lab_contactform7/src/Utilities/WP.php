@@ -85,9 +85,9 @@ class WP extends BaseUtility
         return $this->select(self::TARGET, $items, $hookSlug);
     }
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG): array
+    public function selectInput(string $targetSlug, array $items = []): array
     {
-        return $this->select(self::INPUT, $items, $hookSlug);
+        return $this->select(self::INPUT, $items, $targetSlug);
     }
 
     private function select($suffix, ...$params): array

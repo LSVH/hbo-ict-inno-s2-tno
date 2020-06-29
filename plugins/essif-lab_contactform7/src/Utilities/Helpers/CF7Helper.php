@@ -73,8 +73,13 @@ class CF7Helper extends WP
         /**
          *  Insert the inputs.
          */
-        // TODO: make inputs not be inserted if they already exist
-        $inputs = parent::selectInput();
+        $inputNames = [];
+        foreach ($this->getAllTargets() as $slug => $title) {
+            $inputs = parent::selectInput($slug);
+            $inputNames = array_merge(array_map(function ($input) {
+                return $input->getAttributes()[Constants::TYPE_INSTANCE_SLUG_ATTR];
+            }, $inputs), $inputNames);
+        }
         foreach ($this->getAllInputs() as $input) {
             $targetId = $input[0];
 
@@ -83,7 +88,9 @@ class CF7Helper extends WP
             $inputs = [$slugs, $titles];
 
             for ($i = 0; $i < count($inputs[0]); $i++) {
-                parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
+                if (!in_array($inputs[0][$i], $inputNames)) {
+                    parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
+                }
             }
         }
     }

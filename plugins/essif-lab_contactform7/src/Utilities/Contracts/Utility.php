@@ -30,7 +30,7 @@ interface Utility
 
     public function selectTarget(array $items = [], string $hookSlug = self::SLUG);
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG);
+    public function selectInput(string $targetSlug, array $items = []);
 
     public function addEssifLabFormTag();
 
