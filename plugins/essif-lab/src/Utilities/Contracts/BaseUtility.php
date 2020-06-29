@@ -32,7 +32,11 @@ abstract class BaseUtility implements Utility
 
 	public const GET_CREATE_MODEL_LINK = 'getCreateModelLink';
 
-	protected $functions = [];
+    public const ADD_JWT_ENDPOINT = 'addJWTEndpoint';
+
+    public const REGISTER_REST_ROUTE = 'registerRestRoute';
+
+    protected $functions = [];
 
 	function __construct(array $functions = [])
 	{
@@ -50,6 +54,8 @@ abstract class BaseUtility implements Utility
 			self::GET_MODEL_META        => [static::class, 'getModelMeta'],
 			self::GET_EDIT_MODEL_LINK   => [static::class, 'getEditModelLink'],
 			self::GET_CREATE_MODEL_LINK => [static::class, 'getCreateModelLink'],
+            self::ADD_JWT_ENDPOINT => [static::class, 'addJWTEndpoint'],
+            self::REGISTER_REST_ROUTE => [static::class, 'registerRestRoute'],
 		], $this->functions, $functions);
 	}
 

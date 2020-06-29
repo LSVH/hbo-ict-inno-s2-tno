@@ -8,6 +8,8 @@ use TNO\ContactForm7\Views\Button;
 
 class WP extends BaseUtility
 {
+	private const HOOK = "hook";
+
 	private const TARGET = "target";
 
 	private const INPUT = "input";
@@ -35,7 +37,7 @@ class WP extends BaseUtility
 
 	function insertHook(string $slug = self::SLUG, string $title = self::TITLE)
 	{
-		$this->insert("hook", [$slug => $title]);
+		$this->insert(self::HOOK, [$slug => $title]);
 	}
 
 	function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
@@ -55,7 +57,7 @@ class WP extends BaseUtility
 
 	function deleteHook(string $slug = self::SLUG, string $title = self::TITLE)
 	{
-		$this->delete("hook", [$slug => $title]);
+		$this->delete(self::HOOK, [$slug => $title]);
 	}
 
 	function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
@@ -75,7 +77,7 @@ class WP extends BaseUtility
 
 	function selectHook(string $slug = self::SLUG, string $title = self::TITLE): array
 	{
-		return $this->select("hook", [$slug => $title]);
+		return $this->select(self::HOOK, [$slug => $title]);
 	}
 
 	function selectTarget(array $items = [], string $hookSlug = self::SLUG): array
@@ -96,7 +98,7 @@ class WP extends BaseUtility
 	function addEssifLabFormTag()
 	{
 		add_action('wpcf7_init',
-			wpcf7_add_form_tag('essif_lab', [Button::class, 'custom_essif_lab_form_tag_handler'])
+			wpcf7_add_form_tag('essif_lab', [Button::class, 'custom_essif_lab_form_tag_handler'], ['name-attr' => true])
 		);
 	}
 
@@ -111,13 +113,13 @@ class WP extends BaseUtility
 		add_action('wp_enqueue_scripts', [$this, 'loadCustomJs']);
 	}
 
-	function addActivateHook(CF7Helper $cf7Helper, string $appDir)
+	function addActivateHook(CF7Helper $cf7Helper)
 	{
-		register_deactivation_hook($appDir, [$cf7Helper, 'addAllOnActivate']);
+		register_activation_hook(PLUGIN_DIR, [$cf7Helper, 'addAllOnActivate']);
 	}
 
-	function addDeactivateHook(CF7Helper $cf7Helper, string $appDir)
+	function addDeactivateHook(CF7Helper $cf7Helper)
 	{
-		register_deactivation_hook($appDir, [$cf7Helper, 'deleteAllOnDeactivate']);
+		register_deactivation_hook(PLUGIN_DIR, [$cf7Helper, 'deleteAllOnDeactivate']);
 	}
 }

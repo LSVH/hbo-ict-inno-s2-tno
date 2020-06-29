@@ -189,7 +189,7 @@ class WordPressTest extends TestCase
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
 		$this->assertNotEmpty($history);
 
-        $relations = array_filter($history, function ($entry) {
+		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
 
 			return strpos($id, '_relation_') !== false;
@@ -248,7 +248,7 @@ class WordPressTest extends TestCase
 		$history = $this->utility->getHistoryByFuncName(WP::ADD_META_BOX);
 		$this->assertNotEmpty($history);
 
-        $relations = array_filter($history, function ($entry) {
+		$relations = array_filter($history, function ($entry) {
 			$id = $entry->getParams()[0];
 
 			return strpos($id, '_field_') !== false;
@@ -258,6 +258,15 @@ class WordPressTest extends TestCase
 		$entry = current($relations);
 		$title = $entry->getParams()[1];
 		$this->assertEquals('Signature', $title);
+	}
+
+	/** @test */
+	function adds_a_JWT_endpoint()
+	{
+		$this->subject->install();
+
+		$history = $this->utility->getHistoryByFuncName(BaseUtility::REGISTER_REST_ROUTE);
+		$this->assertNotEmpty($history);
 	}
 
 	private function create_a_relation($id): void

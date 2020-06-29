@@ -111,15 +111,15 @@ class Utility extends BaseUtility
 		array_push($this->history, $histObj);
 	}
 
-	function addActivateHook(\TNO\ContactForm7\Utilities\Helpers\CF7Helper $cf7Helper, string $appDir)
-	{
-		$histObj = new History("addActivateHook");
-		array_push($this->history, $histObj);
-	}
+    function addActivateHook(\TNO\ContactForm7\Utilities\Helpers\CF7Helper $cf7Helper)
+    {
+        $histObj = new History("addActivateHook");
+        array_push($this->history, $histObj);
+    }
 
-	function addDeactivateHook(\TNO\ContactForm7\Utilities\Helpers\CF7Helper $cf7Helper, string $appDir)
-	{
-		$histObj = new History("addDeactivateHook");
-		array_push($this->history, $histObj);
-	}
+    function addDeactivateHook(\TNO\ContactForm7\Utilities\Helpers\CF7Helper $cf7Helper)
+    {
+        $histObj = new History("addDeactivateHook");
+        array_push($this->history, $histObj);
+    }
 }

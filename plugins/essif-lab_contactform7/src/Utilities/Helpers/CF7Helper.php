@@ -17,10 +17,10 @@ class CF7Helper extends WP
 		if ($post->post_content != null)
 		{
 			$post_content = $post->post_content;
-			$post_content = (string) strstr($post_content, 'TNO', true);
-			$re = '/\[(?:\w+\*?\s+)?([^][]+)]/';
+			$post_content = preg_split("/\s1\s/", $post_content)[0];
+			$re = '/\[(?!.*(submit|essif_lab))(?:\w+\*?\s+)?([^][]+)]/';
 			preg_match_all($re, $post_content, $fields);
-			$slugs = array_unique($fields[1]);
+			$slugs = array_unique($fields[2]);
 			$titles = str_replace("-", " ", $slugs);
 			$res = [$slugs, $titles];
 		}
@@ -39,7 +39,9 @@ class CF7Helper extends WP
 	{
 		$cf7Forms = parent::getAllForms();
 
-		return array_map(null, [$cf7Forms->ID, $cf7Forms->post_title], $this->extractInputsFromForm($cf7Forms));
+		return array_map(function ($form){
+			return array($form->ID, $form->post_title, $this->extractInputsFromForm($form));
+		}, $cf7Forms);
 	}
 
 	function addAllOnActivate()
@@ -60,33 +62,31 @@ class CF7Helper extends WP
 		/**
 		 *  Insert the targets
 		 */
+
+		// TODO: fix selectTarget to actually get the targets :)
 		$targets = parent::selectTarget();
-		foreach ($this->getAllTargets() as $key => $target)
+		foreach ($this->getAllTargets() as $id => $title)
 		{
-			if (!in_array($target, $targets))
+			if (!in_array($title, $targets))
 			{
-				parent::insertTarget($key, $target);
+				parent::insertTarget($id, $title);
 			}
 		}
 
 		/**
 		 *  Insert the inputs
 		 */
-		foreach ($this->getAllInputs() as $input)
-		{
-			$target = $input[0];
-			$targetHook = parent::selectInput([$target[0] => $target[1]]);
+		// TODO: make inputs not be inserted if they already exist
+		$inputs = parent::selectInput();
+		foreach ($this->getAllInputs() as $input) {
+			$targetId = $input[0];
 
-			$slugs = $input[1][0];
-			$titles = $input[1][1];
+			$slugs = $input[2][0];
+			$titles = $input[2][1];
 			$inputs = [$slugs, $titles];
 
-			foreach ($inputs as $inp)
-			{
-				if (!in_array($inp, $targetHook))
-				{
-					parent::insertInput($inp[0], $inp[1], $target[0]);
-				}
+			for ($i = 0; $i < count($inputs[0]); $i++){
+				parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
 			}
 		}
 	}

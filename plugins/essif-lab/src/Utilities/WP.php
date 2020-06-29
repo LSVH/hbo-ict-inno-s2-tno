@@ -2,9 +2,11 @@
 
 namespace TNO\EssifLab\Utilities;
 
+use Firebase\JWT\JWT;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
+use WP_REST_Response;
 
 class WP extends BaseUtility
 {
@@ -29,6 +31,16 @@ class WP extends BaseUtility
 	const POST_TITLE = 'post_title';
 
 	const POST_CONTENT = 'post_content';
+
+	const ADD_JWT_ENDPOINT = 'add_jwt_endpoint';
+
+	const JWT_SUB = 'credential-verify-request';
+
+	const JWT_AUD = 'ssi-service-provider';
+
+	const JWT_ISS = "0ddc6513-b57a-4398-9fb5-027d3cbc82dc";
+
+	const JWT_JTI = "sxt0wOOd8O6X";
 
 	protected $functions = [
 		self::ADD_ACTION                  => [self::class, 'addAction'],
@@ -91,7 +103,7 @@ class WP extends BaseUtility
 		register_post_type($postType, $args);
 	}
 
-	static function createModel(Model $model): bool
+	static function createModel(Model $model): int
 	{
 		$result = wp_insert_post(self::mapModelToPost($model), true);
 		if (!is_int($result))
@@ -125,6 +137,13 @@ class WP extends BaseUtility
 
 	static function getModels(array $args = []): array
 	{
+		echo "<pre>";
+		var_dump("args", array_merge([
+			'numberposts'                   => -1,
+			Constants::MODEL_TYPE_INDICATOR => 'any',
+		], $args));
+		echo "</pre>";
+
 		return array_map(function ($post) {
 			return self::modelFactory($post->to_array());
 		}, get_posts(array_merge([
@@ -214,7 +233,8 @@ class WP extends BaseUtility
 		$modelAttrs = $model->getAttributes();
 
 		$postAttrs = [
-			'post_type' => $model->getTypeName(),
+			'post_type'   => $model->getTypeName(),
+			'post_status' => 'publish',
 		];
 		if (array_key_exists(Constants::TYPE_INSTANCE_IDENTIFIER_ATTR, $modelAttrs))
 		{
@@ -266,5 +286,40 @@ class WP extends BaseUtility
 	static function getCreateModelLink(string $postType): string
 	{
 		return add_query_arg(['post_type' => $postType], admin_url('post-new.php'));
+	}
+
+	static function generateJWTToken($request)
+	{
+		$payload = [
+			'type'        => 'testEmail',
+			'callbackUrl' => $request['callbackurl'],
+			'sub'         => self::JWT_SUB,
+			'iat'         => time(),
+			'aud'         => self::JWT_AUD,
+			'iss'         => self::JWT_ISS,
+			'jti'         => self::JWT_JTI,
+		];
+
+		$key = self::getSharedSecret();
+
+		$jwt = JWT::encode($payload, $key);
+
+		$response = new WP_REST_Response($jwt);
+		$response->set_status(200);
+
+		return $response;
+	}
+
+	static function getSharedSecret(): string
+	{
+		return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
+	}
+
+	static function registerRestRoute(): bool
+	{
+		return register_rest_route('jwt/v1', 'callbackurl=(?P<callbackurl>.+)', [
+			'methods'  => 'GET',
+			'callback' => [WP::class, 'generateJWTToken'],
+		]);
 	}
 }

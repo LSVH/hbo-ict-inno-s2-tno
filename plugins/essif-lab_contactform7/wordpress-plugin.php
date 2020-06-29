@@ -9,6 +9,8 @@
  * Text Domain: essif-lab_contactform7
  */
 
+define('PLUGIN_DIR', __FILE__);
+
 if (!defined('WPINC') || !defined('ABSPATH'))
 {
 	die;

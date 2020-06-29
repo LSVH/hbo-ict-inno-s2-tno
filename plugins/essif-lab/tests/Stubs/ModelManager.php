@@ -26,11 +26,11 @@ class ModelManager extends BaseModelManager
 
 	private $relations = [];
 
-	function insert(Model $model): bool
+	function insert(Model $model): int
 	{
 		$this->recordHistory('insert', [$model]);
 
-		return true;
+		return 1;
 	}
 
 	function delete(Model $model): bool
@@ -40,9 +40,9 @@ class ModelManager extends BaseModelManager
 		return true;
 	}
 
-	function update(Model $model): bool
+	function update(Model $model): int
 	{
-		return true;
+		return 1;
 	}
 
 	function select(Model $model, array $criteria = []): array

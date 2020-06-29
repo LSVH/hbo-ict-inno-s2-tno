@@ -5,6 +5,7 @@ namespace TNO\EssifLab\Integrations;
 use ReflectionClass;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\Contracts\BaseIntegration;
+use TNO\EssifLab\ModelManagers\Exceptions\UnknownModel;
 use TNO\EssifLab\Models\Hook;
 use TNO\EssifLab\Models\Input;
 use TNO\EssifLab\Models\Target;
@@ -41,6 +42,7 @@ class WordPressSubPluginApi extends BaseIntegration
 		}
 	}
 
+	// TODO: figure out why this action is immediately executed instead of waiting for the trigger
 	private function addActionInsert(string $instance, int $params)
 	{
 		$triggerName = self::getTriggerName(self::TRIGGER_PRE.'insert_', $instance);
@@ -49,7 +51,28 @@ class WordPressSubPluginApi extends BaseIntegration
 			{
 				$instance = new $instance(self::getProps($params));
 
-				$this->manager->insert($instance);
+				$instanceId = $this->manager->insert($instance);
+
+				if (!($instance instanceof Hook))
+				{
+					$instanceAttrs = $instance->getAttributes();
+					$instanceAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR] = $instanceId;
+					$instance->setAttributes($instanceAttrs);
+
+					$relatedModelId = null;
+					if ($instance instanceof Target)
+					{
+						$relatedModelId = $this->manager->select(new Hook(), [WP::POST_NAME => $params[1]])[0];
+					} else if ($instance instanceof Input)
+					{
+						$relatedModelId = $this->manager->select(new Target(), [WP::POST_NAME => $params[1]])[0];
+					} else
+					{
+						throw new UnknownModel(get_class($instance));
+					}
+
+					$this->manager->insertRelation($instance, $relatedModelId);
+				}
 			}
 		}, 1, $params);
 	}
@@ -83,7 +106,7 @@ class WordPressSubPluginApi extends BaseIntegration
 		$triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
 		$this->utility->call(WP::ADD_FILTER, $triggerName, function ($items, $parentSlug) use ($model, $relation) {
 			$items = is_array($items) ? $items : [];
-			$parentInstances = $this->manager->select(new $relation(), ['post_name' => $parentSlug]);
+			$parentInstances = $this->manager->select(new $relation(), ['name' => $parentSlug]);
 			$from = empty ($parentInstances) ? null : current($parentInstances);
 
 			if (empty($from))
@@ -117,13 +140,11 @@ class WordPressSubPluginApi extends BaseIntegration
 
 	private static function getTitle(array $models): string
 	{
-		return strval(current(end($models)));
+		return strval(current(reset($models)));
 	}
 
 	private static function getSlug(array $models): string
 	{
-		return implode('__', array_map(function (array $param) {
-			return key($param);
-		}, $models));
+		return strval(key(reset($models)));
 	}
 }

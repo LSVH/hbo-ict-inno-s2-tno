@@ -5,7 +5,7 @@ namespace TNO\EssifLab\ModelManagers;
 use TNO\EssifLab\Applications\Contracts\Application;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\ModelManagers\Contracts\BaseModelManager;
-use TNO\EssifLab\ModelManagers\Exceptions\MissingIdentifier;
+use TNO\EssifLab\ModelManagers\Exceptions\UnknownModel;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use TNO\EssifLab\Utilities\Contracts\Utility;
@@ -20,16 +20,16 @@ class WordPressPostTypes extends BaseModelManager
 		$this->relationKey = $application->getNamespace().'_'.Constants::MANAGER_TYPE_RELATION_ID_NAME;
 	}
 
-	function insert(Model $model): bool
+	function insert(Model $model): int
 	{
 		return $this->utility->call(BaseUtility::CREATE_MODEL, $model);
 	}
 
-	function update(Model $model): bool
+	function update(Model $model): int
 	{
 		if (self::getModelId($model) < 0)
 		{
-			throw new MissingIdentifier($model->getSingularName());
+			throw new UnknownModel($model->getSingularName());
 		}
 
 		return $this->insert($model);
@@ -62,7 +62,7 @@ class WordPressPostTypes extends BaseModelManager
 
 		if ($toId < 0)
 		{
-			throw new MissingIdentifier($to->getSingularName());
+			throw new UnknownModel($to->getSingularName());
 		}
 
 		$relationFromToKey = $this->relationKey.$to->getTypeName();
@@ -81,7 +81,7 @@ class WordPressPostTypes extends BaseModelManager
 
 		if ($toId < 0)
 		{
-			throw new MissingIdentifier($to->getSingularName());
+			throw new UnknownModel($to->getSingularName());
 		}
 
 		$relationFromToKey = $this->relationKey.$to->getTypeName();
@@ -150,7 +150,7 @@ class WordPressPostTypes extends BaseModelManager
 			return $currentModelAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR];
 		}
 
-		throw new MissingIdentifier($model->getSingularName());
+		throw new UnknownModel($model->getSingularName());
 	}
 
 	private static function getModelId(Model $model): int

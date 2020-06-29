@@ -19,13 +19,13 @@ class Utility extends BaseUtility
 	];
 
 	protected $valueReturningFunctions = [
-		BaseUtility::GET_CURRENT_MODEL => [self::class, 'getCurrentModel'],
-		BaseUtility::GET_MODEL         => [self::class, 'getModel'],
-		BaseUtility::CREATE_MODEL_META => [self::class, 'createModelMeta'],
-		BaseUtility::UPDATE_MODEL_META => [self::class, 'updateModelMeta'],
-		BaseUtility::DELETE_MODEL_META => [self::class, 'deleteModelMeta'],
-		BaseUtility::GET_MODEL_META    => [self::class, 'getModelMeta'],
-		BaseUtility::GET_MODELS        => [self::class, 'getModels'],
+		BaseUtility::GET_CURRENT_MODEL   => [self::class, 'getCurrentModel'],
+		BaseUtility::GET_MODEL           => [self::class, 'getModel'],
+		BaseUtility::CREATE_MODEL_META   => [self::class, 'createModelMeta'],
+		BaseUtility::DELETE_MODEL_META   => [self::class, 'deleteModelMeta'],
+		BaseUtility::GET_MODEL_META      => [self::class, 'getModelMeta'],
+		BaseUtility::GET_MODELS          => [self::class, 'getModels'],
+		BaseUtility::REGISTER_REST_ROUTE => [self::class, 'registerRestRoute'],
 	];
 
 	function call(string $name, ...$parameters)
@@ -224,5 +224,10 @@ class Utility extends BaseUtility
 	public function clearMeta(): void
 	{
 		self::$meta = [];
+	}
+
+	static function registerRestRoute(): bool
+	{
+		return true;
 	}
 }
