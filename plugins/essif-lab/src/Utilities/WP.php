@@ -32,8 +32,6 @@ class WP extends BaseUtility
 
     const POST_CONTENT = 'post_content';
 
-    const ADD_JWT_ENDPOINT = 'add_jwt_endpoint';
-
     const JWT_SUB = 'credential-verify-request';
 
     const JWT_AUD = 'ssi-service-provider';
@@ -170,7 +168,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -272,7 +270,7 @@ class WP extends BaseUtility
     public static function generateJWTToken($request)
     {
         $payload = [
-            'type'        => $request['inputslug'],
+            'type'        => self::getCredentialType($request['inputslug']),
             'callbackUrl' => $request['callbackurl'],
             'sub'         => self::JWT_SUB,
             'iat'         => time(),
@@ -291,16 +289,39 @@ class WP extends BaseUtility
         return $response;
     }
 
-    public static function getSharedSecret(): string
+    private static function getSharedSecret(): string
     {
         return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 
     public static function registerRestRoute(): bool
     {
-        return register_rest_route('jwt/v1', 'callbackurl=(?P<callbackurl>.+)/inputslug=(?P<inputslug>.+)', [
-            'methods'  => 'GET',
-            'callback' => [self::class, 'generateJWTToken'],
-        ]);
+        return register_rest_route('jwt/v1',
+            'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
+            [
+                'methods'  => 'GET',
+                'callback' => [self::class, 'generateJWTToken'],
+            ]);
+    }
+
+    private static function getCredentialType(string $slug)
+    {
+        $input = self::getModels(['name' => $slug])[0];
+
+        $relationIds = self::getModelMeta(
+            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential');
+        $credential = self::getModel($relationIds[0]);
+
+        $credentialTypesIds = self::getModelMeta(
+            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential-type');
+        $credentialType = self::getModel($credentialTypesIds[0]);
+
+        $credentialTypeArray = json_decode(
+            $credentialType->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR],
+            true);
+
+        return $credentialTypeArray[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
     }
 }

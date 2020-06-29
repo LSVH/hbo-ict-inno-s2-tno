@@ -58,9 +58,9 @@ class Utility extends BaseUtility
         $this->delete('hook', [$slug => $title]);
     }
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function deleteTarget(string $name, string $title)
     {
-        $this->delete('target', [$id => $title], $hookSlug);
+        $this->delete('target', [$name => $title]);
     }
 
     public function deleteInput(string $slug, string $title, int $targetId)

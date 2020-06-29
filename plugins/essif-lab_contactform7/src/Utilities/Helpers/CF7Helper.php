@@ -97,10 +97,6 @@ class CF7Helper extends WP
 
     public function deleteAllOnDeactivate()
     {
-        $hook = [
-            'contact-form-7' => 'Contact Form 7',
-        ];
-
         /**
          *  Delete the inputs.
          */
@@ -120,7 +116,7 @@ class CF7Helper extends WP
 
             for ($i = 0; $i < count($inputs[0]); $i++) {
                 if (in_array($inputs[0][$i], $inputNames)) {
-                    parent::insertInput($inputs[0][$i], $inputs[1][$i], $targetId);
+                    parent::deleteInput($inputs[0][$i], $inputs[1][$i], $targetId);
                 }
             }
         }
