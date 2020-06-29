@@ -377,13 +377,6 @@ class WP extends BaseUtility {
 
     public static function getModels(array $args = []): array
     {
-        echo '<pre>';
-        var_dump('args', array_merge([
-            'numberposts'                   => -1,
-            Constants::MODEL_TYPE_INDICATOR => 'any',
-        ], $args));
-        echo '</pre>';
-
         return array_map(function ($post) {
             return self::modelFactory($post->to_array());
         }, get_posts(array_merge([
