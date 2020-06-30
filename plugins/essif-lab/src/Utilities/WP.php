@@ -171,7 +171,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
+        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -347,14 +347,14 @@ class WP extends BaseUtility
 
     public static function receiveJWTToken($request)
     {
-        $page = $request["page"];
-        $slug = $request["slug"];
-        $jwtToken = $request["jwtToken"];
+        $page = $request['page'];
+        $slug = $request['slug'];
+        $jwtToken = $request['jwtToken'];
 
         $key = self::getSharedSecret();
 
         $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
-        header('Location: ' . $page . "?" . $slug . "=" . reset($jwt->data));
+        header('Location: '.$page.'?'.$slug.'='.reset($jwt->data));
         die();
     }
 }
