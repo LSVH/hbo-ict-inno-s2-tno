@@ -102,7 +102,7 @@ class WP extends BaseUtility
             wpcf7_add_form_tag(
                 $tag_name,
                 [Button::class, 'custom_essif_lab_form_tag_handler'],
-                ['name-attr' => true,]);
+                ['name-attr' => true]);
         });
         add_action('wpcf7_admin_init', function () use ($tag_name) {
             $tag_generator = \WPCF7_TagGenerator::get_instance();
