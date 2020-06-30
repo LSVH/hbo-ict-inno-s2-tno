@@ -20,8 +20,7 @@
                 url: '../wp-json/jwt/v1/callbackurl=' + callbackUrl + '&inputslug=' + name,
                 success: function (data) {
                     if (data != null) {
-                        const redirectUrl = 'https://service.ssi-lab.sensorlab.tno.nl/verify/' + data;
-                        window.location.href = redirectUrl;
+                        window.location.href = 'https://service.ssi-lab.sensorlab.tno.nl/verify/' + data;
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

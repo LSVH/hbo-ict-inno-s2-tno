@@ -282,9 +282,7 @@ class WP extends BaseUtility
             'jti'         => self::JWT_JTI,
         ];
 
-        $key = self::getSharedSecret();
-
-        $jwt = JWT::encode($payload, $key, self::ALG);
+        $jwt = JWT::encode($payload, self::getSharedSecret(), self::ALG);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
@@ -351,9 +349,8 @@ class WP extends BaseUtility
         $slug = $request["slug"];
         $jwtToken = $request["jwtToken"];
 
-        $key = self::getSharedSecret();
 
-        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
+        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
         header('Location: ' . $page . "?" . $slug . "=" . reset($jwt->data));
         die();
     }
