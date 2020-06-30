@@ -215,16 +215,16 @@ class WP extends BaseUtility
     {
         $tag_name = 'essif_lab';
         add_action('wpcf7_init', function () use ($tag_name) {
-            wpcf7_add_form_tag($tag_name,
-                [Button::class, 'custom_essif_lab_form_tag_handler',],
+            wpcf7_add_form_tag(
+                $tag_name,
+                [Button::class, 'custom_essif_lab_form_tag_handler'],
                 ['name-attr' => true,]);
         });
         add_action('wpcf7_admin_init', function () use ($tag_name) {
             $tag_generator = \WPCF7_TagGenerator::get_instance();
             $tag_generator->add($tag_name, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tag_name) {
                 $args = wp_parse_args($args, []);
-                $description = __("Allow's users to load credentials from their wallet.");
-                ?>
+                $description = __("Allow's users to load credentials from their wallet."); ?>
                 <div class="control-box">
                     <fieldset>
                         <legend><?php echo $description ?></legend>
