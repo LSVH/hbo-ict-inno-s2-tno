@@ -23,7 +23,7 @@ class Button
         $inputName = $attrs['name'];
         $input = '<input name="'.$inputName.'" type="'.$inputType.'" value="'.$inputValue.'" class="'.$inputClass.'">';
 
-        $style = '<style>.essif-lab{width:100%;font-size:75%;padding:1%;}</style>';
+        $style = '<style>body .essif-lab{width:100%;font-size:75%;padding:1%;}</style>';
 
         return $input.$style;
     }
