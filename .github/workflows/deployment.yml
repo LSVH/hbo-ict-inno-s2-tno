@@ -48,3 +48,10 @@ jobs:
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
                     registry: docker.pkg.github.com
+
+            -   name: SSH-ing into EC2 instance
+                run: | apt-get install sshpass -y  && \
+                    sshpass -p TNO ssh ubuntu@52.207.254.225
+                    wget https://github.com/LSVH/hbo-ict-inno-s2-tno.git /test && \
+                    cd /test/docker/src/ && \
+                    docker-compose up -d
