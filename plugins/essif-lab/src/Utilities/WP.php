@@ -349,10 +349,8 @@ class WP extends BaseUtility
         $slug = $request['slug'];
         $jwtToken = $request['jwtToken'];
 
-        $key = self::getSharedSecret();
-
-        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
-        header('Location: '.$page.'?'.$slug.'='.reset($jwt->data));
+        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data));
         die();
     }
 }
