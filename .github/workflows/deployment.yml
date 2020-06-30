@@ -58,6 +58,11 @@ jobs:
                     passphrase: ${{ secrets.PASSPHRASE }}
                     privateKey: ${{ secrets.PRIVATE_KEY}}
                 
+            - name: Git clone repo
+              run: sudo git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /test 
+
             - name: Running containers
-              run: git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /test && \
-                        docker-compose up -f /test/docker/src up -d
+              run: sudo docker-compose -f /test/docker/src/docker-compose.yml up -d
+              
+        env:
+         CI: true
