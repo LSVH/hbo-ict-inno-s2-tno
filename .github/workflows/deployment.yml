@@ -50,8 +50,14 @@ jobs:
                     registry: docker.pkg.github.com
 
             -   name: SSH-ing into EC2 instance
-                run: | apt-get install sshpass -y  && \
-                    sshpass -p TNO ssh ubuntu@52.207.254.225
-                    wget https://github.com/LSVH/hbo-ict-inno-s2-tno.git /test && \
-                    cd /test/docker/src/ && \
-                    docker-compose up -d
+                uses: garygrossgarten/github-action-ssh@release
+                with:
+                    command: ls -a
+                    host: ${{ secrets.HOST }}
+                    username: ubuntu
+                    passphrase: ${{ secrets.PASSPHRASE }}
+                    privateKey: ${{ secrets.PRIVATE_KEY}}
+                
+            - name: Running containers
+              run: git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /test && \
+                        docker-compose up -f /test/docker/src up -d
