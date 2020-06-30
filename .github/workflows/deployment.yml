@@ -64,5 +64,11 @@ jobs:
             - name: Running containers
               run: sudo docker-compose -f /test/docker/src/docker-compose.yml up -d
               
+            - name: After 10 min repo down
+              run: sleep 10m && sudo docker-compose -f /test/docker/src/docker-compose.yml down 
+              
+            - name: Delete git clone repo
+              run: sudo rm -rf /test
+              
         env:
          CI: true
