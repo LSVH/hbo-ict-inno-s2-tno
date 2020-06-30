@@ -19,13 +19,14 @@ class Utility extends BaseUtility
     ];
 
     protected $valueReturningFunctions = [
-        BaseUtility::GET_CURRENT_MODEL   => [self::class, 'getCurrentModel'],
-        BaseUtility::GET_MODEL           => [self::class, 'getModel'],
-        BaseUtility::CREATE_MODEL_META   => [self::class, 'createModelMeta'],
-        BaseUtility::DELETE_MODEL_META   => [self::class, 'deleteModelMeta'],
-        BaseUtility::GET_MODEL_META      => [self::class, 'getModelMeta'],
-        BaseUtility::GET_MODELS          => [self::class, 'getModels'],
-        BaseUtility::REGISTER_REST_ROUTE => [self::class, 'registerRestRoute'],
+        BaseUtility::GET_CURRENT_MODEL           => [self::class, 'getCurrentModel'],
+        BaseUtility::GET_MODEL                   => [self::class, 'getModel'],
+        BaseUtility::CREATE_MODEL_META           => [self::class, 'createModelMeta'],
+        BaseUtility::DELETE_MODEL_META           => [self::class, 'deleteModelMeta'],
+        BaseUtility::GET_MODEL_META              => [self::class, 'getModelMeta'],
+        BaseUtility::GET_MODELS                  => [self::class, 'getModels'],
+        BaseUtility::REGISTER_GENERATE_JWT_ROUTE => [self::class, 'registerGenerateJWTRoute'],
+        BaseUtility::REGISTER_RECEIVE_JWT_ROUTE  => [self::class, 'registerReceiveJWTRoute'],
     ];
 
     public function call(string $name, ...$parameters)
@@ -207,7 +208,12 @@ class Utility extends BaseUtility
         self::$meta = [];
     }
 
-    public static function registerRestRoute(): bool
+    public static function registerGenerateJWTRoute(): bool
+    {
+        return true;
+    }
+
+    public static function registerReceiveJWTRoute(): bool
     {
         return true;
     }

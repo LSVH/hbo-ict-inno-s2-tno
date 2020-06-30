@@ -7,14 +7,14 @@
 
         function redirectToWallet(name)
         {
-            const callbackUrl = window.location.href;
+            const callbackUrl = window.location.href + "/wp-json/";
             $.ajax({
                 type: 'GET',
                 url: '../wp-json/jwt/v1/callbackurl=' + callbackUrl + '&inputslug=' + name,
                 success: function (data) {
                     if (data != null) {
                         const redirectUrl = 'https://service.ssi-lab.sensorlab.tno.nl/verify/' + data;
-                        window.open(redirectUrl, '_blank');
+                        window.location.href = redirectUrl;
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
