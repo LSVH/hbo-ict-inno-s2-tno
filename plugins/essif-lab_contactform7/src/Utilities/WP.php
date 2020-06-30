@@ -109,7 +109,7 @@ class WP extends BaseUtility
             $tag_generator = \WPCF7_TagGenerator::get_instance();
             $tag_generator->add($tag_name, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tag_name) {
                 $args = wp_parse_args($args, []);
-                $description = __("Allows users to load credentials from their wallet."); ?>
+                $description = __('Allows users to load credentials from their wallet.'); ?>
                 <div class="control-box">
                     <fieldset>
                         <legend><?php echo $description ?></legend>
