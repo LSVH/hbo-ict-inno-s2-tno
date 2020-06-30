@@ -168,7 +168,7 @@ class WP extends BaseUtility
 
     private function insert($suffix, ...$params)
     {
-        do_action(self::ACTION_PREFIX . 'insert_' . $suffix, ...$params);
+        do_action(self::ACTION_PREFIX.'insert_'.$suffix, ...$params);
     }
 
     public function deleteHook(string $slug = self::SLUG, string $title = self::TITLE)
@@ -188,7 +188,7 @@ class WP extends BaseUtility
 
     private function delete($suffix, ...$params)
     {
-        do_action(self::ACTION_PREFIX . 'delete_' . $suffix, ...$params);
+        do_action(self::ACTION_PREFIX.'delete_'.$suffix, ...$params);
     }
 
     public function selectHook(string $slug = self::SLUG): array
@@ -208,15 +208,39 @@ class WP extends BaseUtility
 
     private function select($suffix, ...$params): array
     {
-        return apply_filters(self::ACTION_PREFIX . 'select_' . $suffix, ...$params);
+        return apply_filters(self::ACTION_PREFIX.'select_'.$suffix, ...$params);
     }
 
     public function addEssifLabFormTag()
     {
-        add_action('wpcf7_init', function () {
-            wpcf7_add_form_tag('essif_lab',
+        $tag_name = 'essif_lab';
+        add_action('wpcf7_init', function () use ($tag_name) {
+            wpcf7_add_form_tag($tag_name,
                 [Button::class, 'custom_essif_lab_form_tag_handler',],
                 ['name-attr' => true,]);
+        });
+        add_action('wpcf7_admin_init', function () use ($tag_name) {
+            $tag_generator = \WPCF7_TagGenerator::get_instance();
+            $tag_generator->add($tag_name, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tag_name) {
+                $args = wp_parse_args($args, []);
+                $description = __("Allow's users to load credentials from their wallet.");
+                ?>
+                <div class="control-box">
+                    <fieldset>
+                        <legend><?php echo $description ?></legend>
+                    </fieldset>
+                    <div class="insert-box">
+                        <input title="result" type="text" name="<?php echo $tag_name; ?>" class="tag code"
+                               readonly="readonly"
+                               onfocus="this.select()"/>
+                        <div class="submitbox">
+                            <input type="button" class="button button-primary insert-tag"
+                                   value="<?php echo esc_attr(__('Insert Tag', 'contact-form-7')); ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }, ['nameless' => 1]);
         });
     }
 
@@ -224,7 +248,7 @@ class WP extends BaseUtility
     {
         wp_enqueue_script(
             'EssifLab_ContactForm7-CustomJs',
-            plugin_dir_url(__FILE__) . '../js/script.js',
+            plugin_dir_url(__FILE__).'../js/script.js',
             ['jquery'],
             '',
             false
