@@ -415,7 +415,7 @@ class WP extends BaseUtility {
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
+        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -565,6 +565,7 @@ class WP extends BaseUtility {
     public static function registerRestRoute(): bool
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         return register_rest_route('jwt/v1', 'callbackurl=(?P<callbackurl>.+)/inputslug=(?P<inputslug>.+)', [
             'methods'  => 'GET',
             'callback' => [self::class, 'generateJWTToken'],
@@ -572,11 +573,16 @@ class WP extends BaseUtility {
 >>>>>>> 44a9692... Applying patch StyleCI
 =======
         return register_rest_route('jwt/v1',
+=======
+        return register_rest_route(
+            'jwt/v1',
+>>>>>>> 358c6f7... Fixed styling issues and some refactorign
             'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
             [
                 'methods'  => 'GET',
                 'callback' => [self::class, 'generateJWTToken'],
-            ]);
+            ]
+        );
     }
 
     private static function getCredentialType(string $slug)
@@ -585,17 +591,20 @@ class WP extends BaseUtility {
 
         $relationIds = self::getModelMeta(
             $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
-            'essif-lab_relationcredential');
+            'essif-lab_relationcredential'
+        );
         $credential = self::getModel($relationIds[0]);
 
         $credentialTypesIds = self::getModelMeta(
             $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
-            'essif-lab_relationcredential-type');
+            'essif-lab_relationcredential-type'
+        );
         $credentialType = self::getModel($credentialTypesIds[0]);
 
         $credentialTypeArray = json_decode(
             $credentialType->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR],
-            true);
+            true
+        );
 
         return $credentialTypeArray[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
 >>>>>>> c291f2b... added correct credential_type to jwt

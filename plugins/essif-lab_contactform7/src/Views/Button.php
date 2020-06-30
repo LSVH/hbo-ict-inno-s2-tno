@@ -21,11 +21,11 @@ class Button
         $inputValue = 'Gegevens inladen';
         $inputClass = 'wpcf7-form-control wpcf7-submit essif-lab';
         $inputName = $attrs['name'];
-        $style = "body .essif-lab { width: 100%;
-                  font-size: 75%;
-                  padding: 1%; }";
+        $input = '<input name="'.$inputName.'" type="'.$inputType.'" value="'.$inputValue.'" class="'.$inputClass.'">';
 
-        return '<input name="'.$inputName.'" type="'.$inputType.'" value="'.$inputValue.'" class="'.$inputClass.'"><style>' . $style . '</style>';
+        $style = '<style>.essif-lab{width:100%;font-size:75%;padding:1%;}</style>';
+
+        return $input.$style;
     }
 >>>>>>> 44a9692... Applying patch StyleCI
 }
