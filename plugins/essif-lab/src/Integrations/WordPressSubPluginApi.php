@@ -112,7 +112,8 @@ class WordPressSubPluginApi extends BaseIntegration
         }, 1, 2);
     }
 
-    private function applyFilterGenerateJti() {
+    private function applyFilterGenerateJti()
+    {
         $triggerName = self::TRIGGER_PRE.'generate_jti';
         $this->utility->call(WP::ADD_FILTER, $triggerName, function () {
             return uniqid();
