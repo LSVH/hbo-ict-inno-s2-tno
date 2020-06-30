@@ -7,6 +7,7 @@ use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use \Firebase\JWT\JWT;
 use WP_REST_Response;
+use WP_REST_Server;
 
 <<<<<<< HEAD
 class WP extends BaseUtility
@@ -417,7 +418,7 @@ class WP extends BaseUtility {
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -581,7 +582,7 @@ class WP extends BaseUtility {
 >>>>>>> 358c6f7... Fixed styling issues and some refactorign
             'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
             [
-                'methods'  => 'GET',
+                'methods'  => WP_REST_Server::READABLE,
                 'callback' => [self::class, 'generateJWTToken'],
             ]
         );
@@ -616,9 +617,9 @@ class WP extends BaseUtility {
     {
         return register_rest_route(
             'jwt/v1',
-            '(?P<jwtToken>.+)',
+            'page=(?P<page>.+)&inputslug=(?P<slug>.+)&jwt=(?P<jwtToken>.+)',
             [
-                'methods'  => 'POST',
+                'methods'  => WP_REST_Server::READABLE,
                 'callback' => [self::class, 'receiveJWTToken'],
             ]
         );
@@ -626,12 +627,15 @@ class WP extends BaseUtility {
 
     public static function receiveJWTToken($request)
     {
+        $page = $request["page"];
+        $slug = $request["slug"];
         $jwtToken = $request["jwtToken"];
 
         $key = self::getSharedSecret();
 
         $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
-        var_dump($jwt->data);
+        header('Location: ' . $page . "?" . $slug . "=" . reset($jwt->data));
+        die();
     }
 }
 >>>>>>> ad9b665... moved register rest route to utilities to enable testing (by using a stub)
