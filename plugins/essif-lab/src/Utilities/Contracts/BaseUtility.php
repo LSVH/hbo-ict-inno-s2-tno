@@ -55,7 +55,9 @@ abstract class BaseUtility implements Utility {
 
     public const GET_CREATE_MODEL_LINK = 'getCreateModelLink';
 
-    public const REGISTER_REST_ROUTE = 'registerRestRoute';
+    public const REGISTER_GENERATE_JWT_ROUTE = 'registerGenerateJWTRoute';
+
+    public const REGISTER_RECEIVE_JWT_ROUTE = 'registerReceiveJWTRoute';
 
     protected $functions = [];
 
@@ -121,20 +123,21 @@ abstract class BaseUtility implements Utility {
     public function __construct(array $functions = [])
     {
         $this->functions = array_merge([
-            self::CREATE_MODEL          => [static::class, 'createModel'],
-            self::UPDATE_MODEL          => [static::class, 'updateModel'],
-            self::DELETE_MODEL          => [static::class, 'deleteModel'],
-            self::GET_MODELS            => [static::class, 'getModels'],
-            self::GET_MODEL             => [static::class, 'getModel'],
-            self::GET_CURRENT_MODEL     => [static::class, 'getCurrentModel'],
-            self::CREATE_MODEL_TYPE     => [static::class, 'createModelType'],
-            self::CREATE_MODEL_META     => [static::class, 'createModelMeta'],
-            self::UPDATE_MODEL_META     => [static::class, 'updateModelMeta'],
-            self::DELETE_MODEL_META     => [static::class, 'deleteModelMeta'],
-            self::GET_MODEL_META        => [static::class, 'getModelMeta'],
-            self::GET_EDIT_MODEL_LINK   => [static::class, 'getEditModelLink'],
-            self::GET_CREATE_MODEL_LINK => [static::class, 'getCreateModelLink'],
-            self::REGISTER_REST_ROUTE   => [static::class, 'registerRestRoute'],
+            self::CREATE_MODEL                => [static::class, 'createModel'],
+            self::UPDATE_MODEL                => [static::class, 'updateModel'],
+            self::DELETE_MODEL                => [static::class, 'deleteModel'],
+            self::GET_MODELS                  => [static::class, 'getModels'],
+            self::GET_MODEL                   => [static::class, 'getModel'],
+            self::GET_CURRENT_MODEL           => [static::class, 'getCurrentModel'],
+            self::CREATE_MODEL_TYPE           => [static::class, 'createModelType'],
+            self::CREATE_MODEL_META           => [static::class, 'createModelMeta'],
+            self::UPDATE_MODEL_META           => [static::class, 'updateModelMeta'],
+            self::DELETE_MODEL_META           => [static::class, 'deleteModelMeta'],
+            self::GET_MODEL_META              => [static::class, 'getModelMeta'],
+            self::GET_EDIT_MODEL_LINK         => [static::class, 'getEditModelLink'],
+            self::GET_CREATE_MODEL_LINK       => [static::class, 'getCreateModelLink'],
+            self::REGISTER_GENERATE_JWT_ROUTE => [static::class, 'registerGenerateJWTRoute'],
+            self::REGISTER_RECEIVE_JWT_ROUTE  => [static::class, 'registerReceiveJWTRoute'],
         ], $this->functions, $functions);
     }
 

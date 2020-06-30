@@ -66,6 +66,8 @@ class WP extends BaseUtility {
     const JWT_JTI = 'sxt0wOOd8O6X';
 >>>>>>> 44a9692... Applying patch StyleCI
 
+    private const ALG = 'HS256';
+
     protected $functions = [
         self::ADD_ACTION                  => [self::class, 'addAction'],
         self::ADD_FILTER                  => [self::class, 'addFilter'],
@@ -529,7 +531,7 @@ class WP extends BaseUtility {
 
         $key = self::getSharedSecret();
 
-        $jwt = JWT::encode($payload, $key);
+        $jwt = JWT::encode($payload, $key, self::ALG);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
@@ -562,7 +564,7 @@ class WP extends BaseUtility {
         return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 
-    public static function registerRestRoute(): bool
+    public static function registerGenerateJWTRoute(): bool
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -608,6 +610,28 @@ class WP extends BaseUtility {
 
         return $credentialTypeArray[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
 >>>>>>> c291f2b... added correct credential_type to jwt
+    }
+
+    public static function registerReceiveJWTRoute(): bool
+    {
+        return register_rest_route(
+            'jwt/v1',
+            '(?P<jwtToken>.+)',
+            [
+                'methods'  => 'POST',
+                'callback' => [self::class, 'receiveJWTToken'],
+            ]
+        );
+    }
+
+    public static function receiveJWTToken($request)
+    {
+        $jwtToken = $request["jwtToken"];
+
+        $key = self::getSharedSecret();
+
+        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
+        var_dump($jwt->data);
     }
 }
 >>>>>>> ad9b665... moved register rest route to utilities to enable testing (by using a stub)
