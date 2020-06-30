@@ -36,7 +36,7 @@ abstract class Constants
 
     const ACTION_NAME_RELATION_ACTION = 'relation_action';
 
-    const FIELD_TYPE_CREDENTIAL_TYPE = 'credential type';
+    const FIELD_TYPE_CREDENTIAL_TYPE = 'credential_type';
 
     const FIELD_TYPE_IMMUTABLE = 'immutable';
 

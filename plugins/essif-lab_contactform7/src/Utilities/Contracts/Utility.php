@@ -12,25 +12,25 @@ interface Utility
 
     public function getAllForms();
 
-    public function getTargetsFromForms(array $cf7Forms, string $post_title, string $id);
+    public function getTargetsFromForms(array $cf7Forms);
 
     public function insertHook(string $slug = self::SLUG, string $title = self::TITLE);
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG);
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG);
 
     public function insertInput(string $slug, string $title, int $targetId);
 
     public function deleteHook(string $slug = self::SLUG, string $title = self::TITLE);
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG);
+    public function deleteTarget(string $name, string $title);
 
     public function deleteInput(string $slug, string $title, int $targetId);
 
-    public function selectHook(string $slug = self::SLUG, string $title = self::TITLE);
+    public function selectHook(string $slug = self::SLUG);
 
     public function selectTarget(array $items = [], string $hookSlug = self::SLUG);
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG);
+    public function selectInput(string $targetSlug, array $items = []);
 
     public function addEssifLabFormTag();
 

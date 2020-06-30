@@ -26,7 +26,7 @@ class Utility extends BaseUtility
         array_push($this->history, $histObj);
     }
 
-    public function getTargetsFromForms(array $cf7Forms, string $post_title, string $id)
+    public function getTargetsFromForms(array $cf7Forms)
     {
         $histObj = new History('getTargetsFromForms');
         array_push($this->history, $histObj);
@@ -37,9 +37,9 @@ class Utility extends BaseUtility
         $this->insert('hook', [$slug => $title]);
     }
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG)
     {
-        $this->insert('target', [$id => $title], $hookSlug);
+        $this->insert('target', [$name => $title], $hookSlug);
     }
 
     public function insertInput(string $slug, string $title, int $targetId)
@@ -58,9 +58,9 @@ class Utility extends BaseUtility
         $this->delete('hook', [$slug => $title]);
     }
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function deleteTarget(string $name, string $title)
     {
-        $this->delete('target', [$id => $title], $hookSlug);
+        $this->delete('target', [$name => $title]);
     }
 
     public function deleteInput(string $slug, string $title, int $targetId)
@@ -86,11 +86,11 @@ class Utility extends BaseUtility
         $this->select('target', $items, $hookSlug, $target);
     }
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG)
+    public function selectInput(string $targetSlug, array $items = [])
     {
         $mockHelper = new CF7Helper();
         $input = $mockHelper->getTestInput();
-        $this->select('input', $items, $hookSlug, $input);
+        $this->select('input', $items, $targetSlug, $input);
     }
 
     private function select($suffix, ...$params)

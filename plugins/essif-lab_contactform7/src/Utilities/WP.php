@@ -30,9 +30,9 @@ class WP extends BaseUtility
         return get_posts($args);
     }
 
-    public function getTargetsFromForms(array $cf7Forms, string $post_title, string $id)
+    public function getTargetsFromForms(array $cf7Forms)
     {
-        return wp_list_pluck($cf7Forms, 'post_title', 'ID');
+        return wp_list_pluck($cf7Forms, 'post_title', 'post_name');
     }
 
     public function insertHook(string $slug = self::SLUG, string $title = self::TITLE)
@@ -40,9 +40,9 @@ class WP extends BaseUtility
         $this->insert(self::HOOK, [$slug => $title]);
     }
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG)
     {
-        $this->insert(self::TARGET, [$id => $title], $hookSlug);
+        $this->insert(self::TARGET, [$name => $title], $hookSlug);
     }
 
     public function insertInput(string $slug, string $title, int $targetId)
@@ -60,9 +60,9 @@ class WP extends BaseUtility
         $this->delete(self::HOOK, [$slug => $title]);
     }
 
-    public function deleteTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function deleteTarget(string $name, string $title)
     {
-        $this->delete(self::TARGET, [$id => $title], $hookSlug);
+        $this->delete(self::TARGET, [$name => $title]);
     }
 
     public function deleteInput(string $slug, string $title, int $targetId)
@@ -75,9 +75,9 @@ class WP extends BaseUtility
         do_action(self::ACTION_PREFIX.'delete_'.$suffix, ...$params);
     }
 
-    public function selectHook(string $slug = self::SLUG, string $title = self::TITLE): array
+    public function selectHook(string $slug = self::SLUG): array
     {
-        return $this->select(self::HOOK, [$slug => $title]);
+        return $this->select(self::HOOK, null);
     }
 
     public function selectTarget(array $items = [], string $hookSlug = self::SLUG): array
@@ -85,9 +85,9 @@ class WP extends BaseUtility
         return $this->select(self::TARGET, $items, $hookSlug);
     }
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG): array
+    public function selectInput(string $targetSlug, array $items = []): array
     {
-        return $this->select(self::INPUT, $items, $hookSlug);
+        return $this->select(self::INPUT, $items, $targetSlug);
     }
 
     private function select($suffix, ...$params): array
@@ -97,10 +97,36 @@ class WP extends BaseUtility
 
     public function addEssifLabFormTag()
     {
-        add_action(
-            'wpcf7_init',
-            wpcf7_add_form_tag('essif_lab', [Button::class, 'custom_essif_lab_form_tag_handler'], ['name-attr' => true])
-        );
+        $tag_name = 'essif_lab';
+        add_action('wpcf7_init', function () use ($tag_name) {
+            wpcf7_add_form_tag(
+                $tag_name,
+                [Button::class, 'custom_essif_lab_form_tag_handler'],
+                ['name-attr' => true]
+            );
+        });
+        add_action('wpcf7_admin_init', function () use ($tag_name) {
+            $tag_generator = \WPCF7_TagGenerator::get_instance();
+            $tag_generator->add($tag_name, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tag_name) {
+                $args = wp_parse_args($args, []);
+                $description = __("Allows users to load credentials from their wallet."); ?>
+                <div class="control-box">
+                    <fieldset>
+                        <legend><?php echo $description ?></legend>
+                    </fieldset>
+                    <div class="insert-box">
+                        <input title="result" type="text" name="<?php echo $tag_name; ?>" class="tag code"
+                               readonly="readonly"
+                               onfocus="this.select()"/>
+                        <div class="submitbox">
+                            <input type="button" class="button button-primary insert-tag"
+                                   value="<?php echo esc_attr(__('Insert Tag', 'contact-form-7')); ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }, ['nameless' => 1]);
+        });
     }
 
     public function loadCustomJs()
