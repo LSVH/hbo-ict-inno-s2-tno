@@ -1,11 +1,15 @@
 FROM wordpress:cli
 
-COPY docker/local /usr/local
+COPY ./docker/local /usr/local
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 USER root
 
-RUN chmod +x /usr/local/bin/setup-wp /usr/local/bin/wait-for-it
-
-COPY ./plugins ./wp-content/plugins
+RUN apk update \
+ && apk add git \
+ && cd /usr/local/bin \
+ && chmod +x \
+    setup-wp wait-for-it
 
 CMD setup-wp

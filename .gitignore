@@ -2,7 +2,12 @@
 .idea
 =======
 .env
+<<<<<<< HEAD
 >>>>>>> 9826cd5... Added env example for docker-compose
+=======
+
+# generated
+>>>>>>> b9af6d6... Added volumes for each plugin and composer
 vendor
 <<<<<<< HEAD
 composer.lock
@@ -12,4 +17,7 @@ composer.lock
 # Tools
 .idea
 .phpunit.result.cache
+<<<<<<< HEAD
 >>>>>>> ab5745f... Removed composer.lock
+=======
+>>>>>>> b9af6d6... Added volumes for each plugin and composer
