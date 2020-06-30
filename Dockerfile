@@ -1,7 +1,6 @@
 FROM wordpress:cli
 
-COPY ./docker/bin /usr/local/bin
-COPY ./docker/etc /usr/local/etc
+COPY docker/local /usr/local
 
 USER root
 
