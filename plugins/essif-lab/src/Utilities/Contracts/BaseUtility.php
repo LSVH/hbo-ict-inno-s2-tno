@@ -32,7 +32,6 @@ abstract class BaseUtility implements Utility
 
     public const GET_CREATE_MODEL_LINK = 'getCreateModelLink';
 
-
     public const REGISTER_REST_ROUTE = 'registerRestRoute';
 
     protected $functions = [];
