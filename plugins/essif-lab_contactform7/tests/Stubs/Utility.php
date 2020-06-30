@@ -190,9 +190,9 @@ class Utility extends BaseUtility
         $this->insert('hook', [$slug => $title]);
     }
 
-    public function insertTarget(int $id, string $title, string $hookSlug = self::SLUG)
+    public function insertTarget(string $name, string $title, string $hookSlug = self::SLUG)
     {
-        $this->insert('target', [$id => $title], $hookSlug);
+        $this->insert('target', [$name => $title], $hookSlug);
     }
 
     public function insertInput(string $slug, string $title, int $targetId)
@@ -283,12 +283,16 @@ class Utility extends BaseUtility
         $this->select('target', $items, $hookSlug, $target);
     }
 
-    public function selectInput(array $items = [], string $hookSlug = self::SLUG)
+    public function selectInput(array $items = [], string $targetSlug = self::SLUG)
     {
         $mockHelper = new CF7Helper();
         $input = $mockHelper->getTestInput();
+<<<<<<< HEAD
         $this->select('input', $items, $hookSlug, $input);
 >>>>>>> 44a9692... Applying patch StyleCI
+=======
+        $this->select('input', $items, $targetSlug, $input);
+>>>>>>> 1896a46... fixed insert inputs
     }
 
     private function select($suffix, ...$params)

@@ -235,9 +235,9 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function applyFilterSelect(string $model)
     {
-        $triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
-        $this->utility->call(WP::ADD_FILTER, $triggerName, function ($items) use ($model) {
-            return array_merge(is_array($items) ? $items : [], $this->manager->select(new $model()));
+        $triggerName = self::getTriggerName(self::TRIGGER_PRE . 'select_', $model);
+        $this->utility->call(WP::ADD_FILTER, $triggerName, function () use ($model) {
+            return $this->manager->select(new $model());
         }, 1, 1);
     }
 
@@ -259,7 +259,8 @@ class WordPressSubPluginApi extends BaseIntegration
         }, 1, 2);
     }
 
-    private function applyFilterGenerateJti() {
+    private function applyFilterGenerateJti()
+    {
         $triggerName = self::TRIGGER_PRE.'generate_jti';
         $this->utility->call(WP::ADD_FILTER, $triggerName, function () {
             return uniqid();
