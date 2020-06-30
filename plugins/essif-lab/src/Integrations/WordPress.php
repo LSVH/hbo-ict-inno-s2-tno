@@ -24,7 +24,7 @@ class WordPress extends BaseIntegration
         $this->configureAllModelsAvailable();
         $this->configureModelCurrentlyBeingViewed();
         $this->configureSubPluginApi();
-        $this->addJWTEndpoint();
+        $this->addJWTEndpoints();
     }
 
     private function configureAllMiscellaneous(): void
@@ -248,10 +248,11 @@ class WordPress extends BaseIntegration
         return implode(' ', array_map('ucfirst', explode(' ', $v)));
     }
 
-    private function addJWTEndpoint()
+    private function addJWTEndpoints()
     {
         $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
-            $this->utility->call(BaseUtility::REGISTER_REST_ROUTE);
+            $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE);
+            $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE);
         });
     }
 }

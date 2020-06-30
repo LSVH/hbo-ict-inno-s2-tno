@@ -7,6 +7,7 @@ use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
 use WP_REST_Response;
+use WP_REST_Server;
 
 class WP extends BaseUtility
 {
@@ -39,6 +40,8 @@ class WP extends BaseUtility
     const JWT_ISS = '0ddc6513-b57a-4398-9fb5-027d3cbc82dc';
 
     const JWT_JTI = 'sxt0wOOd8O6X';
+
+    private const ALG = 'HS256';
 
     protected $functions = [
         self::ADD_ACTION                  => [self::class, 'addAction'],
@@ -168,7 +171,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -281,7 +284,7 @@ class WP extends BaseUtility
 
         $key = self::getSharedSecret();
 
-        $jwt = JWT::encode($payload, $key);
+        $jwt = JWT::encode($payload, $key, self::ALG);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
@@ -294,13 +297,13 @@ class WP extends BaseUtility
         return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 
-    public static function registerRestRoute(): bool
+    public static function registerGenerateJWTRoute(): bool
     {
         return register_rest_route(
             'jwt/v1',
             'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
             [
-                'methods'  => 'GET',
+                'methods'  => WP_REST_Server::READABLE,
                 'callback' => [self::class, 'generateJWTToken'],
             ]
         );
@@ -328,5 +331,30 @@ class WP extends BaseUtility
         );
 
         return $credentialTypeArray[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
+    }
+
+    public static function registerReceiveJWTRoute(): bool
+    {
+        return register_rest_route(
+            'jwt/v1',
+            'page=(?P<page>.+)&inputslug=(?P<slug>.+)&jwt=(?P<jwtToken>.+)',
+            [
+                'methods'  => WP_REST_Server::READABLE,
+                'callback' => [self::class, 'receiveJWTToken'],
+            ]
+        );
+    }
+
+    public static function receiveJWTToken($request)
+    {
+        $page = $request["page"];
+        $slug = $request["slug"];
+        $jwtToken = $request["jwtToken"];
+
+        $key = self::getSharedSecret();
+
+        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
+        header('Location: ' . $page . "?" . $slug . "=" . reset($jwt->data));
+        die();
     }
 }

@@ -262,7 +262,7 @@ class WordPressTest extends TestCase
     {
         $this->subject->install();
 
-        $history = $this->utility->getHistoryByFuncName(BaseUtility::REGISTER_REST_ROUTE);
+        $history = $this->utility->getHistoryByFuncName(BaseUtility::REGISTER_GENERATE_JWT_ROUTE);
         $this->assertNotEmpty($history);
     }
 
