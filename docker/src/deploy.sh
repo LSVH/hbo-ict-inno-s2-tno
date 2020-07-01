@@ -17,6 +17,10 @@ if [ ! "$(docker ps -q -f name=$NAME)" ]; then
         git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /tmp/testing-env
     fi
     # runing setup
+    # cleaning repo
+    rm -rf $DIR_repo
+    #Git clone repo
+    git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /tmp/testing-env
     echo "System is ready for running containers..."
     cat /home/ubuntu/TOKEN.txt | docker login https://docker.pkg.github.com/ -u weis999 --password-stdin
     echo "Going to start the containers for 10 minutes!!"
@@ -30,3 +34,4 @@ if [ ! "$(docker ps -q -f name=$NAME)" ]; then
     echo "Going to clean the setup!!"
     rm -rf $DIR_repo
 fi
+exit 0
