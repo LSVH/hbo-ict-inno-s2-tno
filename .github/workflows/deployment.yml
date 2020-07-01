@@ -1,68 +1,68 @@
 name: "Deployment Workflow"
 
 on:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 env:
-    COMPOSER_CONFIGS: plugins/*/composer.json
+  COMPOSER_CONFIGS: plugins/*/composer.json
 
 jobs:
-    build_push:
-        name: "Build and push docker image"
+  build_push:
+    name: "Build and push docker image"
 
-        runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-        steps:
-            -   uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-            -   name: Install dependencies for deployment
-                run: |
-                    for i in $(ls -1 $COMPOSER_CONFIGS);
-                        do composer install \
-                            --no-ansi \
-                            --no-dev \
-                            --no-interaction \
-                            --no-plugins \
-                            --no-progress \
-                            --no-scripts \
-                            --no-suggest \
-                            --optimize-autoloader \
-                            -d $(dirname "$i");
-                    done;
+      - name: Install dependencies for deployment
+        run: |
+          for i in $(ls -1 $COMPOSER_CONFIGS);
+              do composer install \
+                  --no-ansi \
+                  --no-dev \
+                  --no-interaction \
+                  --no-plugins \
+                  --no-progress \
+                  --no-scripts \
+                  --no-suggest \
+                  --optimize-autoloader \
+                  -d $(dirname "$i");
+          done;
 
-            -   name: Extract branch name
-                run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
-                id: extract_branch
-                shell: bash
+      - name: Extract branch name
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+        id: extract_branch
+        shell: bash
 
-            -   name: Build docker image and publish to registry
-                uses: elgohr/Publish-Docker-Github-Action@master
-                with:
-                    name: ${{ format('{0}/{1}', github.repository, steps.extract_branch.outputs.branch)  }}
-                    username: ${{ github.actor }}
-                    password: ${{ secrets.GITHUB_TOKEN }}
-                    registry: docker.pkg.github.com
-                    dockerfile: docker/src/Dockerfile
+      - name: Build docker image and publish to registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: ${{ format('{0}/{1}', github.repository, steps.extract_branch.outputs.branch)  }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          dockerfile: docker/src/Dockerfile
 
-    deploy:
-        name: "Deploy the published image"
+  deploy:
+    name: "Deploy the published image"
 
-        runs-on: ubuntu-latest
-        
-        env:
-            CI: true
+    runs-on: ubuntu-latest
 
-        steps: 
-            -   name: SSH-ing into EC2 instance
-                uses: garygrossgarten/github-action-ssh@release
-                with:
-                    command: ls -a
-                    host: ${{ secrets.HOST }}
-                    username: ubuntu
-                    passphrase: ${{ secrets.PASSPHRASE }}
-                    privateKey: ${{ secrets.PRIVATE_KEY}}
+    env:
+      CI: true
+
+    steps:
+      - name: SSH-ing into EC2 instance
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: ls -a
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          passphrase: ${{ secrets.PASSPHRASE }}
+          privateKey: ${{ secrets.PRIVATE_KEY}}
