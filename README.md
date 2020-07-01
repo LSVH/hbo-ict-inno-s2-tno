@@ -31,7 +31,7 @@ Allow users of your WordPress website to use your website with their Personal Da
 
 ## Demo
 
-Just here to check it out? Have a look at the [demo environment](http://52.207.254.225).
+Just here to check it out? Have a look at the [demo environment](http://52.207.254.225/wp-login.php).
 
 > Username: admin  
 > Password: My_secret123
@@ -63,7 +63,7 @@ Please select the option what suits your needs to help install one of our plugin
 Each release what also will be uploaded to WordPress's plugin repository will also be released here on this
 repository. Consider the following steps:
 
-1. Go to [the page with all the releases](/LSVH/hbo-ict-inno-s2-tno/releases/latest).
+1. Go to [the page with all the releases](https://github.com/LSVH/hbo-ict-inno-s2-tno/releases/latest).
 2. Download the [main plugin](#main-plugin) zip.
 3. Download one of the [sub plugins](#sub-plugins).
 4. Upload the downloaded zip files to your WordPress server and move them to the `wp-content/plugins` directory.
