@@ -2,8 +2,14 @@
     $(window).load(function () {
         const urlParams = new URLSearchParams(window.location.search);
 
+        const immutable = urlParams.get("immutable") === 'true';
+        urlParams.delete("immutable")
+
+        let input;
         for (const entry of urlParams.entries()) {
-            $("." + entry[0] + " input").val(entry[1]);
+            input = $("." + entry[0] + " input");
+            input.val(entry[1]);
+            if (immutable === true) input.prop("disabled", immutable);
         }
         window.history.replaceState({}, document.title, window.location.href.split("?")[0]);
 

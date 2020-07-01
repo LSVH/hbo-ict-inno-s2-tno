@@ -350,7 +350,21 @@ class WP extends BaseUtility
         $jwtToken = $request['jwtToken'];
 
         $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
-        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data));
+
+        $input = self::getModels(['name' => $slug])[0];
+
+        $relationIds = self::getModelMeta(
+            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential'
+        );
+        $credential = self::getModel($relationIds[0]);
+
+        $description = $credential->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR];
+
+        $re = "/(?<=\"immutable\":)[^},]+/";
+        preg_match($re, $description, $immutableArray);
+
+        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data) . '&immutable=' . $immutableArray[0]);
         die();
     }
 }
