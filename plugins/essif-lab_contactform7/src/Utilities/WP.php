@@ -242,8 +242,7 @@ class WP extends BaseUtility
     {
         $nameLabel = esc_html(__('Name', 'contact-form-7'));
         $nameId = esc_attr($args['content'].'-name');
-        $submitLabel = esc_attr(__('Insert Tag', 'contact-form-7'));
-        ?>
+        $submitLabel = esc_attr(__('Insert Tag', 'contact-form-7')); ?>
         <div class="control-box">
             <table class="form-table">
                 <caption>Generate a form-tag what allows the user to load data from a wallet.</caption>
