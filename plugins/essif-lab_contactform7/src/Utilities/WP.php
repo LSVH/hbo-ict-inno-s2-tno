@@ -213,36 +213,62 @@ class WP extends BaseUtility
 
     public function addEssifLabFormTag()
     {
-        $tag_name = 'essif_lab';
-        add_action('wpcf7_init', function () use ($tag_name) {
+        $tagName = 'essif_lab';
+        add_action('wpcf7_init', function () use ($tagName) {
             wpcf7_add_form_tag(
-                $tag_name,
+                $tagName,
                 [Button::class, 'custom_essif_lab_form_tag_handler'],
                 ['name-attr' => true]
             );
         });
-        add_action('wpcf7_admin_init', function () use ($tag_name) {
+        add_action('wpcf7_admin_init', function () use ($tagName) {
             $tag_generator = \WPCF7_TagGenerator::get_instance();
-            $tag_generator->add($tag_name, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tag_name) {
+            $tag_generator->add($tagName, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tagName) {
                 $args = wp_parse_args($args, []);
-                $description = __('Allows users to load credentials from their wallet.'); ?>
-                <div class="control-box">
-                    <fieldset>
-                        <legend><?php echo $description ?></legend>
-                    </fieldset>
-                    <div class="insert-box">
-                        <input title="result" type="text" name="<?php echo $tag_name; ?>" class="tag code"
-                               readonly="readonly"
-                               onfocus="this.select()"/>
-                        <div class="submitbox">
-                            <input type="button" class="button button-primary insert-tag"
-                                   value="<?php echo esc_attr(__('Insert Tag', 'contact-form-7')); ?>"/>
-                        </div>
-                    </div>
-                </div>
-                <?php
-            }, ['nameless' => 1]);
+                $names = array_map(function ($tag) use ($tagName) {
+                    $label = $tag->name.' ('.$tag->type.')';
+
+                    return '<option value="'.$tagName.' '.$tag->name.'">'.$label.'</option>';
+                }, array_filter($contact_form->form_scan_shortcode(), function ($tag) use ($tagName) {
+                    return !empty($tag->name) && $tag->type != $tagName;
+                }));
+
+                self::getTagGeneratorView($tagName, $names, $args);
+            });
         });
+    }
+
+    private static function getTagGeneratorView(string $tagName, array $names, array $args)
+    {
+        $nameLabel = esc_html(__('Name', 'contact-form-7'));
+        $nameId = esc_attr($args['content'].'-name');
+        $submitLabel = esc_attr(__('Insert Tag', 'contact-form-7'));
+        ?>
+        <div class="control-box">
+            <table class="form-table">
+                <caption>Generate a form-tag what allows the user to load data from a wallet.</caption>
+                <tbody>
+                <tr>
+                    <th scope="row">
+                        <label for="<?php echo $nameId; ?>"><?php echo $nameLabel ?></label>
+                    </th>
+                    <td>
+                        <select name="tagtype" class="tg-name oneline" id="<?php echo $nameId; ?>">
+                            <?php echo implode('', $names) ?>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="insert-box">
+                <input title="result" type="text" name="<?php echo $tagName; ?>" class="tag code" readonly="readonly"
+                       onfocus="this.select()"/>
+                <div class="submitbox">
+                    <input type="button" class="button button-primary insert-tag" value="<?php echo $submitLabel ?>"/>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 
     public function loadCustomJs()
