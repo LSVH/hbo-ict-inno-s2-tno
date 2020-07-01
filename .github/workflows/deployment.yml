@@ -58,10 +58,12 @@ jobs:
             CI: true
 
         steps: 
+            -   uses: actions/checkout@v2
+                
             -   name: SSH-ing into EC2 instance
                 uses: garygrossgarten/github-action-ssh@release
                 with:
-                    command: ls -a
+                    command: sudo bash /home/ubuntu/deploy.sh
                     host: ${{ secrets.HOST }}
                     username: ubuntu
                     passphrase: ${{ secrets.PASSPHRASE }}
