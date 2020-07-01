@@ -349,6 +349,8 @@ class WP extends BaseUtility
         $slug = $request['slug'];
         $jwtToken = $request['jwtToken'];
 
+        sleep(1); //Sleep to ensure the timestamp in the JWT has actually passed before decoding
+
         $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
         $data = $jwt->data;
 
