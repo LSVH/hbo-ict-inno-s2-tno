@@ -50,7 +50,7 @@ jobs:
                     dockerfile: docker/src/Dockerfile
 
     deploy:
-        needs: build_push
+        #needs: build_push
         name: "Deploy the published image"
         runs-on: ubuntu-latest
 
