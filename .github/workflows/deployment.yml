@@ -20,21 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install dependencies for deployment
-        run: |
-          for i in $(ls -1 $COMPOSER_CONFIGS);
-              do composer install \
-                  --no-ansi \
-                  --no-dev \
-                  --no-interaction \
-                  --no-plugins \
-                  --no-progress \
-                  --no-scripts \
-                  --no-suggest \
-                  --optimize-autoloader \
-                  -d $(dirname "$i");
-          done;
-
       - name: Extract branch name
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
         id: extract_branch
