@@ -13,6 +13,7 @@ services:
       - wp
     build:
       context: .
+      dockerfile: development.Dockerfile
     environment:
       WP_HOST: ${WP_HOST} # default: http://localhost
       WP_USER: ${WP_USER} # default: admin
