@@ -34,22 +34,22 @@ jobs:
           registry: docker.pkg.github.com
           dockerfile: deployment.Dockerfile
 
-    deploy:
-      needs: build_push
+  deploy:
+    needs: build_push
 
-      name: "Deploy the published image"
+    name: "Deploy the published image"
 
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-      env:
-        CI: true
+    env:
+      CI: true
 
-      steps:
-        - name: SSH-ing into EC2 instance
-          uses: garygrossgarten/github-action-ssh@release
-          with:
-            command: sudo bash /home/ubuntu/deploy.sh
-            host: ${{ secrets.HOST }}
-            username: ubuntu
-            passphrase: ${{ secrets.PASSPHRASE }}
-            privateKey: ${{ secrets.PRIVATE_KEY}}
+    steps:
+      - name: SSH-ing into EC2 instance
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: sudo bash /home/ubuntu/deploy.sh
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          passphrase: ${{ secrets.PASSPHRASE }}
+          privateKey: ${{ secrets.PRIVATE_KEY}}
