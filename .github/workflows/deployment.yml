@@ -20,21 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install dependencies for deployment
-        run: |
-          for i in $(ls -1 $COMPOSER_CONFIGS);
-              do composer install \
-                  --no-ansi \
-                  --no-dev \
-                  --no-interaction \
-                  --no-plugins \
-                  --no-progress \
-                  --no-scripts \
-                  --no-suggest \
-                  --optimize-autoloader \
-                  -d $(dirname "$i");
-          done;
-
       - name: Extract branch name
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
         id: extract_branch
@@ -49,6 +34,7 @@ jobs:
           registry: docker.pkg.github.com
           dockerfile: deployment.Dockerfile
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     deploy:
         #needs: build_push
@@ -66,6 +52,11 @@ jobs:
                     privateKey: ${{ secrets.PRIVATE_KEY}}
 =======
   deploy:
+=======
+  deploy:
+    needs: build_push
+
+>>>>>>> 8827670... Fixed tabs
     name: "Deploy the published image"
 
     runs-on: ubuntu-latest
@@ -77,9 +68,16 @@ jobs:
       - name: SSH-ing into EC2 instance
         uses: garygrossgarten/github-action-ssh@release
         with:
+<<<<<<< HEAD
           command: ls -a
+=======
+          command: sudo bash /home/ubuntu/deploy.sh
+>>>>>>> 8827670... Fixed tabs
           host: ${{ secrets.HOST }}
           username: ubuntu
           passphrase: ${{ secrets.PASSPHRASE }}
           privateKey: ${{ secrets.PRIVATE_KEY}}
+<<<<<<< HEAD
 >>>>>>> 2a5c778... Reformatted workflow files
+=======
+>>>>>>> 8827670... Fixed tabs
