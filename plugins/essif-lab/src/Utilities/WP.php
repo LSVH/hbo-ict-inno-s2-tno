@@ -669,15 +669,21 @@ class WP extends BaseUtility {
 
         $inputs = self::getModels(['post_type' => 'input', 'post__in' => $inputRelationIds]);
 
-        $slugs = '';
         if (count($inputs) == 1) {
             $slugs = $slug . '=' . reset($data);
         } else {
-            $slugs = implode('&', array_map(function ($i) use ($data) {
-                $title = $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+            $inputTitles = array_map(function ($i) {
+                return $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+            }, $inputs);
 
-                return $title . '=' . $data->$title;
-            }, $inputs));
+            $slugArray = [];
+            foreach ($data as $slug => $value) {
+                $re = preg_quote('/' . $slug . '/');
+                $title = preg_grep($re, $inputTitles);
+                $slugArray[] = reset($title) . '=' . $value;
+            }
+
+            $slugs = implode('&', $slugArray);
         }
 
         $description = $credential->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR];
