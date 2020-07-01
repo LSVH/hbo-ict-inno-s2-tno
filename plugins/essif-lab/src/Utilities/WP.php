@@ -171,7 +171,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -350,21 +350,40 @@ class WP extends BaseUtility
         $jwtToken = $request['jwtToken'];
 
         $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+        $data = $jwt->data;
 
         $input = self::getModels(['name' => $slug])[0];
 
-        $relationIds = self::getModelMeta(
+        $credentialRelationIds = self::getModelMeta(
             $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
             'essif-lab_relationcredential'
         );
-        $credential = self::getModel($relationIds[0]);
+        $credential = self::getModel($credentialRelationIds[0]);
+
+        $inputRelationIds = self::getModelMeta(
+            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationinput'
+        );
+
+        $inputs = self::getModels(['post_type' => 'input', 'post__in' => $inputRelationIds]);
+
+        $slugs = '';
+        if (count($inputs) == 1) {
+            $slugs = $slug . '=' . reset($data);
+        } else {
+            $slugs = implode('&', array_map(function ($i) use ($data) {
+                $title = $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+
+                return $title . '=' . $data->$title;
+            }, $inputs));
+        }
 
         $description = $credential->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR];
 
         $re = "/(?<=\"immutable\":)[^},]+/";
         preg_match($re, $description, $immutableArray);
 
-        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data) . '&immutable=' . $immutableArray[0]);
+        header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
         die();
     }
 }
