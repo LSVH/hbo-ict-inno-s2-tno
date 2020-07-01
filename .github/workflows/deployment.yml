@@ -50,16 +50,11 @@ jobs:
                     dockerfile: docker/src/Dockerfile
 
     deploy:
+        needs: build_push
         name: "Deploy the published image"
-
         runs-on: ubuntu-latest
-        
-        env:
-            CI: true
 
-        steps: 
-            -   uses: actions/checkout@v2
-                
+        steps:                 
             -   name: SSH-ing into EC2 instance
                 uses: garygrossgarten/github-action-ssh@release
                 with:
