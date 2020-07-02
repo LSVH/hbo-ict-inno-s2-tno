@@ -275,13 +275,9 @@ class WP extends BaseUtility
     public function loadCustomScripts(Application $application)
     {
         add_action('wp_enqueue_scripts', function () use ($application) {
-            wp_enqueue_script(
-                'essif-lab',
-                plugins_url($application->getAppDir()).'js/script.js',
-                ['jquery'],
-                '',
-                false
-            );
+            $namespace = $application->getNamespace();
+            $script = plugins_url('js/script.js', $application->getAppDir().'x');
+            wp_enqueue_script($namespace, $script, ['jquery'],null,false);
         });
     }
 

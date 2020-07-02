@@ -294,19 +294,6 @@ class WordPress extends BaseIntegration
             $callback = [$this, 'renderSettingsPage'];
             $this->utility->call(WP::ADD_SUBMENU_PAGE, $main_slug, $title, $title, $capability, $sub_slug, $callback);
         });
-
-        $enqueueAndLocalize = 'enqueueAndLocalizeScripts';
-        $this->utility->call(WP::ADD_ACTION, 'login_enqueue_scripts', [$this, $enqueueAndLocalize]);
-        $this->utility->call(WP::ADD_ACTION, 'admin_enqueue_scripts', [$this, $enqueueAndLocalize]);
-        $this->utility->call(WP::ADD_ACTION, 'wp_enqueue_scripts', [$this, $enqueueAndLocalize]);
-    }
-
-    public function enqueueAndLocalizeScripts()
-    {
-        $ns = $this->application->getNamespace();
-        $options = $this->utility->call(WP::GET_OPTION, $ns);
-        $options = is_array($options) ? $options : [];
-        $this->utility->call(WP::LOCALIZE_SCRIPT, $ns, 'eSSIfLab', $options);
     }
 
     private function configureAllModelsAvailable(): void
@@ -356,7 +343,7 @@ class WordPress extends BaseIntegration
             global $post_type;
             $post_type = str_replace('-', '', $post_type);
             $model = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
-            if (self::isConcreteModel('TNO\EssifLab\Models\\'.$post_type)) {
+            if (self::isConcreteModel(Constants::TYPE_NAMESPACE . '\\' . $post_type)) {
                 $this->utility->call(WP::REMOVE_ALL_ACTIONS_AND_EXEC, $hook, function () use ($model) {
                     $this->manager->deleteAllRelations($model);
                 });
@@ -528,7 +515,7 @@ class WordPress extends BaseIntegration
     {
 >>>>>>> 44a9692... Applying patch StyleCI
         $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
-            $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE);
+            $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE, $this->application);
             $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE);
             $this->utility->call(BaseUtility::REGISTER_RETURN_INPUTS_ROUTE);
         });
