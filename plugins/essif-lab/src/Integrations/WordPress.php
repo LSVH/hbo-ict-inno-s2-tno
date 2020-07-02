@@ -272,12 +272,27 @@ class WordPress extends BaseIntegration
 
     private function configureAllMiscellaneous(): void
     {
+        $this->utility->call(WP::ADD_ACTION, 'admin_init', function () {
+            $namespace = $this->application->getNamespace();
+            $this->utility->call(WP::REGISTER_SETTING, $namespace, $namespace);
+
+            $id = $namespace.'_settings';
+            $title = $this->application->getName().' - Settings';
+            $this->utility->call(WP::ADD_SETTINGS_SECTION, $id, $title, '', $namespace);
+
+            $this->renderSettingsPageFields($namespace, $id);
+        });
         $this->utility->call(WP::ADD_ACTION, 'admin_menu', function () {
             $title = $this->application->getName();
             $capability = Constants::ADMIN_MENU_CAPABILITY;
-            $slug = $this->application->getNamespace();
+            $main_slug = $this->application->getNamespace();
             $icon = Constants::ADMIN_MENU_ICON_URL;
-            $this->utility->call(WP::ADD_NAV_ITEM, $title, $capability, $slug, $icon);
+            $this->utility->call(WP::ADD_NAV_ITEM, $title, $capability, $main_slug, $icon);
+
+            $title = 'Settings';
+            $sub_slug = 'settings';
+            $callback = [$this, 'renderSettingsPage'];
+            $this->utility->call(WP::ADD_SUBMENU_PAGE, $main_slug, $title, $title, $capability, $sub_slug, $callback);
         });
     }
 
@@ -328,7 +343,7 @@ class WordPress extends BaseIntegration
             global $post_type;
             $post_type = str_replace('-', '', $post_type);
             $model = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
-            if (self::isConcreteModel('TNO\EssifLab\Models\\' . $post_type)) {
+            if (self::isConcreteModel('TNO\EssifLab\Models\\'.$post_type)) {
                 $this->utility->call(WP::REMOVE_ALL_ACTIONS_AND_EXEC, $hook, function () use ($model) {
                     $this->manager->deleteAllRelations($model);
                 });
@@ -504,6 +519,74 @@ class WordPress extends BaseIntegration
             $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE);
             $this->utility->call(BaseUtility::REGISTER_RETURN_INPUTS_ROUTE);
         });
+    }
+
+    public function renderSettingsPage()
+    {
+        $namespace = $this->application->getNamespace();
+        if (isset($_GET['settings-updated'])) {
+            $slug = 'success_message';
+            $success = 'success';
+            $message = 'Settings successfully updated';
+            $this->utility->call(WP::ADD_SETTINGS_ERROR, $namespace, $slug, $message, $success);
+        }
+
+        // show error/update messages
+        settings_errors($namespace); ?>
+        <div class="wrap">
+            <form action="options.php" method="post">
+                <?php
+                // output security fields for the registered setting "wporg"
+                settings_fields($namespace);
+                // output setting sections and their fields
+                // (sections are registered for "wporg", each field is registered to a specific section)
+                do_settings_sections($namespace);
+                // output save settings button
+                submit_button('Save Settings');
+                ?>
+            </form>
+        </div>
+        <?php
+    }
+
+    public function renderSettingsPageFields(string $page, string $section)
+    {
+        $fields = [
+            [
+                'id'       => 'api_url',
+                'title'    => 'eSSIF-Lab API service URL',
+            ],
+            [
+                'id'       => 'iss',
+                'title'    => 'Organisation Signature',
+            ],
+            [
+                'id'       => 'shared_secret',
+                'title'    => 'Shared secret',
+            ],
+        ];
+
+        foreach ($fields as $field) {
+            $id = $field['id'];
+            $title = $field['title'];
+            $callback = array_key_exists('callback', $field) ? $field['callback'] : [$this, 'renderTextField'];
+            $this->utility->call(WP::ADD_SETTINGS_FIELD, $id, $title, $callback, $page, $section, [
+                'name'         => $id,
+                'label_for'    => $id,
+                'option_group' => $page,
+            ]);
+        }
+    }
+
+    public function renderTextField(array $args)
+    {
+        $options = $this->utility->call(WP::GET_OPTION, $this->application->getNamespace());
+        $options = is_array($options) ? $options : [];
+        $id = $args['name'];
+        $value = array_key_exists($id, $options) ? $options[$id] : '';
+        $name = $args['option_group'].'['.$id.']';
+
+        print '<input name="'.$name.'" value="'.$value.'"/>';
     }
 }
 >>>>>>> 452bd9f... Added JWT REST API Eindpoint & generateJWTToken function for proper structure
