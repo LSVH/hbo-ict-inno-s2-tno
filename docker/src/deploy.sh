@@ -31,7 +31,7 @@ if [ $? -eq 0 ]; then
     echo "Going to start the containers for 10 minutes!!"
     docker-compose --env-file $FILE_env -f $FILE_docker_compose  up -d --build --force-recreate
     echo "Going to sleep for 10 minutes!!"
-    sleep 3m
+    sleep 10m
     echo "Going to stop the containers!!"
     docker-compose --env-file $FILE_env -f $FILE_docker_compose down
     echo "Going to clean docker engine!!"
