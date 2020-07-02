@@ -21,7 +21,6 @@ if [ ! "$(docker ps -q -f name=$NAME_app)" ]; then
 fi
 if [ $? -eq 0 ]; then
     echo "Online"
-    # runing setup
     # cleaning repo
     rm -rf $DIR_repo
     #Git clone repo
