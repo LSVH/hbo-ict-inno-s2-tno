@@ -51,19 +51,6 @@ class WordPress extends BaseIntegration
             $callback = [$this, 'renderSettingsPage'];
             $this->utility->call(WP::ADD_SUBMENU_PAGE, $main_slug, $title, $title, $capability, $sub_slug, $callback);
         });
-
-        $enqueueAndLocalize = 'enqueueAndLocalizeScripts';
-        $this->utility->call(WP::ADD_ACTION, 'login_enqueue_scripts', [$this, $enqueueAndLocalize]);
-        $this->utility->call(WP::ADD_ACTION, 'admin_enqueue_scripts', [$this, $enqueueAndLocalize]);
-        $this->utility->call(WP::ADD_ACTION, 'wp_enqueue_scripts', [$this, $enqueueAndLocalize]);
-    }
-
-    public function enqueueAndLocalizeScripts()
-    {
-        $ns = $this->application->getNamespace();
-        $options = $this->utility->call(WP::GET_OPTION, $ns);
-        $options = is_array($options) ? $options : [];
-        $this->utility->call(WP::LOCALIZE_SCRIPT, $ns, 'eSSIfLab', $options);
     }
 
     private function configureAllModelsAvailable(): void
