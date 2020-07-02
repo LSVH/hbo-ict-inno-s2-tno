@@ -70,4 +70,7 @@ wp plugin install $(cat /usr/local/etc/third-party-plugins.txt) --allow-root
 
 # Activate all the plugins in the wp-content/plugins directory
 wp plugin activate $(wp plugin list --field=name --allow-root) --allow-root
+
+wp config set WP_DEBUG true --allow-root
+
 exit 0
