@@ -57,6 +57,8 @@ abstract class Constants
 
     const FIELD_TYPE_IMMUTABLE = 'immutable';
 
+    const TRIGGER_PRE = 'essif-lab_';
+
     const TYPE_DEFAULT_ATTRIBUTE_NAMES = [
         self::TYPE_INSTANCE_IDENTIFIER_ATTR,
         self::TYPE_INSTANCE_TITLE_ATTR,

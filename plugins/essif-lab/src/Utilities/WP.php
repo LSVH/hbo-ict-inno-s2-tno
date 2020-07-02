@@ -64,9 +64,12 @@ class WP extends BaseUtility {
 
     const JWT_ISS = '0ddc6513-b57a-4398-9fb5-027d3cbc82dc';
 
+<<<<<<< HEAD
     const JWT_JTI = 'sxt0wOOd8O6X';
 >>>>>>> 44a9692... Applying patch StyleCI
 
+=======
+>>>>>>> 33aed31... made the api actually use the generated jti
     private const ALG = 'HS256';
 
     private const JWT_V_1 = 'jwt/v1';
@@ -548,7 +551,7 @@ class WP extends BaseUtility {
             'iat'         => time(),
             'aud'         => self::JWT_AUD,
             'iss'         => self::JWT_ISS,
-            'jti'         => self::JWT_JTI,
+            'jti'         => self::applyFilter(Constants::TRIGGER_PRE . 'generate_jti', []),
         ];
 >>>>>>> 44a9692... Applying patch StyleCI
 
