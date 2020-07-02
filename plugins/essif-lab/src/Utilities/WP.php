@@ -69,6 +69,16 @@ class WP extends BaseUtility {
 
     private const ALG = 'HS256';
 
+    private const JWT_V_1 = 'jwt/v1';
+
+    private const METHODS = 'methods';
+
+    private const CALLBACK = 'callback';
+
+    private const POST_TYPE = 'post_type';
+
+    private const POST_STATUS = 'post_status';
+
     protected $functions = [
         self::ADD_ACTION                  => [self::class, 'addAction'],
         self::ADD_FILTER                  => [self::class, 'addFilter'],
@@ -466,8 +476,8 @@ class WP extends BaseUtility {
         $modelAttrs = $model->getAttributes();
 
         $postAttrs = [
-            'post_type'   => $model->getTypeName(),
-            'post_status' => 'publish',
+            self::POST_TYPE   => $model->getTypeName(),
+            self::POST_STATUS => 'publish',
         ];
         if (array_key_exists(Constants::TYPE_INSTANCE_IDENTIFIER_ATTR, $modelAttrs)) {
             $postAttrs[self::POST_ID] = $modelAttrs[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR];
@@ -514,7 +524,19 @@ class WP extends BaseUtility {
 
     public static function getCreateModelLink(string $postType): string
     {
-        return add_query_arg(['post_type' => $postType], admin_url('post-new.php'));
+        return add_query_arg([self::POST_TYPE => $postType], admin_url('post-new.php'));
+    }
+
+    public static function registerGenerateJWTRoute(): bool
+    {
+        return register_rest_route(
+            self::JWT_V_1,
+            'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
+            [
+                self::METHODS  => WP_REST_Server::READABLE,
+                self::CALLBACK => [self::class, 'generateJWTToken'],
+            ]
+        );
     }
 
     public static function generateJWTToken($request)
@@ -563,6 +585,7 @@ class WP extends BaseUtility {
         return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 
+<<<<<<< HEAD
     public static function registerGenerateJWTRoute(): bool
     {
 <<<<<<< HEAD
@@ -586,6 +609,8 @@ class WP extends BaseUtility {
         );
     }
 
+=======
+>>>>>>> ccf8374... added removing of credentials after loading them
     private static function getCredentialType(string $slug)
     {
         $input = self::getModels(['name' => $slug])[0];
@@ -614,11 +639,11 @@ class WP extends BaseUtility {
     public static function registerReceiveJWTRoute(): bool
     {
         return register_rest_route(
-            'jwt/v1',
+            self::JWT_V_1,
             'page=(?P<page>.+)&inputslug=(?P<slug>.+)&jwt=(?P<jwtToken>.+)',
             [
-                'methods'  => WP_REST_Server::READABLE,
-                'callback' => [self::class, 'receiveJWTToken'],
+                self::METHODS  => WP_REST_Server::READABLE,
+                self::CALLBACK => [self::class, 'receiveJWTToken'],
             ]
         );
     }
@@ -654,20 +679,7 @@ class WP extends BaseUtility {
         $data = $jwt->data;
 >>>>>>> d7e71fa... added response handling for credentials with multiple values
 
-        $input = self::getModels(['name' => $slug])[0];
-
-        $credentialRelationIds = self::getModelMeta(
-            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
-            'essif-lab_relationcredential'
-        );
-        $credential = self::getModel($credentialRelationIds[0]);
-
-        $inputRelationIds = self::getModelMeta(
-            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
-            'essif-lab_relationinput'
-        );
-
-        $inputs = self::getModels(['post_type' => 'input', 'post__in' => $inputRelationIds]);
+        [$credential, $inputs] = self::getInputs($slug);
 
         if (count($inputs) == 1) {
             $slugs = $slug . '=' . reset($data);
@@ -698,6 +710,49 @@ class WP extends BaseUtility {
         header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
 >>>>>>> d7e71fa... added response handling for credentials with multiple values
         die();
+    }
+
+    public static function registerReturnInputsRoute(): bool
+    {
+        return register_rest_route(
+            self::JWT_V_1,
+            'inputs/inputslug=(?P<inputslug>.+)',
+            [
+                self::METHODS  => WP_REST_Server::READABLE,
+                self::CALLBACK => [self::class, 'returnInputs'],
+            ]
+        );
+    }
+
+    public static function returnInputs($request)
+    {
+        $inputslug = $request['inputslug'];
+
+        [$credential, $inputs] = self::getInputs($inputslug);
+
+        return array_map(function ($i) {
+            return $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+        }, $inputs);
+    }
+
+    private static function getInputs($slug): array
+    {
+        $input = self::getModels(['name' => $slug])[0];
+
+        $credentialRelationIds = self::getModelMeta(
+            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential'
+        );
+        $credential = self::getModel($credentialRelationIds[0]);
+
+        $inputRelationIds = self::getModelMeta(
+            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationinput'
+        );
+
+        $inputs = self::getModels([self::POST_TYPE => 'input', 'post__in' => $inputRelationIds]);
+
+        return [$credential, $inputs];
     }
 }
 >>>>>>> ad9b665... moved register rest route to utilities to enable testing (by using a stub)

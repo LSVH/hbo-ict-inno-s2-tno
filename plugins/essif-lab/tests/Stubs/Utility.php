@@ -428,14 +428,15 @@ class Utility extends BaseUtility
     ];
 
     protected $valueReturningFunctions = [
-        BaseUtility::GET_CURRENT_MODEL           => [self::class, 'getCurrentModel'],
-        BaseUtility::GET_MODEL                   => [self::class, 'getModel'],
-        BaseUtility::CREATE_MODEL_META           => [self::class, 'createModelMeta'],
-        BaseUtility::DELETE_MODEL_META           => [self::class, 'deleteModelMeta'],
-        BaseUtility::GET_MODEL_META              => [self::class, 'getModelMeta'],
-        BaseUtility::GET_MODELS                  => [self::class, 'getModels'],
-        BaseUtility::REGISTER_GENERATE_JWT_ROUTE => [self::class, 'registerGenerateJWTRoute'],
-        BaseUtility::REGISTER_RECEIVE_JWT_ROUTE  => [self::class, 'registerReceiveJWTRoute'],
+        BaseUtility::GET_CURRENT_MODEL            => [self::class, 'getCurrentModel'],
+        BaseUtility::GET_MODEL                    => [self::class, 'getModel'],
+        BaseUtility::CREATE_MODEL_META            => [self::class, 'createModelMeta'],
+        BaseUtility::DELETE_MODEL_META            => [self::class, 'deleteModelMeta'],
+        BaseUtility::GET_MODEL_META               => [self::class, 'getModelMeta'],
+        BaseUtility::GET_MODELS                   => [self::class, 'getModels'],
+        BaseUtility::REGISTER_GENERATE_JWT_ROUTE  => [self::class, 'registerGenerateJWTRoute'],
+        BaseUtility::REGISTER_RECEIVE_JWT_ROUTE   => [self::class, 'registerReceiveJWTRoute'],
+        BaseUtility::REGISTER_RETURN_INPUTS_ROUTE => [self::class, 'registerReturnInputsRoute'],
     ];
 
     public function call(string $name, ...$parameters)
@@ -701,6 +702,11 @@ class Utility extends BaseUtility
     {
         return true;
 >>>>>>> 44a9692... Applying patch StyleCI
+    }
+
+    public static function registerReturnInputsRoute(): bool
+    {
+        return true;
     }
 }
 >>>>>>> ad9b665... moved register rest route to utilities to enable testing (by using a stub)
