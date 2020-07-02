@@ -1,7 +1,7 @@
 FROM wordpress:cli
 
 COPY docker/local /usr/local
-COPY plugins /var/www/html/wp-content/plugins
+COPY plugins /usr/local/etc/
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 

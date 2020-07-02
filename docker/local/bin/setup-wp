@@ -59,9 +59,10 @@ wait $!
 wp plugin delete hello akismet --allow-root
 
 # Install all dependencies of all our plugins
-for i in $(ls -1 /var/www/html/wp-content/plugins/*/composer*.json); do
+for i in $(ls -1 /usr/local/etc/*/composer.json); do
     echo "Install composer dependencies for: $i"
     composer install --prefer-dist -d $(dirname "$i")
+    cp -R /usr/local/etc/{essif-lab,essif-lab_contactform7} /var/www/html/wp-content/plugins/
 done
 
 # Install third party plugins
@@ -69,5 +70,4 @@ wp plugin install $(cat /usr/local/etc/third-party-plugins.txt) --allow-root
 
 # Activate all the plugins in the wp-content/plugins directory
 wp plugin activate $(wp plugin list --field=name --allow-root) --allow-root
-
 exit 0
