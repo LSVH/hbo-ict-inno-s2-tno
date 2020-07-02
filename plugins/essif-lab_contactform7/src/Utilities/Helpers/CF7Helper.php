@@ -110,7 +110,9 @@ class CF7Helper extends WP
         foreach ($this->getAllInputs() as $input) {
             $targetId = $input[0];
 
-            $slugs = $input[2][0];
+            $slugs = array_map(function ($i) {
+                return strtolower($i);
+            }, $input[2][0]);
             $titles = $input[2][1];
             $inputs = [$slugs, $titles];
 

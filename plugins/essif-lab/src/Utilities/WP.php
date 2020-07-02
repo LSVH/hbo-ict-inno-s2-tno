@@ -171,7 +171,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -282,9 +282,7 @@ class WP extends BaseUtility
             'jti'         => self::JWT_JTI,
         ];
 
-        $key = self::getSharedSecret();
-
-        $jwt = JWT::encode($payload, $key, self::ALG);
+        $jwt = JWT::encode($payload, self::getSharedSecret(), self::ALG);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
@@ -351,10 +349,49 @@ class WP extends BaseUtility
         $slug = $request['slug'];
         $jwtToken = $request['jwtToken'];
 
-        $key = self::getSharedSecret();
+        sleep(1); //Sleep to ensure the timestamp in the JWT has actually passed before decoding
 
-        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
-        header('Location: '.$page.'?'.$slug.'='.reset($jwt->data));
+        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+        $data = $jwt->data;
+
+        $input = self::getModels(['name' => $slug])[0];
+
+        $credentialRelationIds = self::getModelMeta(
+            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential'
+        );
+        $credential = self::getModel($credentialRelationIds[0]);
+
+        $inputRelationIds = self::getModelMeta(
+            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationinput'
+        );
+
+        $inputs = self::getModels(['post_type' => 'input', 'post__in' => $inputRelationIds]);
+
+        if (count($inputs) == 1) {
+            $slugs = $slug . '=' . reset($data);
+        } else {
+            $inputTitles = array_map(function ($i) {
+                return $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+            }, $inputs);
+
+            $slugArray = [];
+            foreach ($data as $slug => $value) {
+                $re = preg_quote('/' . $slug . '/');
+                $title = preg_grep($re, $inputTitles);
+                $slugArray[] = reset($title) . '=' . $value;
+            }
+
+            $slugs = implode('&', $slugArray);
+        }
+
+        $description = $credential->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR];
+
+        $re = "/(?<=\"immutable\":)[^},]+/";
+        preg_match($re, $description, $immutableArray);
+
+        header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
         die();
     }
 }

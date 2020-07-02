@@ -41,7 +41,6 @@ class WordPressSubPluginApi extends BaseIntegration
         $this->applyFilterGenerateJti();
     }
 
-    // TODO: figure out why this action is immediately executed instead of waiting for the trigger
     private function addActionInsert(string $instance, int $params)
     {
         $triggerName = self::getTriggerName(self::TRIGGER_PRE.'insert_', $instance);
