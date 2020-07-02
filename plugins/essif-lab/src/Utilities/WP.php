@@ -418,7 +418,7 @@ class WP extends BaseUtility {
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -530,9 +530,7 @@ class WP extends BaseUtility {
         ];
 >>>>>>> 44a9692... Applying patch StyleCI
 
-        $key = self::getSharedSecret();
-
-        $jwt = JWT::encode($payload, $key, self::ALG);
+        $jwt = JWT::encode($payload, self::getSharedSecret(), self::ALG);
 
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
@@ -631,10 +629,68 @@ class WP extends BaseUtility {
         $slug = $request['slug'];
         $jwtToken = $request['jwtToken'];
 
-        $key = self::getSharedSecret();
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+<<<<<<< HEAD
         $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
         header('Location: '.$page.'?'.$slug.'='.reset($jwt->data));
+=======
+        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+        header('Location: ' . $page . "?" . $slug . "=" . reset($jwt->data));
+>>>>>>> edf1229... removed unnecessary variables
+=======
+=======
+        sleep(1); //Sleep to ensure the timestamp in the JWT has actually passed before decoding
+
+>>>>>>> abcaaf3... added sleep to ensure decoding the JWT doesn't produce an error
+        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+<<<<<<< HEAD
+<<<<<<< HEAD
+        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data));
+>>>>>>> 36eba92... merged style changes
+=======
+=======
+        $data = $jwt->data;
+>>>>>>> d7e71fa... added response handling for credentials with multiple values
+
+        $input = self::getModels(['name' => $slug])[0];
+
+        $credentialRelationIds = self::getModelMeta(
+            $input->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationcredential'
+        );
+        $credential = self::getModel($credentialRelationIds[0]);
+
+        $inputRelationIds = self::getModelMeta(
+            $credential->getAttributes()[Constants::TYPE_INSTANCE_IDENTIFIER_ATTR],
+            'essif-lab_relationinput'
+        );
+
+        $inputs = self::getModels(['post_type' => 'input', 'post__in' => $inputRelationIds]);
+
+        $slugs = '';
+        if (count($inputs) == 1) {
+            $slugs = $slug . '=' . reset($data);
+        } else {
+            $slugs = implode('&', array_map(function ($i) use ($data) {
+                $title = $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
+
+                return $title . '=' . $data->$title;
+            }, $inputs));
+        }
+
+        $description = $credential->getAttributes()[Constants::TYPE_INSTANCE_DESCRIPTION_ATTR];
+
+        $re = "/(?<=\"immutable\":)[^},]+/";
+        preg_match($re, $description, $immutableArray);
+
+<<<<<<< HEAD
+        header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data) . '&immutable=' . $immutableArray[0]);
+>>>>>>> 4831cac... added immutable handling
+=======
+        header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
+>>>>>>> d7e71fa... added response handling for credentials with multiple values
         die();
     }
 }
