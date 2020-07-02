@@ -28,16 +28,8 @@ if [ $? -eq 0 ]; then
     git clone https://github.com/LSVH/hbo-ict-inno-s2-tno.git /tmp/testing-env
     echo "System is ready for running containers..."
     cat /home/ubuntu/TOKEN.txt | docker login https://docker.pkg.github.com/ -u weis999 --password-stdin
-    echo "Going to start the containers for 10 minutes!!"
+    echo "Going to start the containers!!"
     docker-compose --env-file $FILE_env -f $FILE_docker_compose  up -d --build --force-recreate
-    echo "Going to sleep for 10 minutes!!"
-    sleep 10m
-    echo "Going to stop the containers!!"
-    docker-compose --env-file $FILE_env -f $FILE_docker_compose down
-    echo "Going to clean docker engine!!"
-    docker system prune -a -f
-    echo "Going to clean the setup!!"
-    rm -rf $DIR_repo
 else
     echo "Something went wrong.... Host is probably not accessible from the internet"
 fi
