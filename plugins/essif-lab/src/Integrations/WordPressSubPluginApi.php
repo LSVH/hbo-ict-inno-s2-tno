@@ -13,8 +13,6 @@ use TNO\EssifLab\Utilities\WP;
 
 class WordPressSubPluginApi extends BaseIntegration
 {
-    const TRIGGER_PRE = 'essif-lab_';
-
     const PARAMS = 'params';
 
     const RELATION = 'relation';
@@ -43,7 +41,7 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function addActionInsert(string $instance, int $params)
     {
-        $triggerName = self::getTriggerName(self::TRIGGER_PRE.'insert_', $instance);
+        $triggerName = self::getTriggerName(Constants::TRIGGER_PRE . 'insert_', $instance);
         $this->utility->call(WP::ADD_ACTION, $triggerName, function (...$params) use ($instance) {
             if (self::isArrayOfArrays($params)) {
                 $instance = new $instance(self::getProps($params));
@@ -72,7 +70,7 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function addActionDelete(string $model, int $params)
     {
-        $triggerName = self::getTriggerName(self::TRIGGER_PRE.'delete_', $model);
+        $triggerName = self::getTriggerName(Constants::TRIGGER_PRE . 'delete_', $model);
         $this->utility->call(WP::ADD_ACTION, $triggerName, function (...$params) use ($model) {
             if (self::isArrayOfArrays($params)) {
                 $props = self::getProps($params);
@@ -87,7 +85,7 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function applyFilterSelect(string $model)
     {
-        $triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
+        $triggerName = self::getTriggerName(Constants::TRIGGER_PRE . 'select_', $model);
         $this->utility->call(WP::ADD_FILTER, $triggerName, function () use ($model) {
             return $this->manager->select(new $model());
         }, 1, 1);
@@ -95,7 +93,7 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function applyFilterSelectAllRelations(string $model, string $relation)
     {
-        $triggerName = self::getTriggerName(self::TRIGGER_PRE.'select_', $model);
+        $triggerName = self::getTriggerName(Constants::TRIGGER_PRE . 'select_', $model);
         $this->utility->call(WP::ADD_FILTER, $triggerName, function ($items, $parentSlug) use ($model, $relation) {
             $items = is_array($items) ? $items : [];
             $parentInstances = $this->manager->select(new $relation(), ['name' => $parentSlug]);
@@ -113,7 +111,7 @@ class WordPressSubPluginApi extends BaseIntegration
 
     private function applyFilterGenerateJti()
     {
-        $triggerName = self::TRIGGER_PRE.'generate_jti';
+        $triggerName = Constants::TRIGGER_PRE . 'generate_jti';
         $this->utility->call(WP::ADD_FILTER, $triggerName, function () {
             return uniqid();
         }, 1, 1);

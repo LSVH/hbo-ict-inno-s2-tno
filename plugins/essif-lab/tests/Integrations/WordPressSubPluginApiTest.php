@@ -2,6 +2,7 @@
 
 namespace TNO\EssifLab\Tests\Integrations;
 
+use TNO\EssifLab\Constants;
 use TNO\EssifLab\Integrations\WordPressSubPluginApi;
 use TNO\EssifLab\Models\Hook;
 use TNO\EssifLab\Models\Input;
@@ -11,11 +12,11 @@ use TNO\EssifLab\Utilities\WP;
 
 class WordPressSubPluginApiTest extends TestCase
 {
-    const TRIGGER_INSERT_PRE = WordPressSubPluginApi::TRIGGER_PRE.'insert_';
+    const TRIGGER_INSERT_PRE = Constants::TRIGGER_PRE . 'insert_';
 
-    const TRIGGER_DELETE_PRE = WordPressSubPluginApi::TRIGGER_PRE.'delete_';
+    const TRIGGER_DELETE_PRE = Constants::TRIGGER_PRE . 'delete_';
 
-    const TRIGGER_SELECT_PRE = WordPressSubPluginApi::TRIGGER_PRE.'select_';
+    const TRIGGER_SELECT_PRE = Constants::TRIGGER_PRE . 'select_';
 
     protected $subject;
 
