@@ -14,6 +14,8 @@ services:
             - db
             - wp
         image: ${APP_IMG}
+        env_file: 
+            - .env
         environment:
             WP_HOST: ${WP_HOST} # default: http://localhost
             WP_USER: ${WP_USER} # default: admin
@@ -31,6 +33,8 @@ services:
         restart: always
         ports:
             - 80:80
+        env_file: 
+            - .env
         environment:
             WORDPRESS_DB_HOST: db
             WORDPRESS_DB_USER: ${DB_USER}
@@ -45,6 +49,8 @@ services:
     db:
         image: mysql:5.7
         restart: always
+        env_file: 
+            - .env
         environment:
             MYSQL_DATABASE: ${DB_NAME}
             MYSQL_USER: ${DB_USER}
