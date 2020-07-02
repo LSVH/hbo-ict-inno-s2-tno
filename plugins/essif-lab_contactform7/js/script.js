@@ -1,5 +1,7 @@
 (function ($) {
     $(window).load(function () {
+        const eSSIfLabContactForm7 = 'eSSIfLabContactForm7' in window ? window.eSSIfLabContactForm7 : {}
+        const root = 'root' in eSSIfLabContactForm7 ? eSSIfLabContactForm7.root : '';
         let input
         Object.keys(sessionStorage).map(function (slug) {
             input = $('.' + slug + ' input');
@@ -32,13 +34,13 @@
 
         function redirectToWallet(name)
         {
-            const callbackUrl = window.location.href + '../wp-json/jwt/v1/page=' + window.location.href + '&inputslug=' + name + '&jwt=';
+            const callbackUrl = root+'/page=' + window.location.href + '&inputslug=' + name + '&jwt=';
             $.ajax({
                 type: 'GET',
-                url: '../wp-json/jwt/v1/callbackurl=' + callbackUrl + '&inputslug=' + name,
+                url: root+'/callbackurl=' + callbackUrl + '&inputslug=' + name,
                 success: function (data) {
                     if (data != null) {
-                        window.location.href = 'https://service.ssi-lab.sensorlab.tno.nl/verify/' + data;
+                        window.location.href = data;
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -51,7 +53,7 @@
         {
             $.ajax({
                 type: 'GET',
-                url: '../wp-json/jwt/v1/inputs/inputslug=' + name,
+                url: root+'/inputs/inputslug=' + name,
                 success: function (data) {
                     if (data != null) {
                         data.forEach(function (name) {
