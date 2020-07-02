@@ -5,6 +5,7 @@ namespace TNO\ContactForm7\Utilities;
 use TNO\ContactForm7\Utilities\Contracts\BaseUtility;
 use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 use TNO\ContactForm7\Views\Button;
+use WPCF7_TagGenerator;
 
 class WP extends BaseUtility
 {
@@ -106,13 +107,13 @@ class WP extends BaseUtility
             );
         });
         add_action('wpcf7_admin_init', function () use ($tagName) {
-            $tag_generator = \WPCF7_TagGenerator::get_instance();
+            $tag_generator = WPCF7_TagGenerator::get_instance();
             $tag_generator->add($tagName, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tagName) {
                 $args = wp_parse_args($args, []);
                 $names = array_map(function ($tag) use ($tagName) {
-                    $label = $tag->name.' ('.$tag->type.')';
+                    $label = $tag->name . ' (' . $tag->type . ')';
 
-                    return '<option value="'.$tagName.' '.$tag->name.'">'.$label.'</option>';
+                    return '<option value="' . $tagName . ' ' . $tag->name . '">' . $label . '</option>';
                 }, array_filter($contact_form->form_scan_shortcode(), function ($tag) use ($tagName) {
                     return !empty($tag->name) && $tag->type != $tagName;
                 }));
