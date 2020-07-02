@@ -32,6 +32,8 @@ class WP extends BaseUtility {
 
     const ADD_NAV_ITEM = 'add_menu_page';
 
+    const ADD_SUBMENU_PAGE = 'add_submenu_page';
+
     const ADD_META_BOX = 'add_meta_box';
 
     const POST_ID = Constants::TYPE_INSTANCE_IDENTIFIER_ATTR;
@@ -42,6 +44,7 @@ class WP extends BaseUtility {
 
     const POST_CONTENT = 'post_content';
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     CONST ADD_JWT_ENDPOINT = 'add_jwt_endpoint';
@@ -58,6 +61,26 @@ class WP extends BaseUtility {
 
 =======
 >>>>>>> c291f2b... added correct credential_type to jwt
+=======
+    const REGISTER_SETTING = 'register_setting';
+
+    const ADD_SETTINGS_SECTION = 'add_settings_section';
+
+    const ADD_SETTINGS_FIELD = 'add_settings_field';
+
+    const GET_OPTION = 'get_option';
+
+    const ADD_SETTINGS_ERROR = 'add_settings_error';
+
+    const SETTINGS_ERRORS = 'settings_errors';
+
+    const SETTINGS_FIELDS = 'settings_fields';
+
+    const DO_SETTINGS_SECTIONS = 'do_settings_sections';
+
+    const SUBMIT_BUTTON = 'submit_button';
+
+>>>>>>> 139904f... Added wordpress functions to use WP options API
     const JWT_SUB = 'credential-verify-request';
 
     const JWT_AUD = 'ssi-service-provider';
@@ -90,6 +113,16 @@ class WP extends BaseUtility {
         self::REMOVE_ALL_ACTIONS_AND_EXEC => [self::class, 'removeAllActionsAndExecute'],
         self::ADD_META_BOX                => [self::class, 'addMetaBox'],
         self::ADD_NAV_ITEM                => [self::class, 'addAdminNav'],
+        self::ADD_SUBMENU_PAGE                => [self::class, 'addSubmenuPage'],
+        self::REGISTER_SETTING            => [self::class, 'registerSetting'],
+        self::ADD_SETTINGS_SECTION        => [self::class, 'addSettingsSection'],
+        self::ADD_SETTINGS_FIELD          => [self::class, 'addSettingsField'],
+        self::GET_OPTION                  => [self::class, 'getOption'],
+        self::ADD_SETTINGS_ERROR          => [self::class, 'addSettingsError'],
+        self::SETTINGS_ERRORS             => [self::class, 'settingsErrors'],
+        self::SETTINGS_FIELDS             => [self::class, 'settingsFields'],
+        self::DO_SETTINGS_SECTIONS        => [self::class, 'doSettingsSections'],
+        self::SUBMIT_BUTTON               => [self::class, 'submitButton'],
     ];
 
     public static function addAction(string $hook, callable $callback, int $priority = 10, int $accepted_args = 1): void
@@ -359,6 +392,18 @@ class WP extends BaseUtility {
         add_menu_page($title, $title, $capability, $slug, null, $icon);
     }
 
+    public static function addSubmenuPage(
+        string $parent_slug,
+        string $page_title,
+        string $menu_title,
+        string $capability,
+        string $menu_slug,
+        $function = null,
+        int $position = null
+    ): void {
+        add_submenu_page($parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function, $position);
+    }
+
     public static function createModelType(string $postType, array $args = []): void
     {
         register_post_type($postType, $args);
@@ -431,7 +476,7 @@ class WP extends BaseUtility {
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
+        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -530,6 +575,62 @@ class WP extends BaseUtility {
         return add_query_arg([self::POST_TYPE => $postType], admin_url('post-new.php'));
     }
 
+    public static function registerSetting(string $option_group, string $option_name, array $args = [])
+    {
+        register_setting($option_group, $option_name, $args);
+    }
+
+    public static function addSettingsSection(string $id, string $title, $callback, string $page)
+    {
+        add_settings_section($id, $title, $callback, $page);
+    }
+
+    public static function addSettingsField(
+        string $id,
+        string $title,
+        $callback,
+        string $page,
+        string $section = 'default',
+        array $args = []
+    ) {
+        add_settings_field($id, $title, $callback, $page, $section, $args);
+    }
+
+    public static function getOption(string $option, $default = false)
+    {
+        return get_option($option, $default);
+    }
+
+    public static function addSettingsError(string $setting, string $code, string $message, string $type = 'error')
+    {
+        add_settings_error($setting, $code, $message, $type);
+    }
+
+    public static function settingsError(string $setting = '', bool $sanitize = false, bool $hide_on_update = false)
+    {
+        settings_errors($setting, $sanitize, $hide_on_update);
+    }
+
+    public static function settingsFields(string $option_group)
+    {
+        settings_fields($option_group);
+    }
+
+    public static function doSettingsSections(string $page)
+    {
+        do_settings_sections($page);
+    }
+
+    public static function submitButton(
+        string $text = null,
+        string $type = 'primary',
+        string $name = 'submit',
+        bool $wrap = true,
+        $other_attributes = null
+    ) {
+        submit_button($text, $type, $name, $wrap, $other_attributes);
+    }
+
     public static function registerGenerateJWTRoute(): bool
     {
         return register_rest_route(
@@ -551,7 +652,7 @@ class WP extends BaseUtility {
             'iat'         => time(),
             'aud'         => self::JWT_AUD,
             'iss'         => self::JWT_ISS,
-            'jti'         => self::applyFilter(Constants::TRIGGER_PRE . 'generate_jti', []),
+            'jti'         => self::applyFilter(Constants::TRIGGER_PRE.'generate_jti', []),
         ];
 >>>>>>> 44a9692... Applying patch StyleCI
 
@@ -685,7 +786,7 @@ class WP extends BaseUtility {
         [$credential, $inputs] = self::getInputs($slug);
 
         if (count($inputs) == 1) {
-            $slugs = $slug . '=' . reset($data);
+            $slugs = $slug.'='.reset($data);
         } else {
             $inputTitles = array_map(function ($i) {
                 return $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
@@ -693,9 +794,9 @@ class WP extends BaseUtility {
 
             $slugArray = [];
             foreach ($data as $slug => $value) {
-                $re = preg_quote('/' . $slug . '/');
+                $re = preg_quote('/'.$slug.'/');
                 $title = preg_grep($re, $inputTitles);
-                $slugArray[] = reset($title) . '=' . $value;
+                $slugArray[] = reset($title).'='.$value;
             }
 
             $slugs = implode('&', $slugArray);
@@ -707,11 +808,15 @@ class WP extends BaseUtility {
         preg_match($re, $description, $immutableArray);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         header('Location: ' . $page . '?' . $slug . '=' . reset($jwt->data) . '&immutable=' . $immutableArray[0]);
 >>>>>>> 4831cac... added immutable handling
 =======
         header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
 >>>>>>> d7e71fa... added response handling for credentials with multiple values
+=======
+        header('Location: '.$page.'?'.$slugs.'&immutable='.$immutableArray[0]);
+>>>>>>> 139904f... Added wordpress functions to use WP options API
         die();
     }
 
