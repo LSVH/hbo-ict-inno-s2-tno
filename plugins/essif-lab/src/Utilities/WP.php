@@ -62,17 +62,19 @@ class WP extends BaseUtility
 
     const JWT_KEY = 'shared_secret';
 
-    private const ALG = 'HS256';
+    const JWT_URL = 'api_url';
 
-    private const JWT_V_1 = 'jwt/v1';
+    const ALG = 'HS256';
 
-    private const METHODS = 'methods';
+    const JWT_V_1 = 'jwt/v1';
 
-    private const CALLBACK = 'callback';
+    const METHODS = 'methods';
 
-    private const POST_TYPE = 'post_type';
+    const CALLBACK = 'callback';
 
-    private const POST_STATUS = 'post_status';
+    const POST_TYPE = 'post_type';
+
+    const POST_STATUS = 'post_status';
 
     protected $functions = [
         self::ADD_ACTION                  => [self::class, 'addAction'],
@@ -389,7 +391,9 @@ class WP extends BaseUtility
             'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
             [
                 self::METHODS  => WP_REST_Server::READABLE,
-                self::CALLBACK => function ($request) use ($application) { self::generateJWTToken($request, $application); },
+                self::CALLBACK => function ($request) use ($application) {
+                    return self::generateJWTToken($request, $application);
+                },
             ]
         );
     }
@@ -400,6 +404,7 @@ class WP extends BaseUtility
         $options = is_array($options) ? $options : [];
         $issuer = array_key_exists(self::JWT_ISS, $options) ? $options[self::JWT_ISS] : '';
         $key = array_key_exists(self::JWT_KEY, $options) ? $options[self::JWT_KEY] : '';
+        $url = array_key_exists(self::JWT_URL, $options) ? $options[self::JWT_URL] : '';
 
         $payload = [
             'type'        => self::getCredentialType($request['inputslug']),
@@ -413,7 +418,7 @@ class WP extends BaseUtility
 
         $jwt = JWT::encode($payload, $key, self::ALG);
 
-        $response = new WP_REST_Response($jwt);
+        $response = new WP_REST_Response($url . $jwt);
         $response->set_status(200);
 
         return $response;
