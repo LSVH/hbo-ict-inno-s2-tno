@@ -2,6 +2,7 @@
 
 namespace TNO\ContactForm7\Utilities;
 
+use TNO\ContactForm7\Applications\Contracts\Application;
 use TNO\ContactForm7\Utilities\Contracts\BaseUtility;
 use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 use TNO\ContactForm7\Views\Button;
@@ -155,20 +156,17 @@ class WP extends BaseUtility
         <?php
     }
 
-    public function loadCustomJs()
+    public function loadCustomScripts(Application $application)
     {
-        wp_enqueue_script(
-            'EssifLab_ContactForm7-CustomJs',
-            plugin_dir_url(__FILE__).'../js/script.js',
-            ['jquery'],
-            '',
-            false
-        );
-    }
-
-    public function loadCustomScripts()
-    {
-        add_action('wp_enqueue_scripts', [$this, 'loadCustomJs']);
+        add_action('wp_enqueue_scripts', function () use ($application) {
+            wp_enqueue_script(
+                'essif-lab',
+                plugins_url($application->getAppDir()).'js/script.js',
+                ['jquery'],
+                '',
+                false
+            );
+        });
     }
 
     public function addActivateHook(CF7Helper $cf7Helper)
