@@ -272,7 +272,7 @@ class WordPress extends BaseIntegration
     {
         $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
             $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE, $this->application);
-            $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE);
+            $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE, $this->application);
             $this->utility->call(BaseUtility::REGISTER_RETURN_INPUTS_ROUTE);
         });
     }

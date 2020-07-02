@@ -448,19 +448,21 @@ class WP extends BaseUtility
         return $credentialTypeArray[Constants::FIELD_TYPE_CREDENTIAL_TYPE];
     }
 
-    public static function registerReceiveJWTRoute(): bool
+    public static function registerReceiveJWTRoute(Application $application): bool
     {
         return register_rest_route(
             self::JWT_V_1,
             'page=(?P<page>.+)&inputslug=(?P<slug>.+)&jwt=(?P<jwtToken>.+)',
             [
                 self::METHODS  => WP_REST_Server::READABLE,
-                self::CALLBACK => [self::class, 'receiveJWTToken'],
+                self::CALLBACK => function ($request) use ($application) {
+                    return self::receiveJWTToken($request, $application);
+                },
             ]
         );
     }
 
-    public static function receiveJWTToken($request)
+    public static function receiveJWTToken($request, Application $application)
     {
         $page = $request['page'];
         $slug = $request['slug'];
@@ -468,7 +470,11 @@ class WP extends BaseUtility
 
         sleep(1); //Sleep to ensure the timestamp in the JWT has actually passed before decoding
 
-        $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
+        $options = self::getOption($application->getNamespace());
+        $options = is_array($options) ? $options : [];
+        $key = array_key_exists(self::JWT_KEY, $options) ? $options[self::JWT_KEY] : '';
+
+        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
         $data = $jwt->data;
 
         [$credential, $inputs] = self::getInputs($slug);
