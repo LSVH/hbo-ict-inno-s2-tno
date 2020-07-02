@@ -5,7 +5,6 @@
 ![Development Workflow](https://github.com/LSVH/hbo-ict-inno-s2-tno/workflows/Development%20Workflow/badge.svg)
 ![Deployment Workflow](https://github.com/LSVH/hbo-ict-inno-s2-tno/workflows/Deployment%20Workflow/badge.svg)
 ![StyleCI](https://github.styleci.io/repos/238925389/shield)
-![Codecov](https://codecov.io/gh/LSVH/hbo-ict-inno-s2-tno/branch/master/graph/badge.svg)
 ![Repository size](https://img.shields.io/github/repo-size/LSVH/hbo-ict-inno-s2-tno)
 ![Latest release](https://img.shields.io/github/v/release/LSVH/hbo-ict-inno-s2-tno)
 
