@@ -10,10 +10,13 @@ class Button
         $inputValue = 'Gegevens inladen';
         $inputClass = 'wpcf7-form-control wpcf7-submit essif-lab';
         $inputName = $attrs['name'];
-        $input = '<input name="'.$inputName.'" type="'.$inputType.'" value="'.$inputValue.'" class="'.$inputClass.'">';
+        $input = '<input name="' . $inputName . '" type="' . $inputType . '" value="' . $inputValue . '" class="' . $inputClass . '">';
 
-        $style = '<style>body .essif-lab{width:100%;font-size:75%;padding:1%;}</style>';
+        $style = '<style>
+                  body .essif-lab{width:100%;font-size:75%;padding:1%;}
+                  input:disabled {background: rgba(239, 239, 239, 0.3);border-color: rgba(118, 118, 118, 0.3);cursor: not-allowed;}
+                  </style>';
 
-        return $input.$style;
+        return $input . $style;
     }
 }
