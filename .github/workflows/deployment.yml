@@ -37,6 +37,7 @@ jobs:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     deploy:
         #needs: build_push
         name: "Deploy the published image"
@@ -65,26 +66,40 @@ jobs:
 
 #    name: "Deploy the published image"
 >>>>>>> b4adcbb... Update deployment.yml
+=======
+  deploy:
+    needs: build_push
 
-#    runs-on: ubuntu-latest
+    name: "Deploy the published image"
+>>>>>>> 48901b8... Update deployment.yml
 
-#    env:
-#      CI: true
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 48901b8... Update deployment.yml
     steps:
       - name: SSH-ing into EC2 instance
         uses: garygrossgarten/github-action-ssh@release
         with:
 <<<<<<< HEAD
+<<<<<<< HEAD
           command: ls -a
 =======
           command: sudo bash /home/ubuntu/deploy.sh
 >>>>>>> 8827670... Fixed tabs
+=======
+          command: sudo bash /home/ubuntu/deploy.sh
+>>>>>>> 48901b8... Update deployment.yml
           host: ${{ secrets.HOST }}
           username: ubuntu
           passphrase: ${{ secrets.PASSPHRASE }}
           privateKey: ${{ secrets.PRIVATE_KEY}}
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 2a5c778... Reformatted workflow files
 =======
@@ -100,3 +115,5 @@ jobs:
 #          passphrase: ${{ secrets.PASSPHRASE }}
 #          privateKey: ${{ secrets.PRIVATE_KEY}}
 >>>>>>> b4adcbb... Update deployment.yml
+=======
+>>>>>>> 48901b8... Update deployment.yml
