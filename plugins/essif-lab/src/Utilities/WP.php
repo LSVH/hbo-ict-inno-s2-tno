@@ -3,6 +3,7 @@
 namespace TNO\EssifLab\Utilities;
 
 use Firebase\JWT\JWT;
+use TNO\EssifLab\Applications\Contracts\Application;
 use TNO\EssifLab\Constants;
 use TNO\EssifLab\Models\Contracts\Model;
 use TNO\EssifLab\Utilities\Contracts\BaseUtility;
@@ -59,7 +60,9 @@ class WP extends BaseUtility
 
     const JWT_AUD = 'ssi-service-provider';
 
-    const JWT_ISS = '0ddc6513-b57a-4398-9fb5-027d3cbc82dc';
+    const JWT_ISS = 'iss';
+
+    const JWT_KEY = 'shared_secret';
 
     private const ALG = 'HS256';
 
@@ -148,7 +151,8 @@ class WP extends BaseUtility
         string $menu_slug,
         $function = null,
         int $position = null
-    ): void {
+    ): void
+    {
         add_submenu_page($parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function, $position);
     }
 
@@ -224,7 +228,7 @@ class WP extends BaseUtility
         ) ? $postAttrs[Constants::MODEL_TYPE_INDICATOR] : '';
 
         $className = implode('', array_map('ucfirst', explode(' ', str_replace('-', ' ', $type))));
-        $FQN = Constants::TYPE_NAMESPACE.'\\'.$className;
+        $FQN = Constants::TYPE_NAMESPACE . '\\' . $className;
 
         if (empty($type) || !class_exists($FQN) || !in_array(Model::class, class_implements($FQN))) {
             return null;
@@ -340,7 +344,8 @@ class WP extends BaseUtility
         string $page,
         string $section = 'default',
         array $args = []
-    ) {
+    )
+    {
         add_settings_field($id, $title, $callback, $page, $section, $args);
     }
 
@@ -375,7 +380,8 @@ class WP extends BaseUtility
         string $name = 'submit',
         bool $wrap = true,
         $other_attributes = null
-    ) {
+    )
+    {
         submit_button($text, $type, $name, $wrap, $other_attributes);
     }
 
@@ -384,41 +390,42 @@ class WP extends BaseUtility
         wp_localize_script($handle, $object_name, $data);
     }
 
-    public static function registerGenerateJWTRoute(): bool
+    public static function registerGenerateJWTRoute(Application $application): bool
     {
         return register_rest_route(
             self::JWT_V_1,
             'callbackurl=(?P<callbackurl>.+)&inputslug=(?P<inputslug>.+)',
             [
                 self::METHODS  => WP_REST_Server::READABLE,
-                self::CALLBACK => [self::class, 'generateJWTToken'],
+                self::CALLBACK => function ($request) use ($application) { self::generateJWTToken($request, $application); },
             ]
         );
     }
 
-    public static function generateJWTToken($request)
+    public static function generateJWTToken($request, Application $application)
     {
+        $options = self::getOption($application->getNamespace());
+        $options = is_array($options) ? $options : [];
+        $issuer = array_key_exists(self::JWT_ISS, $options) ? $options[self::JWT_ISS] : '';
+        $key = array_key_exists(self::JWT_KEY, $options) ? $options[self::JWT_KEY] : '';
+
         $payload = [
             'type'        => self::getCredentialType($request['inputslug']),
             'callbackUrl' => $request['callbackurl'],
             'sub'         => self::JWT_SUB,
             'iat'         => time(),
             'aud'         => self::JWT_AUD,
-            'iss'         => self::JWT_ISS,
-            'jti'         => self::applyFilter(Constants::TRIGGER_PRE.'generate_jti', []),
+            'iss'         => $issuer,
+            'jti'         => self::applyFilter(Constants::TRIGGER_PRE . 'generate_jti', []),
         ];
 
-        $jwt = JWT::encode($payload, self::getSharedSecret(), self::ALG);
+        $jwt = JWT::encode($payload, $key, self::ALG);
 
+        var_dump($jwt);
         $response = new WP_REST_Response($jwt);
         $response->set_status(200);
 
         return $response;
-    }
-
-    private static function getSharedSecret(): string
-    {
-        return 'b4005405d2e2354130734e0c3aa0f705c38876bc38a7591d6799f43de0cf1467';
     }
 
     private static function getCredentialType(string $slug)
@@ -471,7 +478,7 @@ class WP extends BaseUtility
         [$credential, $inputs] = self::getInputs($slug);
 
         if (count($inputs) == 1) {
-            $slugs = $slug.'='.reset($data);
+            $slugs = $slug . '=' . reset($data);
         } else {
             $inputTitles = array_map(function ($i) {
                 return $i->getAttributes()[Constants::TYPE_INSTANCE_TITLE_ATTR];
@@ -479,9 +486,9 @@ class WP extends BaseUtility
 
             $slugArray = [];
             foreach ($data as $slug => $value) {
-                $re = preg_quote('/'.$slug.'/');
+                $re = preg_quote('/' . $slug . '/');
                 $title = preg_grep($re, $inputTitles);
-                $slugArray[] = reset($title).'='.$value;
+                $slugArray[] = reset($title) . '=' . $value;
             }
 
             $slugs = implode('&', $slugArray);
@@ -492,7 +499,7 @@ class WP extends BaseUtility
         $re = "/(?<=\"immutable\":)[^},]+/";
         preg_match($re, $description, $immutableArray);
 
-        header('Location: '.$page.'?'.$slugs.'&immutable='.$immutableArray[0]);
+        header('Location: ' . $page . '?' . $slugs . '&immutable=' . $immutableArray[0]);
         die();
     }
 
