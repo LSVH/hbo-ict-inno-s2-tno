@@ -228,9 +228,9 @@ class WP extends BaseUtility
             $tag_generator->add($tagName, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tagName) {
                 $args = wp_parse_args($args, []);
                 $names = array_map(function ($tag) use ($tagName) {
-                    $label = $tag->name . ' (' . $tag->type . ')';
+                    $label = $tag->name.' ('.$tag->type.')';
 
-                    return '<option value="' . $tagName . ' ' . $tag->name . '">' . $label . '</option>';
+                    return '<option value="'.$tagName.' '.$tag->name.'">'.$label.'</option>';
                 }, array_filter($contact_form->form_scan_shortcode(), function ($tag) use ($tagName) {
                     return !empty($tag->name) && $tag->type != $tagName;
                 }));
@@ -277,7 +277,11 @@ class WP extends BaseUtility
         add_action('wp_enqueue_scripts', function () use ($application) {
             $namespace = $application->getNamespace();
             $script = plugins_url('js/script.js', $application->getAppDir().'x');
-            wp_enqueue_script($namespace, $script, ['jquery'],null,false);
+            wp_enqueue_script($namespace, $script, ['jquery'], null, false);
+            wp_localize_script($namespace, 'eSSIfLabContactForm7', [
+                'root'      => esc_url_raw(rest_url('jwt/v1')),
+                'namespace' => 'jwt/v1',
+            ]);
         });
     }
 

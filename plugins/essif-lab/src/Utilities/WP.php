@@ -775,19 +775,21 @@ class WP extends BaseUtility {
 >>>>>>> c291f2b... added correct credential_type to jwt
     }
 
-    public static function registerReceiveJWTRoute(): bool
+    public static function registerReceiveJWTRoute(Application $application): bool
     {
         return register_rest_route(
             self::JWT_V_1,
             'page=(?P<page>.+)&inputslug=(?P<slug>.+)&jwt=(?P<jwtToken>.+)',
             [
                 self::METHODS  => WP_REST_Server::READABLE,
-                self::CALLBACK => [self::class, 'receiveJWTToken'],
+                self::CALLBACK => function ($request) use ($application) {
+                    return self::receiveJWTToken($request, $application);
+                },
             ]
         );
     }
 
-    public static function receiveJWTToken($request)
+    public static function receiveJWTToken($request, Application $application)
     {
         $page = $request['page'];
         $slug = $request['slug'];
@@ -807,6 +809,7 @@ class WP extends BaseUtility {
 =======
         sleep(1); //Sleep to ensure the timestamp in the JWT has actually passed before decoding
 
+<<<<<<< HEAD
 >>>>>>> abcaaf3... added sleep to ensure decoding the JWT doesn't produce an error
         $jwt = JWT::decode($jwtToken, self::getSharedSecret(), [self::ALG]);
 <<<<<<< HEAD
@@ -815,6 +818,13 @@ class WP extends BaseUtility {
 >>>>>>> 36eba92... merged style changes
 =======
 =======
+=======
+        $options = self::getOption($application->getNamespace());
+        $options = is_array($options) ? $options : [];
+        $key = array_key_exists(self::JWT_KEY, $options) ? $options[self::JWT_KEY] : '';
+
+        $jwt = JWT::decode($jwtToken, $key, [self::ALG]);
+>>>>>>> 1bc3fae... changed receive jwt to use shared secret from options
         $data = $jwt->data;
 >>>>>>> d7e71fa... added response handling for credentials with multiple values
 
