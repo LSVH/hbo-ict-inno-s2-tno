@@ -80,11 +80,16 @@ class WordPress extends BaseIntegration
 
     private function registerModelDeleteHandler(Model $model): void
     {
-        $hook = 'before_delete_post_'.$model->getTypeName();
+        $hook = 'before_delete_post';
         $this->utility->call(WP::ADD_ACTION, $hook, function () use ($hook, $model) {
-            $this->utility->call(WP::REMOVE_ALL_ACTIONS_AND_EXEC, $hook, function () use ($model) {
-                $this->manager->delete($model);
-            });
+            global $post_type;
+            $post_type = str_replace('-', '', $post_type);
+            $model = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
+            if (self::isConcreteModel('TNO\EssifLab\Models\\' . $post_type)) {
+                $this->utility->call(WP::REMOVE_ALL_ACTIONS_AND_EXEC, $hook, function () use ($model) {
+                    $this->manager->deleteAllRelations($model);
+                });
+            }
         }, -1);
     }
 
