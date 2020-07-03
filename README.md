@@ -72,19 +72,20 @@ After activating the plugins, they need to be configured for them to work. Perfo
 1. Go to the settings for our plugins at eSSIF-Lab>Settings on the admin page.
 2. Enter the relevant details which you received when defining the credentials in the eSSIF Glue API (specifically the URL of the API, the organization signature and the shared secret).
 3. Configure the sub plugin you want to use (see [Configure a sub plugin for use](#configure-a-sub-plugin-for-use))
-4. Create a Credential Type at eSSIF-Lab>Credential Types using the name of the credential you defined in the eSSIF-Lab API.
-5. Create a Credential at eSSIF-Lab>Credential and add a relation to the Credential Type and to the Inputs that you want the Credential to fill.
+4. Create a Credential Type at eSSIF-Lab>Credential Types on the admin page using the name of the credential you defined in the eSSIF-Lab API.
+5. Create a Credential at eSSIF-Lab>Credential on the admin page and add a relation to the Credential Type and to the Inputs that you want the Credential to fill.
    * Optionally you can make the Credential immutable, which means that after it has been loaded the values cannot be changed manually, they can only be deleted via the provided delete button.
 
 ### Configure a sub plugin for use
 #### Contact Form 7
 To configure the Contact Form 7 sub plugin, follow these steps:
 
-1. Change the permalink type to Post name at Settings>Permalinks.
-2. Create a contact form at Contact>Add New.
+1. Change the permalink type to Post name at Settings>Permalinks on the admin page.
+2. Create a contact form at Contact>Add New on the admin page.
 3. Add the custom shortcode (essif_lab) to create a button which will retrieve credentials.
 4. Give the button the name of the input you want to retrieve a credential for.
 5. Add the contact form to a page via the shortcode that Contact Form 7 provides for every form.
+6. Deactivate and reactivate the Contact Form 7 sub plugin at Plugins on the admin page.
 
 ## Installation for contributors
 
