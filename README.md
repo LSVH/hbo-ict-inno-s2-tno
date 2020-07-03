@@ -126,7 +126,7 @@ supports the validation (VE) and/or the issuance engine (IE) of the eSSIF-Lab AP
  
 | Sub plugin name | Integrations for | VE | IE
 |-----------------|------------------|----|---
-| [essif-lab_contactform7](plugins/essif-lab_contactform7) | [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) | :heavy_check_mark: | :white_check_mark:
+| [essif-lab_contactform7](plugins/essif-lab_contactform7) | [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) | :heavy_check_mark: | :x:
 
 ## Features
 
