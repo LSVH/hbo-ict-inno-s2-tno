@@ -10,14 +10,17 @@ NAME_app=src_app_1
 if [ ! "$(docker ps -q -f name=$NAME_wp)" ]; then
     docker-compose -f $FILE_docker_compose down
     docker system prune -a -f
+    docker volume prune -f 
 fi
 if [ ! "$(docker ps -q -f name=$NAME_mysql)" ]; then
     docker-compose -f $FILE_docker_compose down
     docker system prune -a -f
+    docker volume prune -f 
 fi
 if [ ! "$(docker ps -q -f name=$NAME_app)" ]; then
     docker-compose -f $FILE_docker_compose down
     docker system prune -a -f
+    docker volume prune -f 
 fi
 if [ $? -eq 0 ]; then
     echo "Online"
