@@ -328,7 +328,7 @@ class Utility extends BaseUtility
         array_push($this->history, $histObj);
     }
 
-    public function loadCustomScripts()
+    public function loadCustomScripts(\TNO\ContactForm7\Applications\Contracts\Application $application)
     {
         $histObj = new History('loadCustomScripts');
         array_push($this->history, $histObj);
