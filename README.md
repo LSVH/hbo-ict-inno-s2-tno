@@ -18,8 +18,6 @@ Allow users of your WordPress website to use your website with their Personal Da
 - [Demo](#demo)
 - [How it works?](#how-it-works)
 - [Installation for WordPress admin's](#installation-for-wordpress-admins)
-    - [Download plugins from this repository](#download-plugins-from-this-repository) 
-    - [Download and install from within WordPress](#download-and-install-from-within-wordpress)
 - [Plugin index](#plugin-index)
     - [Main plugin](#main-plugin)
     - [Sub plugins](#sub-plugins)
@@ -37,10 +35,10 @@ Just here to check it out? Have a look at the [demo environment](http://essif-la
 
 ## How it works?
 
-This plugin interacts with the eSSIF-Lab's API service in order to get the data from all sorts of PDS's. This plugin
+This plugin interacts with the eSSIF-Lab API service to get the data from all sorts of PDS's. This plugin
 connects the users of PDS to WordPress websites. With this plugin WordPress website admins can create a validation
 policy to customize the functionality of the plugin to their business process. The users of a PDS can leverage from
-these WordPress websites and load their credentials in to the web-page by the graphical components coming from this
+these WordPress websites and load their credentials into the web page by the graphical components coming from this
 plugin.
 
 To learn more about what this software is capable of, have a look at our [features](#features). For more information
@@ -52,11 +50,6 @@ _As written above, the plugin currently only supports the retrieval of data from
 
 ## Installation for WordPress admin's
 
-Please select the option what suits your needs to help install one of our plugins. 
-
-- [Download plugins from this repository](#download-plugins-from-this-repository)
-- [Download and install from within WordPress](#download-and-install-from-within-wordpress)
-
 ### Download plugins from this repository
 
 Each release what also will be uploaded to WordPress's plugin repository will also be released here on this
@@ -65,15 +58,40 @@ repository. Consider the following steps:
 1. Go to [the page with all the releases](https://github.com/LSVH/hbo-ict-inno-s2-tno/releases/latest).
 2. Download the [source code .zip](https://github.com/LSVH/hbo-ict-inno-s2-tno/archive/v1.0.zip).
 3. Extract the files from the downloaded zip file and upload the plugins to your WordPress server and move them to the `wp-content/plugins` directory.
-4. Before activating any of the subplugins ensure you have the [required plugins](#sub-plugins) installed.
+4. Before activating any of the sub plugins ensure you have the [required plugins](#sub-plugins) installed.
 5. Now you can activate them after installation.
- 
+
+### Define credentials in the eSSIF-Lab API
+
+Before the plugins can be used, you need to define at least one credential in the eSSIF-Lab API. How to do this is described in the [documentation](#TODO add API documentation link when it is available) of this API.
+
+### Configure the main plugin for use
+
+After activating the plugins, they need to be configured for them to work. Perform the following steps:
+
+1. Go to the settings for our plugins at eSSIF-Lab>Settings on the admin page.
+2. Enter the relevant details which you received when defining the credentials in the eSSIF Glue API (specifically the URL of the API, the organization signature and the shared secret).
+3. Configure the sub plugin you want to use (see [Configure a sub plugin for use](#configure-a-sub-plugin-for-use))
+4. Create a Credential Type at eSSIF-Lab>Credential Types using the name of the credential you defined in the eSSIF-Lab API.
+5. Create a Credential at eSSIF-Lab>Credential and add a relation to the Credential Type and to the Inputs that you want the Credential to fill.
+   * Optionally you can make the Credential immutable, which means that after it has been loaded the values cannot be changed manually, they can only be deleted via the provided delete button.
+
+### Configure a sub plugin for use
+#### Contact Form 7
+To configure the Contact Form 7 sub plugin, follow these steps:
+
+1. Change the permalink type to Post name at Settings>Permalinks.
+2. Create a contact form at Contact>Add New.
+3. Add the custom shortcode (essif_lab) to create a button which will retrieve credentials.
+4. Give the button the name of the input you want to retrieve a credential for.
+5. Add the contact form to a page via the shortcode that Contact Form 7 provides for every form.
+
 ## Installation for contributors
 
-If you want to contribute to one of our plugins please consider the following steps:
+If you want to contribute to one of our plugins, please consider the following steps:
 
 1. Clone this repository (or your fork) locally.
-2. Install docker if you haven't done so already.
+2. Install docker if you have not done so already.
 3. In a terminal go to the directory of the cloned repository.
 4. Run `cp .env.example .env` and adjust the .env to your needs.
 5. Run `docker-compose up -d` to start the WordPress development environment.
@@ -94,12 +112,12 @@ Some notes:
 
 ## Plugin index
 
-To bring SSI to the world of WordPress we need to make dedicated plugins for various third party plugins in order to
+To bring SSI to the world of WordPress we need to make dedicated plugins for various third-party plugins to
 support all features that the main plugin introduces.
  
 ### Main plugin
 
-In order to keep the integrating sub plugins small and (especially important) capable of adapting to changes quickly, we
+To keep the integrating sub plugins small and (especially important) capable of adapting to changes quickly, we
 decided to develop a plugin that serves as the base for all the [sub plugins](#sub-plugins). This plugin
 includes all the business logic to make the whole process work.
   
@@ -119,9 +137,9 @@ supports the validation (VE) and/or the issuance engine (IE) of the eSSIF-Lab AP
 The plugins support the following features:
 
 - Send a request to an API in the form of a JWT token.
-- Load a single value from a credential into a web-page.
-- Load multiple values from a credential into a web-page.
-- Temporary persist the retrieved credential(s) so more can be loaded into the web-page.
+- Load a single value from a credential into a web page.
+- Load multiple values from a credential into a web page.
+- Temporary persist the retrieved credential(s) so more can be loaded into the web page.
 - Offer graphic components to configure:
     - A validation policy to capture a certain business process.
     - A credential to configure what should be retrieved. 
@@ -133,12 +151,12 @@ The plugins support the following features:
 
 The following features should be implemented in the near future:
 
-- Improvements to the User Experience, reduce the amount of graphical components and clicks necessary.
+- Improvements to the User Experience, reduce the number of graphical components and clicks necessary.
 - Integrate with other software, these seem to be the most important to us:
     - WordPress user management system. When signing up, users need to enter a bunch of personal information. 
       Everything except the username and password could be retrieved from a PDS through our plugin.
     - WooCommerce (a webshop plugin). This plugin is quite big and there are probably multiple processes that we can
-      facilitate with our main plugin. One in particular is the order form, where you have to enter your address, payment
+      facilitate with our main plugin. One in particular is the order form, where you must enter your address, payment
       credentials and such.
 - At some point the implementations should be ready for production and then we should consider adding an
  implementation for the issuance process, by adding support for issuance policies.
