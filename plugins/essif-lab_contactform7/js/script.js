@@ -1,8 +1,8 @@
 (function ($) {
     $(window).load(function () {
-        const eSSIfLabContactForm7 = 'eSSIfLabContactForm7' in window ? window.eSSIfLabContactForm7 : {}
+        const eSSIfLabContactForm7 = 'eSSIfLabContactForm7' in window ? window.eSSIfLabContactForm7 : {};
         const root = 'root' in eSSIfLabContactForm7 ? eSSIfLabContactForm7.root : '';
-        let input
+        let input;
         Object.keys(sessionStorage).map(function (slug) {
             input = $('.' + slug + ' input');
             let value = JSON.parse(sessionStorage.getItem(slug));
@@ -13,7 +13,7 @@
         const urlParams = new URLSearchParams(window.location.search);
 
         const immutable = urlParams.get('immutable') === 'true';
-        urlParams.delete('immutable')
+        urlParams.delete('immutable');
 
         for (const entry of urlParams.entries()) {
             input = $('.' + entry[0] + ' input');
@@ -29,7 +29,7 @@
 
         $('.wpcf7 .essif-lab.reset').click(function (e) {
             e.preventDefault();
-            getCredentialInputs($(this)[0].name)
+            getCredentialInputs($(this)[0].name);
         });
 
         function redirectToWallet(name)
