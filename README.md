@@ -30,7 +30,7 @@ Allow users of your WordPress website to use your website with their Personal Da
 
 ## Demo
 
-Just here to check it out? Have a look at the [demo environment](http://52.207.254.225/wp-login.php).
+Just here to check it out? Have a look at the [demo environment](http://essif-lab.ddns.net/wp-login.php).
 
 > Username: admin  
 > Password: My_secret123

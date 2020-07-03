@@ -2,6 +2,7 @@
 
 namespace TNO\ContactForm7\Utilities\Contracts;
 
+use TNO\ContactForm7\Applications\Contracts\Application;
 use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 
 interface Utility
@@ -34,7 +35,7 @@ interface Utility
 
     public function addEssifLabFormTag();
 
-    public function loadCustomScripts();
+    public function loadCustomScripts(Application $application);
 
 <<<<<<< HEAD
 	function addActivateHook(CF7Helper $cf7Helper, string $appDir);

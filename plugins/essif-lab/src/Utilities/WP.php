@@ -80,7 +80,12 @@ class WP extends BaseUtility {
 
     const SUBMIT_BUTTON = 'submit_button';
 
+<<<<<<< HEAD
 >>>>>>> 139904f... Added wordpress functions to use WP options API
+=======
+    const LOCALIZE_SCRIPT = 'wp_localize_script';
+
+>>>>>>> e502f6e... Add js to work with our variables
     const JWT_SUB = 'credential-verify-request';
 
     const JWT_AUD = 'ssi-service-provider';
@@ -113,7 +118,7 @@ class WP extends BaseUtility {
         self::REMOVE_ALL_ACTIONS_AND_EXEC => [self::class, 'removeAllActionsAndExecute'],
         self::ADD_META_BOX                => [self::class, 'addMetaBox'],
         self::ADD_NAV_ITEM                => [self::class, 'addAdminNav'],
-        self::ADD_SUBMENU_PAGE                => [self::class, 'addSubmenuPage'],
+        self::ADD_SUBMENU_PAGE            => [self::class, 'addSubmenuPage'],
         self::REGISTER_SETTING            => [self::class, 'registerSetting'],
         self::ADD_SETTINGS_SECTION        => [self::class, 'addSettingsSection'],
         self::ADD_SETTINGS_FIELD          => [self::class, 'addSettingsField'],
@@ -123,6 +128,7 @@ class WP extends BaseUtility {
         self::SETTINGS_FIELDS             => [self::class, 'settingsFields'],
         self::DO_SETTINGS_SECTIONS        => [self::class, 'doSettingsSections'],
         self::SUBMIT_BUTTON               => [self::class, 'submitButton'],
+        self::LOCALIZE_SCRIPT             => [self::class, 'localizeScript'],
     ];
 
     public static function addAction(string $hook, callable $callback, int $priority = 10, int $accepted_args = 1): void
@@ -629,6 +635,11 @@ class WP extends BaseUtility {
         $other_attributes = null
     ) {
         submit_button($text, $type, $name, $wrap, $other_attributes);
+    }
+
+    public static function localizeScript(string $handle, string $object_name, array $data)
+    {
+        wp_localize_script($handle, $object_name, $data);
     }
 
     public static function registerGenerateJWTRoute(): bool
