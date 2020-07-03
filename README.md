@@ -63,31 +63,17 @@ Each release what also will be uploaded to WordPress's plugin repository will al
 repository. Consider the following steps:
 
 1. Go to [the page with all the releases](https://github.com/LSVH/hbo-ict-inno-s2-tno/releases/latest).
-2. Download the [main plugin](#main-plugin) zip.
-3. Download one of the [sub plugins](#sub-plugins).
-4. Upload the downloaded zip files to your WordPress server and move them to the `wp-content/plugins` directory.
+2. Download the [source code .zip](https://github.com/LSVH/hbo-ict-inno-s2-tno/archive/v1.0.zip).
+3. Extract the files from the downloaded zip file and upload the plugins to your WordPress server and move them to the `wp-content/plugins` directory.
+4. Before activating any of the subplugins ensure you have the [required plugins](#sub-plugins) installed.
 5. Now you can activate them after installation.
-
-### Download and install from within WordPress
-
-**Note**: _These instructions might not work as expected, since our plugin isn't available on WordPress's repository
- yet._
- 
-To download and install our plugins directly from within WordPress, consider the following steps:
-
-1. Go to the WordPress plugins page.
-2. In the search bar enter `essif-lab`.
-3. Install the main plugin.
-
-To enable a [sub plugin](#sub-plugins) for example with _Contact Form 7_ you also need to install the appropriate plugin
-for that. In this case that would be the plugin named `essif-lab_contactform7`.
  
 ## Installation for contributors
 
-If you want to contribute to one of then our plugins please consider the following steps:
+If you want to contribute to one of our plugins please consider the following steps:
 
 1. Clone this repository (or your fork) locally.
-2. Install docker if you didn't do so already.
+2. Install docker if you haven't done so already.
 3. In a terminal go to the directory of the cloned repository.
 4. Run `cp .env.example .env` and adjust the .env to your needs.
 5. Run `docker-compose up -d` to start the WordPress development environment.
@@ -108,20 +94,20 @@ Some notes:
 
 ## Plugin index
 
-To bring SSI to the world of WordPress we need to make dedicated plugins for various third plugins in order to
-support all features of the main plugin introduces.
+To bring SSI to the world of WordPress we need to make dedicated plugins for various third party plugins in order to
+support all features that the main plugin introduces.
  
 ### Main plugin
 
-In order to keep the integrating sub plugins small and especially important capable of adapting changes quickly, we
-decided to develop a plugin what serves as the base for all the [sub plugins](#sub-plugins). This plugin
+In order to keep the integrating sub plugins small and (especially important) capable of adapting to changes quickly, we
+decided to develop a plugin that serves as the base for all the [sub plugins](#sub-plugins). This plugin
 includes all the business logic to make the whole process work.
   
 [Check out the source](plugins/essif-lab) of the main plugin.
 
 ### Sub plugins
 
-The table below shows for what plugins we made integrations thus far. The table also shows whenever the plugin
+The table below shows for what plugins we have made integrations thus far. The table also shows whether the plugin
 supports the validation (VE) and/or the issuance engine (IE) of the eSSIF-Lab API.
  
 | Sub plugin name | Integrations for | VE | IE
@@ -134,27 +120,25 @@ The plugins support the following features:
 
 - Send a request to an API in the form of a JWT token.
 - Load a single value from a credential into a web-page.
+- Load multiple values from a credential into a web-page.
+- Temporary persist the retrieved credential(s) so more can be loaded into the web-page.
 - Offer graphic components to configure:
     - A validation policy to capture a certain business process.
     - A credential to configure what should be retrieved. 
     - An issuer to determine the origin of a credential.
 - Tag generator to ease the implementation of our plugin in the Contact Form 7 form editor.
-
+- Allow admin users to customize what API service to use, basically a field with an URL. 
 
 ## Roadmap
 
 The following features should be implemented in the near future:
 
-- Load multiple values from a credential into a web-page.
-- Temporary persist the retrieved credential(s) so more can be loaded into the web-page.
-- Allow admin users to customize what API service to use, basically a field with an URL. 
 - Improvements to the User Experience, reduce the amount of graphical components and clicks necessary.
-- Adjust the domain to the now known eSSIF-Lab API service and refactor the code accordingly.
 - Integrate with other software, these seem to be the most important to us:
-    - WordPress its user management system. When signing up users need to enter a bunch of personal information. 
+    - WordPress user management system. When signing up, users need to enter a bunch of personal information. 
       Everything except the username and password could be retrieved from a PDS through our plugin.
-    - WooCommerce a webshop plugin. This plugin is quite big and there are probably multiple processes that we can
-      capture into our main plugin. But one in particular is the order form, where you have to enter address, payment
+    - WooCommerce (a webshop plugin). This plugin is quite big and there are probably multiple processes that we can
+      facilitate with our main plugin. One in particular is the order form, where you have to enter your address, payment
       credentials and such.
 - At some point the implementations should be ready for production and then we should consider adding an
- implementation to the issuance process. By adding support for issuance policies.
+ implementation for the issuance process, by adding support for issuance policies.
