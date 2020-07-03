@@ -73,7 +73,7 @@ Before the plugins can be used, you need to define at least one credential in th
 After activating the plugins, they need to be configured for them to work. Perform the following steps:
 
 1. Go to the settings for our plugins at eSSIF-Lab>Settings on the admin page.
-2. Enter the relevant details which you received when defining the credentials in the eSSIF Glue API (specifically the URL of the API, the organization signature and the shared secret).
+2. Enter the relevant details which you received when defining the credentials in the eSSIF Glue API (specifically the URL of the API, the organization signature, and the shared secret).
 3. Configure the sub plugin you want to use (see [Configure a sub plugin for use](#configure-a-sub-plugin-for-use))
 4. Create a Credential Type at eSSIF-Lab>Credential Types on the admin page using the name of the credential you defined in the eSSIF-Lab API.
 5. Create a Credential at eSSIF-Lab>Credential on the admin page and add a relation to the Credential Type and to the Inputs that you want the Credential to fill.
@@ -85,7 +85,7 @@ To configure the Contact Form 7 sub plugin, follow these steps:
 
 1. Change the permalink type to Post name at Settings>Permalinks on the admin page.
 2. Create a contact form at Contact>Add New on the admin page.
-3. Add the custom shortcode (essif_lab) to create a button which will retrieve credentials.
+3. Add the custom shortcode (essif_lab) to create a button that will retrieve credentials.
 4. Give the button the name of the input you want to retrieve a credential for.
 5. Add the contact form to a page via the shortcode that Contact Form 7 provides for every form.
 6. Deactivate and reactivate the Contact Form 7 sub plugin at Plugins on the admin page.
@@ -155,12 +155,12 @@ The plugins support the following features:
 
 The following features should be implemented in the near future:
 
-- Improvements to the User Experience, reduce the number of graphical components and clicks necessary.
+- Improvements to the User Experience, reduce the number of graphical components, and clicks necessary.
 - Integrate with other software, these seem to be the most important to us:
     - WordPress user management system. When signing up, users need to enter a bunch of personal information. 
       Everything except the username and password could be retrieved from a PDS through our plugin.
     - WooCommerce (a webshop plugin). This plugin is quite big and there are probably multiple processes that we can
-      facilitate with our main plugin. One in particular is the order form, where you must enter your address, payment
-      credentials and such.
-- At some point the implementations should be ready for production and then we should consider adding an
+      facilitate with our main plugin. One example is the order form, where you must enter your address, payment
+      credentials, and such.
+- At some point, the implementations should be ready for production and then we should consider adding an
  implementation for the issuance process, by adding support for issuance policies.
