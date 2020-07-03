@@ -11,9 +11,9 @@
 Allow users of your WordPress website to use your website with their Personal Data Store (PDS).
 
 <details>
-<summary>Table of content</summary>
+<summary>Table of contents</summary>
 
-## Table of content
+## Table of contents
 
 - [Demo](#demo)
 - [How it works?](#how-it-works)
