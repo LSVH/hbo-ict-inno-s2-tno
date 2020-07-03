@@ -100,7 +100,7 @@ class WordPress extends BaseIntegration
             global $post_type;
             $post_type = str_replace('-', '', $post_type);
             $model = $this->utility->call(BaseUtility::GET_CURRENT_MODEL);
-            if (self::isConcreteModel('TNO\EssifLab\Models\\'.$post_type)) {
+            if (self::isConcreteModel(Constants::TYPE_NAMESPACE . '\\' . $post_type)) {
                 $this->utility->call(WP::REMOVE_ALL_ACTIONS_AND_EXEC, $hook, function () use ($model) {
                     $this->manager->deleteAllRelations($model);
                 });
@@ -271,8 +271,8 @@ class WordPress extends BaseIntegration
     private function addJWTEndpoints()
     {
         $this->utility->call(WP::ADD_ACTION, 'rest_api_init', function () {
-            $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE);
-            $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE);
+            $this->utility->call(BaseUtility::REGISTER_GENERATE_JWT_ROUTE, $this->application);
+            $this->utility->call(BaseUtility::REGISTER_RECEIVE_JWT_ROUTE, $this->application);
             $this->utility->call(BaseUtility::REGISTER_RETURN_INPUTS_ROUTE);
         });
     }
@@ -309,16 +309,16 @@ class WordPress extends BaseIntegration
     {
         $fields = [
             [
-                'id'       => 'api_url',
-                'title'    => 'eSSIF-Lab API service URL',
+                'id'    => 'api_url',
+                'title' => 'API service URL',
             ],
             [
-                'id'       => 'iss',
-                'title'    => 'Organisation Signature',
+                'id'    => 'iss',
+                'title' => 'Organisation Signature',
             ],
             [
-                'id'       => 'shared_secret',
-                'title'    => 'Shared secret',
+                'id'    => 'shared_secret',
+                'title' => 'Shared secret',
             ],
         ];
 

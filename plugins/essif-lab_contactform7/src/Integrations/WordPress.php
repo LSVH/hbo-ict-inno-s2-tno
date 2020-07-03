@@ -10,7 +10,7 @@ class WordPress extends BaseIntegration
     public function install(CF7Helper $cf7Helper): void
     {
         $this->utility->addEssifLabFormTag();
-        $this->utility->loadCustomScripts();
+        $this->utility->loadCustomScripts($this->application);
 
         $this->utility->addActivateHook($cf7Helper);
         $this->utility->addDeactivateHook($cf7Helper);

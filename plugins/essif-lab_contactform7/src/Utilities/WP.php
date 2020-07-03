@@ -2,6 +2,7 @@
 
 namespace TNO\ContactForm7\Utilities;
 
+use TNO\ContactForm7\Applications\Contracts\Application;
 use TNO\ContactForm7\Utilities\Contracts\BaseUtility;
 use TNO\ContactForm7\Utilities\Helpers\CF7Helper;
 use TNO\ContactForm7\Views\Button;
@@ -111,9 +112,9 @@ class WP extends BaseUtility
             $tag_generator->add($tagName, 'eSSIF-Lab', function ($contact_form, $args = '') use ($tagName) {
                 $args = wp_parse_args($args, []);
                 $names = array_map(function ($tag) use ($tagName) {
-                    $label = $tag->name . ' (' . $tag->type . ')';
+                    $label = $tag->name.' ('.$tag->type.')';
 
-                    return '<option value="' . $tagName . ' ' . $tag->name . '">' . $label . '</option>';
+                    return '<option value="'.$tagName.' '.$tag->name.'">'.$label.'</option>';
                 }, array_filter($contact_form->form_scan_shortcode(), function ($tag) use ($tagName) {
                     return !empty($tag->name) && $tag->type != $tagName;
                 }));
@@ -155,20 +156,17 @@ class WP extends BaseUtility
         <?php
     }
 
-    public function loadCustomJs()
+    public function loadCustomScripts(Application $application)
     {
-        wp_enqueue_script(
-            'EssifLab_ContactForm7-CustomJs',
-            plugin_dir_url(__FILE__).'../js/script.js',
-            ['jquery'],
-            '',
-            false
-        );
-    }
-
-    public function loadCustomScripts()
-    {
-        add_action('wp_enqueue_scripts', [$this, 'loadCustomJs']);
+        add_action('wp_enqueue_scripts', function () use ($application) {
+            $namespace = $application->getNamespace();
+            $script = plugins_url('js/script.js', $application->getAppDir().'x');
+            wp_enqueue_script($namespace, $script, ['jquery'], null, false);
+            wp_localize_script($namespace, 'eSSIfLabContactForm7', [
+                'root'      => esc_url_raw(rest_url('jwt/v1')),
+                'namespace' => 'jwt/v1',
+            ]);
+        });
     }
 
     public function addActivateHook(CF7Helper $cf7Helper)
