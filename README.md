@@ -18,6 +18,11 @@ Allow users of your WordPress website to use your website with their Personal Da
 - [Demo](#demo)
 - [How it works?](#how-it-works)
 - [Installation for WordPress admin's](#installation-for-wordpress-admins)
+    - [Download plugins from this repository](#download-plugins-from-this-repository)
+    - [Define credentials in the eSSIF-Lab API](#define-credentials-in-the-eSSIF-Lab-API)
+    - [Configure the main plugin for use](#configure-the-main-plugin-for-use)
+    - [Configure a sub plugin for use](#configure-a-sub-plugin-for-use)
+        -[Contact Form 7](#contact-form-7)
 - [Plugin index](#plugin-index)
     - [Main plugin](#main-plugin)
     - [Sub plugins](#sub-plugins)
@@ -52,8 +57,7 @@ _As written above, the plugin currently only supports the retrieval of data from
 
 ### Download plugins from this repository
 
-Each release what also will be uploaded to WordPress's plugin repository will also be released here on this
-repository. Consider the following steps:
+To install the plugins in this repository consider the following steps:
 
 1. Go to [the page with all the releases](https://github.com/LSVH/hbo-ict-inno-s2-tno/releases/latest).
 2. Download the [source code .zip](https://github.com/LSVH/hbo-ict-inno-s2-tno/archive/v1.0.zip).
