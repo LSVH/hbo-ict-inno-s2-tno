@@ -66,7 +66,7 @@ To install the plugins in this repository consider the following steps:
 
 ### Define credentials in the eSSIF-Lab API
 
-Before the plugins can be used, you need to define at least one credential in the eSSIF-Lab API. How to do this is described in the [documentation](#TODO add API documentation link when it is available) of this API.
+Before the plugins can be used, you need to define at least one credential in the eSSIF-Lab API. How to do this is described in the [documentation](#TODO-add-API-documentation-link-when-it-is-available) of this API.
 
 ### Configure the main plugin for use
 
