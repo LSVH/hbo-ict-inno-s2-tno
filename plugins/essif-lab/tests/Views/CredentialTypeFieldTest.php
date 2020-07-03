@@ -26,7 +26,7 @@ class CredentialTypeFieldTest extends TestCase
         $subject = new CredentialTypeField($this->integration, $this->model);
 
         $actual = $subject->render();
-        $expect = '/name="namespace\[credential type]/';
+        $expect = '/name="namespace\[credential_type]/';
 
         $this->assertRegExp($expect, $actual);
     }
