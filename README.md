@@ -22,7 +22,6 @@ Allow users of your WordPress website to use your website with their Personal Da
     - [Define credentials in the eSSIF-Lab API](#define-credentials-in-the-eSSIF-Lab-API)
     - [Configure the main plugin for use](#configure-the-main-plugin-for-use)
     - [Configure a sub plugin for use](#configure-a-sub-plugin-for-use)
-        -[Contact Form 7](#contact-form-7)
 - [Plugin index](#plugin-index)
     - [Main plugin](#main-plugin)
     - [Sub plugins](#sub-plugins)
